@@ -3,4 +3,4 @@ Kisan haat website
 
 
 ## Clone
-Kisan haat website
+git clone
