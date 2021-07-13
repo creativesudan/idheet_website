@@ -2,6 +2,8 @@
 Kisan haat website
 
 
+#### open cmd
+
 ## Clone
 git clone https://github.com/creativesudan/kisanhaat_website.git
 
