@@ -1,6 +1,7 @@
 import React from 'react';
 import {  makeStyles } from '@material-ui/core/styles';
-import {Button, TextField,Divider,Fab,Box,Grid,Container,Link, Typography} from '@material-ui/core';
+// import {Link} from "react-router-dom";
+import {Button, TextField,Divider,Fab,Box,Grid,Container, Typography, Link} from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -113,9 +114,9 @@ export default function Footer() {
                   <Box component="span" display="block" py={1}>
                     <Typography variant="h6">Products</Typography>
                   </Box>
-                  <FooterLinks label="Listing" link="#"/>
-                  <FooterLinks label="Details" link="#"/>
-                  <FooterLinks label="Trending" link="#"/>
+                  <FooterLinks label="Listing" link="listing"/>
+                  <FooterLinks label="Details" link="detail"/>
+                  <FooterLinks label="Trending" link="trending"/>
                   <FooterLinks label="Recommended" link="#"/>
                   <FooterLinks label="Most Popular" link="#"/>
                 </Grid>
@@ -124,7 +125,7 @@ export default function Footer() {
                   <Box component="span" display="block" py={1}>
                     <Typography variant="h6">Checkout Process</Typography>
                   </Box>
-                  <FooterLinks label="Cart" link="#"/>
+                  <FooterLinks label="Cart" link="cart"/>
                   <FooterLinks label="Order Address" link="#"/>
                   <FooterLinks label="Delivery Time" link="#"/>
                   <FooterLinks label="Order Payment" link="#"/>
