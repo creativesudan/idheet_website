@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import store from "./redux/store";
+import { Provider } from "react-redux";
 
 import UbuntuWoff2 from './fonts/Ubuntu-Regular.ttf';
 
@@ -24,10 +26,10 @@ const Ubuntu = {
 const theme = createMuiTheme({
   typography: {
     fontFamily: 'Ubuntu, sans-serif',
-    h2:{fontSize:32,fontWeight: 700,},
-    h4:{fontSize:24,fontWeight: 500,},
-    h5:{fontSize:20,fontWeight: 500,},
-    h6:{fontSize:16,fontWeight: 500,},
+    h2: { fontSize: 32, fontWeight: 700, },
+    h4: { fontSize: 24, fontWeight: 500, },
+    h5: { fontSize: 20, fontWeight: 500, },
+    h6: { fontSize: 16, fontWeight: 500, },
     subtitle1: {
       fontSize: 12,
     },
@@ -35,7 +37,7 @@ const theme = createMuiTheme({
       fontWeight: 500,
     },
     button: {
-      textTransform:'none'
+      textTransform: 'none'
     },
   },
   palette: {
@@ -50,9 +52,11 @@ const theme = createMuiTheme({
 
 ReactDOM.render(
   <>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
   </>,
   document.getElementById('root')
 );

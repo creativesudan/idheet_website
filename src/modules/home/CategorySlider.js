@@ -1,49 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Container,IconButton,Paper,Typography,Button } from '@material-ui/core';
+import { Container, IconButton, Paper, Typography, Button } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import {HeadingBar} from '../component/index'
+import { HeadingBar } from '../component/index'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../redux/actions/home';
 
 const Category = [
-  {id:1, name:'Vegetables',icon:'https://www.zoovi.in/kisanhaat/img/categorie/1.svg'},
-  {id:2, name:'Fruits',icon:'https://www.zoovi.in/kisanhaat/img/categorie/2.svg'},
-  {id:3, name:'Meat',icon:'https://www.zoovi.in/kisanhaat/img/categorie/3.svg'},
-  {id:4, name:'Seafood',icon:'https://www.zoovi.in/kisanhaat/img/categorie/4.svg'},
-  {id:5, name:'Milk & Egg',icon:'https://www.zoovi.in/kisanhaat/img/categorie/5.svg'},
-  {id:6, name:'Bread',icon:'https://www.zoovi.in/kisanhaat/img/categorie/6.svg'},
-  {id:7, name:'Frozen',icon:'https://www.zoovi.in/kisanhaat/img/categorie/7.svg'},
-  {id:8, name:'Organic',icon:'https://www.zoovi.in/kisanhaat/img/categorie/8.svg'},
-  {id:9, name:'Fruits',icon:'https://www.zoovi.in/kisanhaat/img/categorie/1.svg'},
-  {id:10, name:'Meat',icon:'https://www.zoovi.in/kisanhaat/img/categorie/2.svg'},
-  {id:11, name:'Seafood',icon:'https://www.zoovi.in/kisanhaat/img/categorie/3.svg'},
-  {id:12, name:'Milk & Egg',icon:'https://www.zoovi.in/kisanhaat/img/categorie/4.svg'},
-  {id:13, name:'Bread',icon:'https://www.zoovi.in/kisanhaat/img/categorie/5.svg'},
-  {id:14, name:'Vegetables',icon:'https://www.zoovi.in/kisanhaat/img/categorie/6.svg'},
-  {id:15, name:'Frozen',icon:'https://www.zoovi.in/kisanhaat/img/categorie/7.svg'},
-  {id:16, name:'Organic',icon:'https://www.zoovi.in/kisanhaat/img/categorie/8.svg'},
+  { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
+  { id: 2, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/2.svg' },
+  { id: 3, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/3.svg' },
+  { id: 4, name: 'Seafood', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/4.svg' },
+  { id: 5, name: 'Milk & Egg', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/5.svg' },
+  { id: 6, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
+  { id: 7, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
+  { id: 8, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
+  { id: 9, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
+  { id: 10, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/2.svg' },
+  { id: 11, name: 'Seafood', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/3.svg' },
+  { id: 12, name: 'Milk & Egg', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/4.svg' },
+  { id: 13, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/5.svg' },
+  { id: 14, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
+  { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
+  { id: 16, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
 ]
 
 const useStyles = makeStyles((theme) => ({
   sliderArrow: {
-    width:30, height:30,borderRadius:100, background: "#fff", 
-    boxShadow:'1px 1px 5px #ccc', position:'absolute',
-    top:0, bottom:0, margin:'auto', zIndex:1
+    width: 30, height: 30, borderRadius: 100, background: "#fff",
+    boxShadow: '1px 1px 5px #ccc', position: 'absolute',
+    top: 0, bottom: 0, margin: 'auto', zIndex: 1
   },
-  categoryBox:{
-    textAlign:'center',
+  categoryBox: {
+    textAlign: 'center',
     // margin: theme.spacing(1, 0),
     // padding: theme.spacing(0, 1),
-    '& img':{
-      height:40,
-      display:'inline-block'
+    '& img': {
+      height: 40,
+      display: 'inline-block'
     }
   },
-  paper:{
-    padding:theme.spacing(2, 1),
+  paper: {
+    padding: theme.spacing(2, 1),
   }
 }))
 
@@ -53,11 +55,11 @@ function SampleNextArrow(props) {
   return (
     <div
       className={classes.sliderArrow}
-      style={{ ...style, right:-5 }}
+      style={{ ...style, right: -5 }}
     >
       <IconButton size="small" color="primary" onClick={onClick} aria-label="upload picture" component="span">
-      <ChevronRightIcon />
-    </IconButton>
+        <ChevronRightIcon />
+      </IconButton>
     </div>
   );
 }
@@ -68,17 +70,24 @@ function SamplePrevArrow(props) {
   return (
     <div
       className={classes.sliderArrow}
-      style={{ ...style, left:-5  }}
+      style={{ ...style, left: -5 }}
     >
       <IconButton size="small" color="primary" onClick={onClick} aria-label="upload picture" component="span">
-      <ChevronLeftIcon />
-    </IconButton>
+        <ChevronLeftIcon />
+      </IconButton>
     </div>
-    
+
   );
 }
 
 export default function CategorySlider() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
+
+  const categories = useSelector(state => state.home.categories);
   const classes = useStyles();
   var settings = {
     dots: false,
@@ -113,26 +122,27 @@ export default function CategorySlider() {
           slidesToScroll: 1
         }
       }
-    ]};
+    ]
+  };
   return (
     <>
-    
-    <HeadingBar 
-      title="What do you looking for?" 
-      button={<Button color="primary"  variant="outlined" size="small">See more</Button>}
-    />
-    <Slider {...settings} style={{margin:-5}}>
-      {Category.map(item=> (
-        <div className={classes.categoryBox}>
-          <div style={{padding:10}}>
-            <Paper elevation={1} classes={{root:classes.paper}}>
-                <img src={item.icon}/>
+
+      <HeadingBar
+        title="What are you looking for?"
+        button={<Button color="primary" variant="outlined" size="small">See more</Button>}
+      />
+      <Slider {...settings} style={{ margin: -5 }}>
+        {categories && categories.filter(item => item.show_on_home).map(item => (
+          <div className={classes.categoryBox}>
+            <div style={{ padding: 10 }}>
+              <Paper elevation={1} classes={{ root: classes.paper }}>
+                <img src={item.icon} />
                 <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
-            </Paper>
+              </Paper>
+            </div>
           </div>
-        </div>
-      ))}
-    </Slider>
+        ))}
+      </Slider>
 
     </>
   );
