@@ -1,6 +1,6 @@
 import React from 'react';
-import {BrowserRouter as Router,Switch,Route,Link} from "react-router-dom";
-import {Header,Footer} from './modules/common'
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Header, Footer } from './modules/common'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import {Home} from './modules/home'
@@ -13,26 +13,32 @@ import { LoginView, OtpView, RegisterView } from './modules/auth';
 function App() {
   return (
     <>
-    <Router>
-      <Header/>
+      <Router>
+        <Header />
         <Switch>
           <Route path="/listing">
-            <ProductListing/>
+            <ProductListing />
+          </Route>
+          <Route path="/category/:category_id">
+            <ProductListing />
           </Route>
           <Route path="/trending">
-            <Trending/>
+            <Trending />
           </Route>
           <Route path="/detail">
-            <ProductDetail/>
+            <ProductDetail />
+          </Route>
+          <Route path="/product/:product_id">
+            <ProductDetail />
           </Route>
           <Route path="/cart">
-            <CheckoutProcess/>
+            <CheckoutProcess />
           </Route>
           <Route path="/orders">
-            <OrderListing/>
+            <OrderListing />
           </Route>
           <Route path="/order-detail">
-            <OrderDetail/>
+            <OrderDetail />
           </Route>
           <Route path="/login">
             <LoginView/>
@@ -44,11 +50,11 @@ function App() {
             <RegisterView/>
           </Route>          
           <Route path="/">
-            <Home/>
+            <Home />
           </Route>
         </Switch>
-      <Footer/>
-    </Router>
+        <Footer />
+      </Router>
 
     </>
   );

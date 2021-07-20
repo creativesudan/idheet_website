@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
-import { Stepper,Step,StepLabel,StepContent,Button,Grid,Paper,Typography, Divider,AppBar,Tabs,Tab,Box   } from '@material-ui/core';
+import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box } from '@material-ui/core';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,18 +12,19 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 
-import {HeadingBar, QtyController} from '../component/index'
+import { HeadingBar, QtyController } from '../component/index'
 import { useTheme } from '@material-ui/core/styles';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
 
-  addressStyle:{
-    border:'1px solid #ccc',
+  addressStyle: {
+    border: '1px solid #ccc',
   },
 
-  stepLabel:{
-    margin:['12px 0px'],
+  stepLabel: {
+    margin: ['12px 0px'],
   },
   root: {
     width: '100%',
@@ -62,16 +63,16 @@ const useStyles = makeStyles((theme) => ({
     height: 38,
     width: 38,
   },
-  thumb:{},
-  cartDesign:{
-    display:'flex',
-    flexDirection:'row',
-    margin:['12px 0px'],
+  thumb: {},
+  cartDesign: {
+    display: 'flex',
+    flexDirection: 'row',
+    margin: ['12px 0px'],
     alignItems: 'flex-end',
-    '& $thumb':{
-      marginRight:10,
-      position:'relative',
-      '& img':{
+    '& $thumb': {
+      marginRight: 10,
+      position: 'relative',
+      '& img': {
         width: 82,
         height: 82,
         objectFit: 'scale-down',
@@ -81,25 +82,25 @@ const useStyles = makeStyles((theme) => ({
       }
     }
   },
-  colorPrimary:{
+  colorPrimary: {
     color: theme.palette.primary.main
   },
-  cartItemPriceDiv:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    marginTop:8
-  },  
+  cartItemPriceDiv: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8
+  },
   badge: {
-    position:'absolute',
-    left:0,
+    position: 'absolute',
+    left: 0,
     fontSize: 12,
     color: '#ff6000',
     backgroundColor: '#ffe7d9',
     padding: theme.spacing(0.5, 1.2),
-    borderRadius:4,
-    display:'inline-block',
-    fontWeight:600,
+    borderRadius: 4,
+    display: 'inline-block',
+    fontWeight: 600,
   },
 }));
 
@@ -142,9 +143,9 @@ function a11yProps(index) {
 
 
 const CartItem = [
-  {id:1, name:'Bread', image:'https://www.zoovi.in/kisanhaat/img/cart/g1.png', oldPrice:'1.20', newPrice:'0.98', sellPrice:'2.82', disPercent: '10'},
-  {id:2, name:'Spinach', image:'https://www.zoovi.in/kisanhaat/img/cart/g2.png', oldPrice:'1.20', newPrice:'0.98', sellPrice:'2.82', disPercent: '0'},
-  {id:3, name:'Chilli', image:'https://www.zoovi.in/kisanhaat/img/cart/g3.png', oldPrice:'1.20', newPrice:'0.98', sellPrice:'2.82', disPercent: '0'},
+  { id: 1, name: 'Bread', image: 'https://www.zoovi.in/kisanhaat/img/cart/g1.png', oldPrice: '1.20', newPrice: '0.98', sellPrice: '2.82', disPercent: '10' },
+  { id: 2, name: 'Spinach', image: 'https://www.zoovi.in/kisanhaat/img/cart/g2.png', oldPrice: '1.20', newPrice: '0.98', sellPrice: '2.82', disPercent: '0' },
+  { id: 3, name: 'Chilli', image: 'https://www.zoovi.in/kisanhaat/img/cart/g3.png', oldPrice: '1.20', newPrice: '0.98', sellPrice: '2.82', disPercent: '0' },
 ]
 
 function getSteps() {
@@ -156,36 +157,43 @@ export function CartItems() {
   const classes = useStyles();
   const theme = useTheme();
 
+  const dispatch = useDispatch();
+  const cart = useSelector(state => state.cart);
+  const [addProduct, setAddProduct] = useState({});
+  // const isFocused = useIsFocused();
+  const settings = useSelector(state => state.app.settings);
+
+
   return (
     <>
-    <Divider/>
-    {CartItem.map((items)=> (
-      <>
-      <div className={classes.cartDesign}>
-        <div className={classes.thumb}>
-          {items.disPercent > 0 &&
-          <span className={classes.badge} color="textSecondary" gutterBottom>
-            {items.disPercent}%
-          </span>
-          }
-          <img src={items.image}/>
-        </div>
-        <div style={{flex:1}}>
-          <Typography variant="h5"><b>{items.name}</b></Typography>
-          <Typography variant='caption' color={'textPrimary'}>
-            <strike style={{color:theme.palette.primary.main, marginRight:6}}>₹{items.oldPrice}kg</strike>
-            ₹{items.newPrice}/kg
-          </Typography>
-          <div className={classes.cartItemPriceDiv}>
-            <div style={{flex:1}}>
-              <Typography variant='h6'><b>₹{items.sellPrice}</b></Typography>
+      <Divider />
+      {CartItem.map((items) => (
+        <>
+          <div className={classes.cartDesign}>
+            <div className={classes.thumb}>
+              {items.disPercent > 0 &&
+                <span className={classes.badge} color="textSecondary" gutterBottom>
+                  {items.disPercent}%
+                </span>
+              }
+              <img src={items.image} />
             </div>
-            <QtyController/>
+            <div style={{ flex: 1 }}>
+              <Typography variant="h5"><b>{items.name}</b></Typography>
+              <Typography variant='caption' color={'textPrimary'}>
+                <strike style={{ color: theme.palette.primary.main, marginRight: 6 }}>₹{items.oldPrice}kg</strike>
+                ₹{items.newPrice}/kg
+              </Typography>
+              <div className={classes.cartItemPriceDiv}>
+                <div style={{ flex: 1 }}>
+                  <Typography variant='h6'><b>₹{items.sellPrice}</b></Typography>
+                </div>
+                <QtyController />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <Divider/>
-      </>
+          <Divider />
+        </>
       ))}
     </>
   )
@@ -195,47 +203,47 @@ export function CartItems() {
 export function AddressList() {
   const classes = useStyles();
   return (
-    <Grid container  spacing={3}>
+    <Grid container spacing={3}>
       <Grid item lg={6}>
-          <div className={classes.addressStyle}>
-              <div className={classes.addressType}>
-                <Typography>Home</Typography>
-                <span className={classes.badge} color="textSecondary" gutterBottom>
-                  Default
-                </span>
-                <Typography>
-                    Model Town Ludhiana, Punjab 140010, India
-                </Typography>
-                <Button variant="text" color="primary">
-                  Edit
-                </Button>
-                <Button variant="contained" disableElevation color="inherit" fullWidth>
-                  Deliver Here
-                </Button>
-              </div>
+        <div className={classes.addressStyle}>
+          <div className={classes.addressType}>
+            <Typography>Home</Typography>
+            <span className={classes.badge} color="textSecondary" gutterBottom>
+              Default
+            </span>
+            <Typography>
+              Model Town Ludhiana, Punjab 140010, India
+            </Typography>
+            <Button variant="text" color="primary">
+              Edit
+            </Button>
+            <Button variant="contained" disableElevation color="inherit" fullWidth>
+              Deliver Here
+            </Button>
           </div>
+        </div>
       </Grid>
       <Grid item lg={6}>
-          <div className={classes.addressStyle}>
-              <div className={classes.addressType}>
-                <Typography>Home</Typography>
-                <span className={classes.badge} color="textSecondary" gutterBottom>
-                  Default
-                </span>
-                <Typography>
-                    Model Town Ludhiana, Punjab 140010, India
-                </Typography>
-                <Button variant="text" color="primary">
-                  Edit
-                </Button>
-                <Button variant="contained" disableElevation color="inherit" fullWidth>
-                  Deliver Here
-                </Button>
-              </div>
+        <div className={classes.addressStyle}>
+          <div className={classes.addressType}>
+            <Typography>Home</Typography>
+            <span className={classes.badge} color="textSecondary" gutterBottom>
+              Default
+            </span>
+            <Typography>
+              Model Town Ludhiana, Punjab 140010, India
+            </Typography>
+            <Button variant="text" color="primary">
+              Edit
+            </Button>
+            <Button variant="contained" disableElevation color="inherit" fullWidth>
+              Deliver Here
+            </Button>
           </div>
+        </div>
       </Grid>
     </Grid>
-    )
+  )
 }
 
 export function TimeSlot() {
@@ -244,10 +252,10 @@ export function TimeSlot() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+
   return (
     <div>
-        <AppBar position="static" color="default">
+      <AppBar position="static" color="default">
         <Tabs
           value={value}
           onChange={handleChange}
@@ -288,7 +296,7 @@ export function TimeSlot() {
         Item Seven
       </TabPanel>
     </div>
-    )
+  )
 }
 
 export function PaymentType() {
@@ -296,19 +304,19 @@ export function PaymentType() {
     <div>
       Payment Type
     </div>
-    )
+  )
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <CartItems/>;
+      return <CartItems />;
     case 1:
-      return <AddressList/>;
+      return <AddressList />;
     case 2:
-      return <TimeSlot/>;
+      return <TimeSlot />;
     case 3:
-      return <PaymentType/>;
+      return <PaymentType />;
     default:
       return 'Unknown step';
   }
@@ -318,6 +326,7 @@ export default function CartView() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -334,44 +343,44 @@ export default function CartView() {
   return (
     <>
       <div className={classes.root}>
-      <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel className={{root:classes.stepLabel}}>{label}</StepLabel>
-            <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
-              <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    className={classes.button}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
+        <Stepper activeStep={activeStep} orientation="vertical">
+          {steps.map((label, index) => (
+            <Step key={label}>
+              <StepLabel className={{ root: classes.stepLabel }}>{label}</StepLabel>
+              <StepContent>
+                <Typography>{getStepContent(index)}</Typography>
+                <div className={classes.actionsContainer}>
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.button}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleNext}
+                      className={classes.button}
+                    >
+                      {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </StepContent>
-          </Step>
-        ))}
-      </Stepper>
-      {activeStep === steps.length && (
-        <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>All steps completed - you&apos;re finished</Typography>
-          <Button onClick={handleReset} className={classes.button}>
-            Reset
-          </Button>
-        </Paper>
-      )}
-    </div>
+              </StepContent>
+            </Step>
+          ))}
+        </Stepper>
+        {activeStep === steps.length && (
+          <Paper square elevation={0} className={classes.resetContainer}>
+            <Typography>All steps completed - you&apos;re finished</Typography>
+            <Button onClick={handleReset} className={classes.button}>
+              Reset
+            </Button>
+          </Paper>
+        )}
+      </div>
     </>
   );
 }
