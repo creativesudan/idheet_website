@@ -166,7 +166,7 @@ export default function Footer() {
                   <FooterLinks label="Help Support" link="#"/>
                   <FooterLinks label="Refund Payment" link="#"/>
                   <FooterLinks label="FAQ" link="#"/>
-                  <FooterLinks label="Sign In" link="#"/>
+                  <FooterLinks label="Sign In" link="login"/>
                 </Grid>
       
           </Grid>

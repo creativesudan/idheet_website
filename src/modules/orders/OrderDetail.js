@@ -63,7 +63,7 @@ export default function OrderDetail() {
               </Typography>
 
               <Box>
-                
+                z
                 <Typography variant='subtitle1' color="textSecondary">
                   Preparing order
                 </Typography>

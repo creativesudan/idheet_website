@@ -8,6 +8,7 @@ import {ProductListing, Trending, Recommended} from './modules/listing'
 import {ProductDetail} from './modules/detail';
 import {CheckoutProcess} from './modules/checkout';
 import {OrderListing, OrderDetail} from './modules/orders';
+import { LoginView, OtpView, RegisterView } from './modules/auth';
 
 function App() {
   return (
@@ -33,6 +34,15 @@ function App() {
           <Route path="/order-detail">
             <OrderDetail/>
           </Route>
+          <Route path="/login">
+            <LoginView/>
+          </Route>
+          <Route path="/otp">
+            <OtpView/>
+          </Route>
+          <Route path="/register">
+            <RegisterView/>
+          </Route>          
           <Route path="/">
             <Home/>
           </Route>
