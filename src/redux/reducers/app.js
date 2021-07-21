@@ -21,7 +21,7 @@ import {
 // import Toast from "react-native-toast-message";
 
 
-export default function (state = {}, action) {
+export default function (state = { siteLoading: true }, action) {
     if (action.error) {
         return state;
     }
@@ -34,7 +34,8 @@ export default function (state = {}, action) {
         case APP_LOADED:
             return {
                 ...state,
-                showInitScreen: false
+                showInitScreen: false,
+                siteLoading: false
             }
         case ASYNC_START:
             return {

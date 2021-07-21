@@ -67,14 +67,15 @@ const promiseMiddleware = store => next => action => {
                 //     text1: 'API Error',
                 //     text2: error.response.body.message || error.response.body.toString()
                 // });
+                console.log('ERROR', error);
                 if (!action.lazyLoad) store.dispatch({ type: ASYNC_END, promise: action.payload });
-                console.log('ERROR', error.response);
-                if (error.response.status == 401) {
+
+                if (error.response?.status == 401) {
                     console.log("Unauthorized Access. Logging Out.");
                     store.dispatch(logout());
                 } else {
                     action.error = true;
-                    action.payload = error.response.body;
+                    action.payload = error.response?.body;
                     // console.log(error.response);
                     store.dispatch(action);
                 }

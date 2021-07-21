@@ -13,7 +13,7 @@ const initialState = {
     isAuthenticated: false,
     user: null,
     mobile: '',
-    inProgress: false,
+    inProgress: true,
     userId: null,
     token: null
 };

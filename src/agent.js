@@ -6,13 +6,13 @@ import _superagent from 'superagent';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'https://logiit.in/api';
+const API_ROOT = 'https://kisanhaat.co.in/backend/api';
 const MEDIA_ROOT = '';
 
 const encode = encodeURIComponent;
 const responseBody = res => JSON.parse(res.text);
 
-let token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiMjJiMjlmYjU3MWUzN2Q4MWE2Mjc5YTUzYTE2ZjViMmY0MTEwOGYyNDcwMzQ5Y2RhZjIyMTU3ZDIzM2EwNTdlY2QwNGEwNzZiZDY3YjY0MGIiLCJpYXQiOjE2MjE4NjYyODksIm5iZiI6MTYyMTg2NjI4OSwiZXhwIjoxNjUzNDAyMjg5LCJzdWIiOiI3Iiwic2NvcGVzIjpbXX0.u6CncnxQN_kR1_rIe0TnbfEom5u4rX56t5NO0unhVReNfuGKpyeZfx_g53a4fw6VYSYgqOjwaGDE4TNZCLabfo6Oxh6zQmed_NPFkq_EBiwDhwl-XVyHJh7yR666B2tBUyENhIImeDms9vfEBkl5MMjEbehJX0Plls98bH68uJolxT7LLtgv3CfAMBs03q2wtMqI_DhAkX407fHPEsiUViTwg5fivEvNTWm5FO5J-D2geJ9-h_DS569HeRkyJzdMGKhflADxsWKP0lhjoNX6yMDylapYAgkSiWNJpz9ocbgmt2RYksZXbUany0FApBCfCzp2wKSJmlG0ylr4r1Qv7Ip1dG4gwrX5Dwxs-Qbts-wyCeMKz65j7UeRPNwIu29haywiI1bdCkWeutG9fMSzlgLmmw8XyNd-Jp8ZH2I_QM6YNrAvQq6Ur8h-LF24aza89TpQagPH70LVzIzTctvI_n5C-H8-2wkOEMHXcSyH3Mmw6uWR91VvHvpzwXnqCRl4C3HE-vwvs6TUuxqUeMTYGbhEt6O8phDdLMuFL3MvjoPB2N30MO-UrMqlr7DEzmwBObkQG92h7HENMY-8QeqMIVm3yIyxBc5R98Gd5ejTyvCN8FhTz9UYxb4csuDZkB0S4aINR35nMNX5JmVbkSkaOo25Y3eLUycN9LhXyCl1btQ';
+let token = null;
 let userId = null;
 
 const tokenPlugin = req => {
@@ -51,9 +51,9 @@ const Auth = {
     login: (mobile) =>
         requests.post(`/otp?mobile=${mobile}`, {}),
     verify: (mobile, otp, deviceToken) =>
-        requests.post(`/login?mobile=${mobile}&otp=${otp}&device_token=${deviceToken}`, {}),
+        requests.post(`/login?mobile=${mobile}&otp=${otp}&device_token=dummy`, {}),
     register: (mobile) =>
-        requests.post(`/register?mobile=${mobile}`, {}),
+        requests.post(`/register?mobile=${mobile}&device_token=dummy`, {}),
 };
 
 
