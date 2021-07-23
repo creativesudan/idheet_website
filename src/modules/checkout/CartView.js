@@ -12,6 +12,13 @@ import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+
 import { HeadingBar, QtyController } from '../component/index'
 import { useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,8 +26,44 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
 
+  cartOverview:{
+    padding:12
+  },
+  cartDetailRow:{
+    display:'flex',
+    flexDirection:'row',
+    margin:'6px 0'
+  },
+  dateLabel:{
+    display:'block',
+    fontSize:12
+  },
+  center:{
+    textAlign:'center',
+    '& .MuiTab-root':{
+      minWidth:100
+    },
+    '& .MuiTab-wrapper':{
+      width:'auto'
+    }
+  },
+  content:{},
+  editBtn:{},
   addressStyle: {
     border: '1px solid #ccc',
+    '& $content':{
+      padding: '15px',
+      position:'relative',
+      '& $badge':{
+        right:10,
+        top:10,
+        left:'auto'
+      },
+      '& $editBtn': {
+        marginTop:20,
+        textAlign:'right'
+      }
+    },
   },
 
   stepLabel: {
@@ -207,16 +250,20 @@ export function AddressList() {
       <Grid item lg={6}>
         <div className={classes.addressStyle}>
           <div className={classes.addressType}>
-            <Typography>Home</Typography>
+            <div className={classes.content}>
+            <Typography><b>Home</b></Typography>
             <span className={classes.badge} color="textSecondary" gutterBottom>
               Default
             </span>
-            <Typography>
+            <Typography variant="caption">
               Model Town Ludhiana, Punjab 140010, India
             </Typography>
-            <Button variant="text" color="primary">
+            <div className={classes.editBtn}>
+            <Button variant="outlined" color="primary">
               Edit
             </Button>
+            </div>
+            </div>
             <Button variant="contained" disableElevation color="inherit" fullWidth>
               Deliver Here
             </Button>
@@ -226,16 +273,20 @@ export function AddressList() {
       <Grid item lg={6}>
         <div className={classes.addressStyle}>
           <div className={classes.addressType}>
-            <Typography>Home</Typography>
-            <span className={classes.badge} color="textSecondary" gutterBottom>
+            <div className={classes.content}>
+            <Typography><b>Home</b></Typography>
+            {/* <span className={classes.badge} color="textSecondary" gutterBottom>
               Default
-            </span>
-            <Typography>
+            </span> */}
+            <Typography variant="caption">
               Model Town Ludhiana, Punjab 140010, India
             </Typography>
-            <Button variant="text" color="primary">
+            <div className={classes.editBtn}>
+            <Button variant="outlined" color="primary">
               Edit
             </Button>
+            </div>
+            </div>
             <Button variant="contained" disableElevation color="inherit" fullWidth>
               Deliver Here
             </Button>
@@ -248,34 +299,47 @@ export function AddressList() {
 
 export function TimeSlot() {
   const [value, setValue] = React.useState(0);
+  const [time, setTime] = React.useState('female');
+  const classes = useStyles();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const timeSelect = (event) => {
+    setTime(event.target.time);
+  };
+
   return (
     <div>
+      <div className={classes.center}>
       <AppBar position="static" color="default">
         <Tabs
           value={value}
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
-          variant="scrollable"
+          // variant="scrollable"
           scrollButtons="auto"
-          aria-label="scrollable auto tabs example"
+          aria-label="simple tabs example"
+          // aria-label="scrollable auto tabs example"
         >
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-          <Tab label="Item Four" {...a11yProps(3)} />
-          <Tab label="Item Five" {...a11yProps(4)} />
-          <Tab label="Item Six" {...a11yProps(5)} />
-          <Tab label="Item Seven" {...a11yProps(6)} />
+          <Tab label={<div><b>MON</b><span className={classes.dateLabel}>7 Sep</span></div>} {...a11yProps(0)} />
+          <Tab label={<div><b>TUE</b><span className={classes.dateLabel}>8 Sep</span></div>}  {...a11yProps(1)} />
+          <Tab label={<div><b>WED</b><span className={classes.dateLabel}>9 Sep</span></div>}  {...a11yProps(2)} />
+          <Tab label={<div><b>THU</b><span className={classes.dateLabel}>10 Sep</span></div>}  {...a11yProps(3)} />
         </Tabs>
       </AppBar>
+      </div>
       <TabPanel value={value} index={0}>
-        Item One
+
+        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={timeSelect}>
+          <FormControlLabel classes={{label:classes.small}} className={classes.filterItem} value="6AM - 10AM" control={<Radio color="primary" />} label="Top Rated" />
+          <FormControlLabel classes={{label:classes.small}}  className={classes.filterItem} value="4PM - 6AM" control={<Radio color="primary" />} label="Nearest Me" />
+          <FormControlLabel classes={{label:classes.small}}  className={classes.filterItem} value="6PM - 9PM" control={<Radio color="primary" />} label="Cost High to Low" />
+          <FormControlLabel classes={{label:classes.small}}  className={classes.filterItem} value="0AM - 1PM" control={<Radio color="primary" />} label="Cost Low to High" />
+        </RadioGroup>
+
       </TabPanel>
       <TabPanel value={value} index={1}>
         Item Two
@@ -286,15 +350,6 @@ export function TimeSlot() {
       <TabPanel value={value} index={3}>
         Item Four
       </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
     </div>
   )
 }
@@ -302,7 +357,8 @@ export function TimeSlot() {
 export function PaymentType() {
   return (
     <div>
-      Payment Type
+      <Button>Online</Button>
+      <Button>COD</Button>
     </div>
   )
 }
@@ -343,7 +399,10 @@ export default function CartView() {
   return (
     <>
       <div className={classes.root}>
-        <Stepper activeStep={activeStep} orientation="vertical">
+    <Grid container spacing={3}>
+      <Grid item lg={8}>
+
+          <Stepper activeStep={activeStep} orientation="vertical">
           {steps.map((label, index) => (
             <Step key={label}>
               <StepLabel className={{ root: classes.stepLabel }}>{label}</StepLabel>
@@ -380,6 +439,62 @@ export default function CartView() {
             </Button>
           </Paper>
         )}
+
+          </Grid>
+
+          <Grid item lg={4}>
+              <Paper>
+                <div className={classes.cartOverview}>
+                  <Typography><b>Bill Details</b></Typography>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                    <Typography color="textSecondary"><span style={{color:'#000'}}>Price</span> (2 item)</Typography>
+                    
+                    </div>
+                    <Typography><b>₹3600</b></Typography>
+                  </div>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                    <Typography color="textSecondary"><span style={{color:'#000'}}>Selling Price Total</span> (2 item)</Typography>
+                    
+                    </div>
+                    <Typography><b>₹3600</b></Typography>
+                  </div>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                    <Typography>Discount Total</Typography>
+                    
+                    </div>
+                    <Typography><b>₹300</b></Typography>
+                  </div>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                    <Typography color="textSecondary"><span style={{color:'#000'}}>Taxes</span></Typography>
+                    
+                    </div>
+                    <Typography><b>₹3600</b></Typography>
+                  </div>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                    <Typography color="textSecondary"><span style={{color:'#000'}}>Delivery Charges</span></Typography>
+                    
+                    </div>
+                    <Typography><b>₹3600</b></Typography>
+                  </div>
+                  <Divider/>
+                    <Typography variant="subtitle2" color={"textSecondary"}>Your Total Savings on this order ₹3600</Typography>
+                  <Divider/>
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                      <Typography variant="h5">To Pay</Typography>
+                    </div>
+                    <Typography variant="h5" color={'error'}>₹3600</Typography>
+                  </div>
+                  </div>
+              </Paper>
+          </Grid>
+        </Grid>
+       
       </div>
     </>
   );

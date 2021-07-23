@@ -1,0 +1,3 @@
+.MuiTab-wrapper {flex-direction: row !important; justify-content: flex-start!important;}
+.MuiTab-wrapper > div {margin-right:10px;}
+.MuiTab-root {max-width: initial;}

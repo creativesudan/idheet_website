@@ -9,6 +9,7 @@ import { ProductDetail } from './modules/detail';
 import { CheckoutProcess } from './modules/checkout';
 import { OrderListing, OrderDetail } from './modules/orders';
 import { LoginView, OtpView, RegisterView } from './modules/auth';
+import MyAccount from './modules/myAccount/MyAccount';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
 
@@ -55,9 +56,9 @@ function App() {
           <Route path="/register">
             <RegisterView />
           </Route>
-          {/* <Route path="/">
-            <Home />
-          </Route> */}
+          <Route path="/my-account">
+            <MyAccount />
+          </Route>
           <PrivateRoute path="/" component={Home}></PrivateRoute>
         </Switch>
         <Footer />
