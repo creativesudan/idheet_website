@@ -80,7 +80,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-export default function BrandSlider() {
+export default function CategorySlider() {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function BrandSlider() {
   const classes = useStyles();
   var settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 8,
     slidesToScroll: 4,
@@ -128,10 +128,10 @@ export default function BrandSlider() {
     <>
 
       <HeadingBar
-        title="What are you looking for?"
+        title="Shop By Brands"
         button={<Button color="primary" variant="outlined" size="small">See more</Button>}
       />
-      <Slider {...settings} style={{ margin: -5 }}>
+      <Slider {...settings} style={{ margin: -5,}}>
         {categories && categories.filter(item => item.show_on_home).map(item => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 10 }}>

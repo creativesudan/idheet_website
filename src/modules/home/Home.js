@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Button } from '@material-ui/core';
-import { PromoSlider, CategorySlider, HotProducts, RecommendedProducts } from './index'
+import { PromoSlider, BrandSlider, CategorySlider, HotProducts, RecommendedProducts } from './index'
 import { HeadingBar } from '../component/index'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppSettings } from '../../redux/actions/app';
@@ -42,6 +42,7 @@ export default function Home() {
           <HotProducts title={settings && settings.home_section2} products={popularProducts} />
           <HotProducts title={settings && settings.home_section3} products={otherProducts} />
           <RecommendedProducts title={settings && settings.home_section4} products={recommendedProducts} />
+          <BrandSlider />
         </div>
       </Container>
     </>

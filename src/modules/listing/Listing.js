@@ -10,6 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { fetchCategories, fetchProducts } from '../../redux/actions/home';
 
+import { CategorySlider } from '../home/index'
+
+
+
 const useStyles = makeStyles((theme) => ({
   sectionGap: {
     margin: theme.spacing(6, 0)
@@ -52,6 +56,7 @@ export default function ProductListing() {
       </div>
       <Container>
         <div className={classes.sectionGap}>
+          <CategorySlider/>
           <Filter drawerState={open} />
 
           <HeadingBar

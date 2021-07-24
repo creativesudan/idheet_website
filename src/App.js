@@ -1,17 +1,24 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Header, Footer } from './modules/common'
+import { Header, Footer, ContentView} from './modules/common'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Home } from './modules/home'
-import { ProductListing, Trending, Recommended } from './modules/listing'
+import { ProductListing, CategoryListing, BrandListing, Trending, Recommended } from './modules/listing'
 import { ProductDetail } from './modules/detail';
 import { CheckoutProcess } from './modules/checkout';
 import { OrderListing, OrderDetail } from './modules/orders';
 import { LoginView, OtpView, RegisterView } from './modules/auth';
 import MyAccount from './modules/myAccount/MyAccount';
+import PromoListView from './modules/myAccount/PromoList';
+import PromoDetailView from './modules/myAccount/PromoDetails';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
+
+
+
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +52,12 @@ function App() {
           <Route path="/listing">
             <ProductListing />
           </Route>
+          <Route path="/category">
+            <CategoryListing />
+          </Route>
+          <Route path="/brands">
+            <BrandListing />
+          </Route>
           <Route path="/category/:category_id">
             <ProductListing />
           </Route>
@@ -75,6 +88,18 @@ function App() {
           <Route path="/register">
             <RegisterView />
           </Route>
+          <Route path="/promo">
+            <PromoListView />
+          </Route>
+          <Route path="/promo-detail">
+            <PromoDetailView />
+          </Route>
+          <Route path="/Content">
+            <ContentView />
+          </Route>
+          
+
+
           <PrivateRoute path="/my-account" component={MyAccount}>
           </PrivateRoute>
           <Route path="/" component={Home}></Route>

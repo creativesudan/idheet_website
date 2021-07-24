@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
-import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box } from '@material-ui/core';
+import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box,TextField } from '@material-ui/core';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -30,6 +30,21 @@ import { clearOrderPlaced } from '../../redux/actions/order';
 
 const useStyles = makeStyles((theme) => ({
 
+  subscriber:{
+    margin:'20px 0'
+  },
+  subscriberBtn: {
+    width:'100%',
+    height: 40,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    marginTop:10
+  },
+  subcribeField: {
+    width:'100%',
+    borderTopRightRadius: 0,
+
+  },
   cartOverview: {
     padding: 12
   },
@@ -536,14 +551,21 @@ export default function CartView() {
                         >
                           Back
                         </Button>
-                        <Button
+
+                        
+
+
+                          <Button
                           variant="contained"
                           color="primary"
                           onClick={handleNext}
                           className={classes.button}
-                        >
-                          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                          >
+                         {activeStep === steps.length - 1 ? 'Pay Now': 'Next' }
                         </Button>
+                        
+                        
+                        
                       </div>
                     </div>
                   </StepContent>
@@ -567,7 +589,11 @@ export default function CartView() {
           <Grid item lg={4}>
             <Paper>
               <div className={classes.cartOverview}>
-                <Typography><b>Bill Details</b></Typography>
+                <Typography><b>Bill Details</b> <br/></Typography>
+
+                
+          
+
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
                     <Typography color="textSecondary"><span style={{ color: '#000' }}>Price</span> ({cart?.totalCount} item(s))</Typography>
@@ -603,9 +629,22 @@ export default function CartView() {
                   </div>
                   <Typography><b>₹{cart?.deliveryCharge}</b></Typography>
                 </div>
+                
+                <form className={classes.subscriber} noValidate autoComplete="off">
+                  <TextField id="outlined-basic" label="Code" variant="outlined" size="small" classes={{ root: classes.subcribeField }} />
+                  <Button variant="contained" color="primary" disableElevation classes={{ root: classes.subscriberBtn }}>
+                    Apply Code
+                  </Button>
+                </form>
+
                 <Divider />
-                <Typography variant="subtitle2" color={"textSecondary"}>Your Total Savings on this order ₹{cart?.totalDiscount + cart?.couponDiscount}</Typography>
+                <div style={{padding:'10px 0px'}}>
+                  <Typography variant="subtitle2" color={"textSecondary"}>Your Total Savings on this order ₹{cart?.totalDiscount + cart?.couponDiscount}</Typography>
+                </div>
                 <Divider />
+                
+                <div style={{padding:'10px 0px'}}>
+                  
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
                     <Typography variant="h5">To Pay</Typography>
@@ -613,6 +652,8 @@ export default function CartView() {
                   <Typography variant="h5" color={'error'}>₹{cart?.total}</Typography>
                 </div>
               </div>
+
+                </div>
             </Paper>
           </Grid>
         </Grid>
