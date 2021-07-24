@@ -9,6 +9,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar, QtyController } from '../component/index'
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { getCartItem } from '../../redux/lib/cart';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCartItems, removeItem, updateItem } from '../../redux/actions/cart';
 
 
 
@@ -79,8 +82,24 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 export default function HotProducts({ title, products }) {
   const classes = useStyles();
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (!cartItems || cartItems.length == 0) fetchCartItems();
+  // }, [cartItems]);
+
+  const handleQtyDec = (cartItem) => {
+    dispatch(removeItem(cartItem));
+  }
+
+  const handleQtyInc = (cartItem) => {
+    dispatch(updateItem(cartItems, cartItem));
+  }
   return (
     <>
       <HeadingBar
@@ -90,6 +109,7 @@ export default function HotProducts({ title, products }) {
       <Grid container spacing={2}>
 
         {products && products.map(item => {
+          const cartItem = getCartItem(cartItems, item);
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>
@@ -116,7 +136,7 @@ export default function HotProducts({ title, products }) {
 
 
                     <Grid item>
-                      <QtyController />
+                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
                     </Grid>
                   </Grid>
 

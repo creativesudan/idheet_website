@@ -94,6 +94,9 @@ const verifyAndApplyCoupon = (cart, priceTotal) => {
 
     return couponDiscount;
 }
+const toTwoDecimals = (number) => {
+    return Math.round(number * 100) / 100;
+}
 export const evaluateCart = (cart, categories, settings) => {
     let mrpTotal = cart.items.reduce((total, obj) => parseFloat(obj.price) * parseInt(obj.qty) + total, 0);
     let priceTotal = cart.items.reduce((total, obj) => parseFloat(obj.total) + total, 0);
@@ -122,13 +125,13 @@ export const evaluateCart = (cart, categories, settings) => {
     return {
         type: CART_EVALUATED,
         payload: {
-            subTotal: mrpTotal,
-            priceTotal: priceTotal,
-            totalDiscount: discount,
+            subTotal: toTwoDecimals(mrpTotal),
+            priceTotal: toTwoDecimals(priceTotal),
+            totalDiscount: toTwoDecimals(discount),
             coupon: cart.appliedCoupon,
-            couponDiscount: couponDiscount,
-            totalTax: totalTax,
-            total: total,
+            couponDiscount: toTwoDecimals(couponDiscount),
+            totalTax: toTwoDecimals(totalTax),
+            total: toTwoDecimals(total),
             uniqueCount: cart.items.length,
             totalCount: cart.items.reduce((total, item) => parseInt(item.qty) + total, 0),
             orderAllowed: settings ? priceTotal >= parseFloat(settings.min_order_value) : false,

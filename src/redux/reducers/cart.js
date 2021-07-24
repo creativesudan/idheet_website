@@ -7,7 +7,8 @@ import {
     CART_TAX_APPLIED,
     CART_EVALUATED,
     CART_CLEARED,
-    CART_ITEMS_LOADED
+    CART_ITEMS_LOADED,
+    ASYNC_START
 } from "../actions/types";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDefaultImage } from "./home";
@@ -61,7 +62,10 @@ export default function (state = initialCart, action) {
             //     items: newItems
             // }
 
-            return state;
+            return {
+                ...state,
+                cartLoading: false
+            };
 
         case CART_CLEARED:
             return initialCart;
@@ -98,7 +102,10 @@ export default function (state = initialCart, action) {
             //     ...state,
             //     items: newItems
             // }
-            return state;
+            return {
+                ...state,
+                cartLoading: false
+            };
 
         case CART_COUPONS_LOADED:
             if (action.error) {
@@ -145,8 +152,17 @@ export default function (state = initialCart, action) {
 
             return {
                 ...state,
-                items: items
+                items: items,
+                cartLoading: false
             };
+        case ASYNC_START:
+            if (action.subtype == CART_ITEMS_LOADED || action.subtype == CART_PRODUCT_UPDATED || action.subtype == CART_PRODUCT_ADDED) {
+                return {
+                    ...state,
+                    cartLoading: true
+                }
+            }
+            return state;
         default:
             return state;
     }

@@ -38,6 +38,7 @@ import agent from "../agent";
 // import thunk from 'redux-thunk';
 // import Toast from 'react-native-toast-message';
 import { fetchOrders } from './actions/order';
+import { fetchCategories } from './actions/home';
 
 const promiseMiddleware = store => next => action => {
     console.log(action)
@@ -93,6 +94,7 @@ const appInitMiddleware = store => next => action => {
     if (action.type == APP_LOADING) {
         console.log('Initializing App');
         store.dispatch(lazyLoad(fetchAppSettings()));
+        store.dispatch(lazyLoad(fetchCategories()));
         const token = localStorage.getItem('token');
 
         console.log("Token: " + token);
@@ -277,7 +279,7 @@ const enquiryMiddleware = store => next => action => {
 };
 
 const orderMiddleware = store => next => action => {
-    if (action.type == ORDER_CANCELLED && !action.error) {
+    if ((action.type == ORDER_CANCELLED || action.type == ORDER_SUCCESS) && !action.error) {
         store.dispatch(fetchOrders());
     }
 

@@ -9,6 +9,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar, QtyController } from '../component/index'
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateItem } from '../../redux/actions/cart';
+import { getCartItem } from '../../redux/lib/cart';
 
 
 
@@ -82,6 +85,18 @@ function SamplePrevArrow(props) {
 
 export default function RecommendedProducts({ title, products }) {
   const classes = useStyles();
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+  const dispatch = useDispatch();
+
+  const handleQtyDec = (cartItem) => {
+    dispatch(removeItem(cartItem));
+  }
+
+  const handleQtyInc = (cartItem) => {
+    dispatch(updateItem(cartItems, cartItem));
+  }
+
   var settings = {
     dots: false,
     infinite: true,
@@ -102,6 +117,7 @@ export default function RecommendedProducts({ title, products }) {
       <Grid container spacing={2}>
 
         {products.map(item => {
+          const cartItem = getCartItem(cartItems, item);
           return (
             <Grid item md={4} xs={12}>
               <Card>
@@ -142,7 +158,7 @@ export default function RecommendedProducts({ title, products }) {
                     </Grid>
 
                     <Grid item>
-                      <QtyController />
+                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
                     </Grid>
 
                   </Grid>

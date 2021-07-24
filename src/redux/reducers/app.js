@@ -15,7 +15,8 @@ import {
     DELIVERY_AREA_SELECTED,
     ENQUIRY_LIST_LOADED,
     CMS_LIST_LOADED,
-    SET_DEVICE_TOKEN
+    SET_DEVICE_TOKEN,
+    SET_PAYMENT_TYPE
 } from "../actions/types";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Toast from "react-native-toast-message";
@@ -141,6 +142,11 @@ export default function (state = { siteLoading: true }, action) {
             return {
                 ...state,
                 deviceToken: action.payload
+            }
+        case SET_PAYMENT_TYPE:
+            return {
+                ...state,
+                paymentType: action.payload
             }
         default:
             return state;

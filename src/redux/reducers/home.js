@@ -118,7 +118,7 @@ export default function (state = {}, action) {
         case APP_SETTINGS_LOADED:
             return {
                 ...state,
-                default_image: action.payload.default_product_image
+                default_image: action.payload?.default_product_image
             }
 
         case BRANDS_LOADED:

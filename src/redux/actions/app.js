@@ -9,7 +9,8 @@ import {
     DELIVERY_SLOT_SELECTED,
     ENQUIRY_LIST_LOADED,
     SEND_ENQUIRY,
-    SET_DEVICE_TOKEN
+    SET_DEVICE_TOKEN,
+    SET_PAYMENT_TYPE
 } from "./types";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import agent from "../../agent";
@@ -98,5 +99,12 @@ export const setDeviceToken = (token) => {
     return {
         type: SET_DEVICE_TOKEN,
         payload: token
+    }
+}
+
+export const setPaymentType = (type) => {
+    return {
+        type: SET_PAYMENT_TYPE,
+        payload: type
     }
 }

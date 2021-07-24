@@ -18,6 +18,25 @@ function App() {
   useEffect(() => {
     dispatch({ type: "APP_LOADING" });
   }, []);
+
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
+  useEffect(() => {
+    loadScript("https://checkout.razorpay.com/v1/checkout.js");
+  });
+
   return (
     <>
       <Router>
@@ -56,10 +75,9 @@ function App() {
           <Route path="/register">
             <RegisterView />
           </Route>
-          <Route path="/my-account">
-            <MyAccount />
-          </Route>
-          <PrivateRoute path="/" component={Home}></PrivateRoute>
+          <PrivateRoute path="/my-account" component={MyAccount}>
+          </PrivateRoute>
+          <Route path="/" component={Home}></Route>
         </Switch>
         <Footer />
       </Router>

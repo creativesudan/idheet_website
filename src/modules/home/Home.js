@@ -28,6 +28,9 @@ export default function Home() {
     dispatch(fetchRecommendedProducts());
     dispatch(fetchOtherProducts());
   }, []);
+
+
+
   const classes = useStyles();
   return (
     <>
