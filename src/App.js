@@ -12,6 +12,8 @@ import { LoginView, OtpView, RegisterView } from './modules/auth';
 import MyAccount from './modules/myAccount/MyAccount';
 import PromoListView from './modules/myAccount/PromoList';
 import EnquiryListView from './modules/myAccount/EnquiryList';
+import EnquiryDetailView from './modules/myAccount/EnquiryDetails';
+import AddressListView from './modules/myAccount/AddressList';
 import PromoDetailView from './modules/myAccount/PromoDetails';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
@@ -94,6 +96,12 @@ function App() {
           </Route>
           <Route path="/enquiry">
             <EnquiryListView />
+          </Route>
+          <Route path="/address">
+            <AddressListView />
+          </Route>
+          <Route path="/enquiry-detail">
+            <EnquiryDetailView />
           </Route>
 
           <Route path="/promo/:promo_id">

@@ -53,12 +53,15 @@ const useStyles = makeStyles((theme) => ({
     position:'absolute',
     right:16,
     top:18,
+  },
+  spacing:{
+    margin:'15px 0'
   }
 }))
 
 
 
-export default function EnquiryListView() {
+export default function EnquiryDetailView() {
   const classes = useStyles();
   const user = useSelector(state => state.auth.user);
 
@@ -87,27 +90,29 @@ export default function EnquiryListView() {
             </Grid>
             <Grid item lg={8}>
               <Paper>
-                <div className={classes.frame}>
-                  <Typography variant="h4"><b>Enquiries</b></Typography>
-                  
-                  <div className={classes.list}>
-                    <Grid container spacing={2}>
-                        <Grid item>
-                          <span className={classes.Avatar}>
-                            <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
-                          </span>
-                        </Grid>
-                        <Grid item>
-                          <div className={classes.listDetails}>
-                          <Typography variant="h5" className={classes.textWhite}>Product Name</Typography>
-                          <Typography variant="caption" className={classes.textWhite}>QTY: <b>5</b></Typography>
-                          
-                          <Typography variant="caption" className={classes.date}>26-07-2021</Typography>
-                          </div>
-                          <Button variant="contained" color="secondary">View details</Button>
-                        </Grid>
-                        
+                <div className={classes.frame}>                  
+                  <div className={classes.spacing}>
+                    <Grid container justify="space-between">
+                      <Grid item>
+                        <Typography variant="h5"><b>Product Name</b></Typography>
+                        <Typography variant="subtitle2"><b>Quantity Required:</b> <span>52</span></Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="caption">27-07-2021</Typography>
+                      </Grid>
                     </Grid>
+                  </div>
+
+                  <hr style={{border:'1px solid #ddd'}}/>
+               
+                  <div className={classes.spacing}>
+                        <Typography variant="subtitle2"><b>Your Name:</b> <span>Vinay</span></Typography>
+                        <Typography variant="caption">7838414681</Typography>
+                  </div>
+
+                  <div className={classes.spacing}>
+                  <Typography variant="subtitle2"><b>Message:</b></Typography>
+                  <Typography variant="body2" color="textSecondary">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</Typography>
                   </div>
                   
 
