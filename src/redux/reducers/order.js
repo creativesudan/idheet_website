@@ -2,7 +2,8 @@
 import {
     ORDER_SUCCESS,
     ORDERS_LOADED,
-    ORDER_PLACED_CLEARED
+    ORDER_PLACED_CLEARED,
+    SINGLE_ORDER_LOADED
 } from "../actions/types";
 
 
@@ -41,11 +42,25 @@ export default function (state = { orders: [], newOrder: {} }, action) {
                 newOrder: {},
                 orderSuccess: null
             }
+        case SINGLE_ORDER_LOADED:
+            if (action.error) {
+                return {
+                    ...state,
+                    activeOrder: null
+                }
+            }
+            return {
+                ...state,
+                activeOrder: SingleOrderModel(action.payload)
+            }
 
         default:
             return state;
     }
 }
+
+
+
 
 export function OrderProductModel(products) {
     let objects = [];
@@ -63,12 +78,19 @@ export function OrderProductModel(products) {
     return objects;
 }
 
+export function SingleOrderModel(order) {
+    return {
+        ...order,
+        // displayDate: date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ", " + date.toLocaleTimeString(),
+        displayDate: order.created_at,
+        items: OrderProductModel(order.order_items)
+    }
+}
+
 export function orderModel(orders) {
     let objects = [];
     if (orders) {
         orders.map(order => {
-            // const variants = variantModel(product.prices);
-            const date = new Date(order.created_at);
             objects.push({
                 ...order,
                 // displayDate: date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + ", " + date.toLocaleTimeString(),

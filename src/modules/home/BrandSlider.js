@@ -8,7 +8,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar } from '../component/index'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCategories } from '../../redux/actions/home';
+import { fetchBrands, fetchCategories } from '../../redux/actions/home';
+import { useHistory } from 'react-router-dom';
 
 const Category = [
   { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
@@ -82,12 +83,13 @@ function SamplePrevArrow(props) {
 
 export default function CategorySlider() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   useEffect(() => {
-    dispatch(fetchCategories());
+    dispatch(fetchBrands());
   }, []);
 
-  const categories = useSelector(state => state.home.categories);
+  const brands = useSelector(state => state.home.brands);
   const classes = useStyles();
   var settings = {
     dots: false,
@@ -129,15 +131,17 @@ export default function CategorySlider() {
 
       <HeadingBar
         title="Shop By Brands"
-        button={<Button color="primary" variant="outlined" size="small">See more</Button>}
+        button={<Button color="primary" variant="outlined" size="small"
+          onClick={() => history.push("/brands")}
+        >See more</Button>}
       />
-      <Slider {...settings} style={{ margin: -5,}}>
-        {categories && categories.filter(item => item.show_on_home).map(item => (
+      <Slider {...settings} style={{ margin: -5, }}>
+        {brands?.map(item => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 10 }}>
-              <Paper elevation={1} classes={{ root: classes.paper }}>
-                <img src={item.icon} />
-                <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
+              <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/brands/" + item.brand_id)}>
+                <img src={item.image} />
+                <Typography variant="caption" display="block" gutterBottom>{item.brand_name}</Typography>
               </Paper>
             </div>
           </div>

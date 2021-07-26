@@ -9,6 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar } from '../component/index'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSliderImages } from '../../redux/actions/home';
+import { useHistory } from 'react-router-dom';
 
 const Category = [
   { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/promo1.jpg' },
@@ -71,6 +72,7 @@ function SamplePrevArrow(props) {
 export default function PromoSlider() {
   const dispatch = useDispatch();
   const banners = useSelector(state => state.home.sliderImages);
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(fetchSliderImages());
@@ -122,7 +124,23 @@ export default function PromoSlider() {
         {banners && banners.map((item) => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 10 }}>
-              <Paper elevation={0} classes={{ root: classes.paper }}>
+              <Paper elevation={0} classes={{ root: classes.paper }}
+                onClick={() => {
+                  if (item.type == "brand") {
+                    history.push("/brands/" + item.typeData?.brand_id);
+                  }
+                  else if (item.type == "product") {
+                    history.push('/product/' + item.typeData?.id);
+                  }
+                  else if (item.type == "category") {
+                    history.push("/category/" + item.typeData?.id);
+                  }
+                  else if (item.type == "coupon") {
+                    console.log(item);
+                    history.push('/promo/' + item.typeData?.coupon_id);
+                  }
+                }}
+              >
                 <img src={item.image} />
               </Paper>
             </div>

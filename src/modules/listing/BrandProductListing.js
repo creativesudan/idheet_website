@@ -8,7 +8,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchCategories, fetchProducts } from '../../redux/actions/home';
+import { fetchBrandProducts, fetchBrands, fetchCategories, fetchProducts } from '../../redux/actions/home';
 
 import { CategorySlider } from '../home/index'
 
@@ -24,38 +24,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ProductListing() {
+export default function BrandProductListing() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
-  const { category_id } = useParams();
+  const { brand_id } = useParams();
   const dispatch = useDispatch();
-  const products = useSelector(state => state.home.products || []);
-  const categories = useSelector(state => state.home.categories || []);
-  const category = categories?.find(item => item.id == category_id) || {};
-  const [subcategories, setSubcategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(category_id);
+  const products = useSelector(state => state.home.brandProducts || []);
+  const brand = useSelector(state => state.home.brands?.find(brand => brand.brand_id == brand_id));
+
 
 
   useEffect(() => {
-    if (selectedCategory) {
-      dispatch(fetchProducts(selectedCategory));
+    if (brand_id) {
+      dispatch(fetchBrandProducts(brand_id));
+      dispatch(fetchBrands());
     }
-    // dispatch(fetchCategories());
-  }, [selectedCategory]);
+  }, [brand_id]);
 
-  useEffect(() => {
-    if (category) setSubcategories(categories?.filter(item => item.parent == category?.name));
-  }, [category])
 
-  useEffect(() => {
-    setSelectedCategory(category_id);
-  }, [category_id]);
-
-  useEffect(() => {
-    console.log("DKJCWVKEWVK")
-    if (subcategories && subcategories.length > 0) setSelectedCategory(subcategories[0]?.id);
-  }, [subcategories]);
 
   return (
     <>
@@ -71,12 +58,12 @@ export default function ProductListing() {
       </div>
       <Container>
         <div className={classes.sectionGap}>
-          <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" />
+          {/* <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" /> */}
           <Filter drawerState={open} />
 
           <HeadingBar
             variant="h4"
-            title={category.name}
+            title={brand?.brand_name}
             button={
               <>
                 <Box mx={1}>

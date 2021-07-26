@@ -16,6 +16,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import LeftPanel from './LeftPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, updateUser } from '../../redux/actions/auth';
+import { useParams } from 'react-router-dom';
+import { fetchCoupons } from '../../redux/actions/cart';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,14 +31,14 @@ const useStyles = makeStyles((theme) => ({
   frame: {
     padding: 20
   },
-  Avatar:{
-    display:'block',
-    '& img':{
-      objectFit:'cover',
-      objectPositon:'center',
-      width:'100%',
-      height:250,
-      borderRadius:10
+  Avatar: {
+    display: 'block',
+    '& img': {
+      objectFit: 'cover',
+      objectPositon: 'center',
+      width: '100%',
+      height: 250,
+      borderRadius: 10
     }
   },
 }))
@@ -46,8 +48,18 @@ const useStyles = makeStyles((theme) => ({
 export default function PromoDetailView() {
   const classes = useStyles();
   const user = useSelector(state => state.auth.user);
+  const { promo_id } = useParams();
+  const dispatch = useDispatch();
+  const list = useSelector(state => state.cart.coupons);
 
+  const [promo, setPromo] = useState(null);
 
+  useEffect(() => {
+    if (!list) dispatch(fetchCoupons());
+    else {
+      setPromo(list?.find(promo => promo.coupon_id == promo_id));
+    }
+  }, [list, promo_id]);
 
   return (
     <>
@@ -58,9 +70,9 @@ export default function PromoDetailView() {
               Home
             </Link>
             <Link color="primary" href="/">
-              My Orders
+              Promos
             </Link>
-            <Typography color="textPrimary">Order Detail</Typography>
+            <Typography color="textPrimary">Promo Detail</Typography>
           </Breadcrumbs>
         </Container>
       </div>
@@ -72,44 +84,39 @@ export default function PromoDetailView() {
             </Grid>
             <Grid item lg={8}>
               <Paper>
-                  <div className={classes.detailView}>
-                    <div className={classes.frame}>
-                      
+                <div className={classes.detailView}>
+                  <div className={classes.frame}>
+
                     <span className={classes.Avatar}>
-                      <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
+                      <img src={promo?.image} />
                     </span>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
 
                     <Grid container justify="space-between" alignItems="center">
-                        
-                        <Grid item>
-                          <Typography color="primary" variant="h5">
-                            <b>Get 25% off buying Banana</b>
-                          </Typography>
-                          <Typography variant="caption" color="textSecondary">Available until 24 July 2020</Typography>
-                        </Grid>
-                        <Grid>
-                          <Button variant="contained" color="primary" size="large">Copy</Button>
-                        </Grid>
+
+                      <Grid item>
+                        <Typography color="primary" variant="h5">
+                          <b>{promo?.title}</b>
+                        </Typography>
+                        <Typography variant="caption" color="textSecondary">Available until {promo?.end_date}</Typography>
+                      </Grid>
+                      <Grid>
+                        <Button variant="contained" color="primary" size="large">Copy</Button>
+                      </Grid>
                     </Grid>
-                    <br/>
+                    <br />
                     <Typography variant="h6">
                       <b>Terms $ Conditions</b>
                     </Typography>
 
                     <Typography variant="caption">
-                    Easypromos only uses detials of its users to facilitate the successful operation of the promotions.
-Easypromos will never utilize detials of registered users for any other reason. <br/><br/>
-                    Easypromos only uses detials of its users to facilitate the successful operation of the promotions.
-Easypromos will never utilize detials of registered users for any other reason. <br/><br/>
-                    Easypromos only uses detials of its users to facilitate the successful operation of the promotions.
-Easypromos will never utilize detials of registered users for any other reason. <br/>
+                      {promo?.description}
                     </Typography>
-                    </div>
-                    
-                    
                   </div>
+
+
+                </div>
               </Paper>
             </Grid>
           </Grid>

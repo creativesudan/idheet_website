@@ -54,6 +54,9 @@ export default function QtyController(props) {
     if (!isAuthenticated) {
       history.push("/login");
     }
+    else if (props.disabled) {
+      return;
+    }
     else {
       updatedCartItem.qty = 1;
       props.handleQtyInc(updatedCartItem);
@@ -62,6 +65,9 @@ export default function QtyController(props) {
 
   const handleQtyDec = () => {
     // setQty(newQty);
+    if (props.disabled) {
+      return;
+    }
     props.handleQtyDec(updatedCartItem);
   }
 
@@ -75,7 +81,7 @@ export default function QtyController(props) {
             aria-label="remove"
             classes={{ sizeSmall: classes.fabBtn }}
             onClick={() => handleQtyDec()}
-            disabled={props.disabled}
+          // disabled={props.disabled}
           >
             <RemoveIcon />
           </Fab>
@@ -88,7 +94,7 @@ export default function QtyController(props) {
         aria-label="add"
         classes={{ sizeSmall: classes.fabBtn }}
         onClick={() => handleQtyInc()}
-        disabled={props.disabled}
+      // disabled={props.disabled}
       >
         <AddIcon />
       </Fab>

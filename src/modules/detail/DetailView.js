@@ -10,6 +10,10 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import SearchIcon from '@material-ui/icons/Search';
+import { getCartItem } from '../../redux/lib/cart';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateItem } from '../../redux/actions/cart';
+import { useHistory } from 'react-router-dom';
 
 
 const sliderImage = [
@@ -71,6 +75,12 @@ export default function DetailView({ product }) {
   useEffect(() => {
     setSelectedVariant(product.defaultVariant);
   }, [product]);
+
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+  const cartItem = getCartItem(cartItems, product);
+  const dispatch = useDispatch();
+  const history = useHistory();
   var settings = {
     dots: false,
     infinite: true,
@@ -82,6 +92,7 @@ export default function DetailView({ product }) {
   };
 
   const [selectedVariant, setSelectedVariant] = React.useState(product.defaultVariant);
+
 
   const handleVariant = (event, newVariant) => {
     console.log(newVariant);
@@ -110,6 +121,14 @@ export default function DetailView({ product }) {
     event.preventDefault();
   };
 
+  const handleQtyDec = (cartItem) => {
+    dispatch(removeItem(cartItem));
+  }
+
+  const handleQtyInc = (cartItem) => {
+    dispatch(updateItem(cartItems, cartItem));
+  }
+
 
   return (
     <>
@@ -127,11 +146,22 @@ export default function DetailView({ product }) {
           <Box mt={2}>
             <Grid container spacing={2}>
               <Grid item sm={6}>
-                <Button classes={{ root: classes.largeBtn }} color="secondary" variant="contained" disableElevation fullWidth size="large">
+                <Button classes={{ root: classes.largeBtn }} color="secondary" variant="contained" disableElevation fullWidth size="large"
+                  onClick={() => {
+                    const tempCartItem = { ...cartItem, qty: 1 };
+                    handleQtyInc(tempCartItem);
+                  }}
+                >
                   <AddIcon /> Add to Cart</Button>
               </Grid>
               <Grid item sm={6}>
-                <Button classes={{ root: classes.largeBtn }} color="primary" variant="contained" disableElevation fullWidth size="large">
+                <Button classes={{ root: classes.largeBtn }} color="primary" variant="contained" disableElevation fullWidth size="large"
+                  onClick={() => {
+                    const tempCartItem = { ...cartItem, qty: 1 };
+                    handleQtyInc(tempCartItem);
+                    history.push("/cart");
+                  }}
+                >
                   <ShoppingCartIcon fontSize="small" /> Buy Now</Button>
               </Grid>
             </Grid>
@@ -193,20 +223,20 @@ export default function DetailView({ product }) {
                 </ToggleButtonGroup>
               </Grid>
               <Grid item>
-                <QtyController />
+                <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
               </Grid>
             </Grid>
 
             <Box my={3}>
 
-              <TextField fullWidth size="small"
+              {/* <TextField fullWidth size="small"
                 label="Type your city (e.g Chennai, Pune)"
                 id="outlined-start-adornment"
                 InputProps={{
                   startAdornment: <InputAdornment position="start"><SearchIcon fontSize="small" /></InputAdornment>,
                 }}
                 variant="outlined"
-              />
+              /> */}
 
             </Box>
 

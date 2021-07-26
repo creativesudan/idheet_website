@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 // import {Link} from "react-router-dom";
 import { Button, Breadcrumbs, TextField, Divider, Fab, Box, Grid, Container, Typography, Link } from '@material-ui/core';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import slugify from 'react-slugify';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,30 +27,35 @@ export function FooterLinks(props) {
 
 export default function ContentView() {
   const classes = useStyles();
+  const { content_slug } = useParams();
+  const dispatch = useDispatch();
+  const cmsList = useSelector(state => state.app.cmsList);
+  const [page, setPage] = React.useState(null);
+
+  useEffect(() => {
+    if (content_slug) {
+      setPage(cmsList?.find(cms => content_slug == slugify(cms.title)));
+    }
+  }, [content_slug, cmsList]);
+
 
   return (
     <>
-     
-     <div className={classes.BreadcrumbsContainer}>
+
+      <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
             <Link color="primary" href="/">
               Home
             </Link>
-            <Typography color="textPrimary">About Us</Typography>
+            <Typography color="textPrimary">{page?.title}</Typography>
           </Breadcrumbs>
         </Container>
       </div>
       <Container>
         <div className={classes.sectionGap}>
-          <Typography>
-          It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. 
-          The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, 
-          content here', making it look like readable English. 
-
-          Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, 
-          and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, 
-          sometimes by accident, sometimes on purpose (injected humour and the like).
+          <Typography dangerouslySetInnerHTML={{ __html: page?.description }}>
+            {/* {page?.description} */}
           </Typography>
         </div>
       </Container>
