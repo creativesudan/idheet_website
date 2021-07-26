@@ -9,6 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar } from '../component/index'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../redux/actions/home';
+import { useHistory } from 'react-router-dom';
 
 const Category = [
   { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
@@ -16,17 +17,17 @@ const Category = [
   { id: 3, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/3.svg' },
   { id: 4, name: 'Seafood', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/4.svg' },
   { id: 5, name: 'Milk & Egg', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/5.svg' },
-  { id: 6, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
-  { id: 7, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
-  { id: 8, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
-  { id: 9, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
-  { id: 10, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/2.svg' },
-  { id: 11, name: 'Seafood', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/3.svg' },
-  { id: 12, name: 'Milk & Egg', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/4.svg' },
-  { id: 13, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/5.svg' },
-  { id: 14, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
-  { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
-  { id: 16, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
+  // { id: 6, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
+  // { id: 7, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
+  // { id: 8, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
+  // { id: 9, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
+  // { id: 10, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/2.svg' },
+  // { id: 11, name: 'Seafood', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/3.svg' },
+  // { id: 12, name: 'Milk & Egg', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/4.svg' },
+  // { id: 13, name: 'Bread', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/5.svg' },
+  // { id: 14, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
+  // { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
+  // { id: 16, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -80,14 +81,9 @@ function SamplePrevArrow(props) {
   );
 }
 
-export default function BrandSlider() {
-  const dispatch = useDispatch();
+export default function CategorySlider({ title, categories, onClick }) {
+  const history = useHistory();
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, []);
-
-  const categories = useSelector(state => state.home.categories);
   const classes = useStyles();
   var settings = {
     dots: false,
@@ -127,15 +123,17 @@ export default function BrandSlider() {
   return (
     <>
 
-      <HeadingBar
-        title="What are you looking for?"
-        button={<Button color="primary" variant="outlined" size="small">See more</Button>}
-      />
+      {categories && categories.length > 0 && <HeadingBar
+        title={title}
+        button={<Button color="primary" variant="outlined" size="small"
+          onClick={() => history.push("/category")}
+        >See more</Button>}
+      />}
       <Slider {...settings} style={{ margin: -5 }}>
-        {categories && categories.filter(item => item.show_on_home).map(item => (
+        {categories?.map(item => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 10 }}>
-              <Paper elevation={1} classes={{ root: classes.paper }}>
+              <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => onClick(item)}>
                 <img src={item.icon} />
                 <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
               </Paper>

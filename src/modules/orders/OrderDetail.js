@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container,Breadcrumbs,Link,Typography,Paper,Grid,Divider,Button} from '@material-ui/core';
+import { Container, Breadcrumbs, Link, Typography, Paper, Grid, Divider, Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import CheckIcon from '@material-ui/icons/Check';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
 import CloseIcon from '@material-ui/icons/Close';
 
-import {CustomBadge} from '../component/index'
+import { CustomBadge } from '../component/index'
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import PhoneIcon from '@material-ui/icons/Phone';
 
@@ -25,270 +25,328 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
+import { useHistory, useParams } from 'react-router-dom';
+import { cancelCompleteOrder, cancelOrderItem, fetchOrderById } from '../../redux/actions/order';
+import { ORDER_STATUS } from './OrderListing';
 
 
 const useStyles = makeStyles((theme) => ({
-  sectionGap:{
+  sectionGap: {
     margin: theme.spacing(6, 0)
   },
-  BreadcrumbsContainer:{
-    padding:'20px 0',
-    background:'#e9ecef'
+  BreadcrumbsContainer: {
+    padding: '20px 0',
+    background: '#e9ecef'
   },
-  tiles:{
-    padding:'10px 20px'
+  tiles: {
+    padding: '10px 20px'
   },
 }))
 
-
+function ConfirmMessage({ title, message, handleYes, handleNo, open }) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  return (
+    <Dialog
+      fullScreen={fullScreen}
+      open={open}
+      onClose={handleNo}
+      aria-labelledby="responsive-dialog-title"
+    >
+      <DialogTitle id="responsive-dialog-title"><b>{title}</b></DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {message}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleYes} color="primary">
+          Yes
+        </Button>
+        <Button color="default" variant="outlined" onClick={handleNo} autoFocus>
+          Not Now
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
 
 
 export default function OrderDetail() {
   const classes = useStyles();
   const user = useSelector(state => state.auth.user);
-  
-  const [open, setOpen] = React.useState(false);
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const { order_id } = useParams();
+  const dispatch = useDispatch();
+  const order = useSelector(state => state.order.activeOrder);
+  const history = useHistory();
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const [openCancelItem, setOpenCancelItem] = React.useState(false);
+  const [openCancelOrder, setOpenCancelOrder] = React.useState(false);
+  const [cancelItemId, setCancelItemId] = React.useState(null);
+
+
+
+
+  const handleItemOpen = () => {
+    setOpenCancelItem(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleOrderOpen = () => {
+    setOpenCancelOrder(true);
   };
+
+  const handleItemNo = () => {
+    setOpenCancelItem(false);
+  };
+
+
+  const handleOrderNo = () => {
+    setOpenCancelOrder(false);
+  };
+
+  const handleItemYes = () => {
+    dispatch(cancelOrderItem(cancelItemId)).
+      then(() => {
+        dispatch(fetchOrderById(order_id));
+        setOpenCancelItem(false);
+      });
+  };
+
+
+  const handleOrderYes = () => {
+    dispatch(cancelCompleteOrder(order?.id)).then(() => history.goBack());
+  };
+
+  useEffect(() => {
+    if (order_id) dispatch(fetchOrderById(order_id));
+  }, [order_id]);
   return (
     <>
-        <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-      >
-        <DialogTitle id="responsive-dialog-title"><b>{"Cancel Order Item"}</b></DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you Sure you want to cancel this item?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Yes
-          </Button>
-          <Button color="default" variant="outlined" onClick={handleClose} autoFocus>
-            Not Now
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmMessage title="Cancel Item?" message="Are you Sure you want to cancel this item?" handleYes={handleItemYes} handleNo={handleItemNo} open={openCancelItem} />
+      <ConfirmMessage title="Cancel Order?" message="Are you Sure you want to cancel this order?" handleYes={handleOrderYes} handleNo={handleOrderNo} open={openCancelOrder} />
 
 
-    <div className={classes.BreadcrumbsContainer}>
+      <div className={classes.BreadcrumbsContainer}>
+        <Container>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="primary" href="/">
+              Home
+            </Link>
+            <Link color="primary" href="/">
+              My Orders
+            </Link>
+            <Typography color="textPrimary">Order Detail</Typography>
+          </Breadcrumbs>
+        </Container>
+      </div>
       <Container>
-        <Breadcrumbs aria-label="breadcrumb">
-          <Link color="primary" href="/">
-            Home
-          </Link>
-          <Link color="primary" href="/">
-            My Orders
-          </Link>
-          <Typography color="textPrimary">Order Detail</Typography>
-        </Breadcrumbs>
-      </Container>
-    </div>
-    <Container>
-      <div className={classes.sectionGap}>
+        <div className={classes.sectionGap}>
 
 
-      <Grid container spacing={3}>
+          <Grid container spacing={3}>
             <Grid item lg={4}>
               <LeftPanel user={user} />
             </Grid>
             <Grid item lg={8}>
-              
-            <Paper>
-              <div className={classes.tiles}>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item>
-                    <Typography variant='subtitle2' color="textSecondary">
-                      16 June, 11:30AM
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Button onClick={handleClickOpen} variant="contained" color="primary" size="large">Cancel Order</Button>
-                  </Grid>
-                </Grid>
-              </div>
-              <Divider/>
 
-              <div className={classes.tiles}>
-                <Typography variant='h5' color="textPrimary">
-                  <b>Order Status</b>
-                </Typography>
-                <Box>
-                  <Typography variant='subtitle2' color="textSecondary">
-                    Preparing order
-                  </Typography>
-                </Box>
-              </div>
-              <Divider/>
-
-              <div className={classes.tiles}>
-                <Typography variant='h5' color="textPrimary">
-                <b>Destination</b>
-                </Typography>
-                <Box>
-                  <Typography variant='subtitle2' color="textSecondary">
-                    Location. Address, XYZ
-                  </Typography>
-                </Box>
-              </div>
-              <Divider/>
-
-              <div className={classes.tiles}>
-                <Typography variant='h5' color="textPrimary">
-                <b>Payment Type</b>
-                </Typography>
-                <Box>
-                  <Typography variant='subtitle2' color="textSecondary">
-                    COD
-                  </Typography>
-                </Box>
-              </div>
-              <Divider/>
-
-              <div className={classes.tiles}>
-                <Typography variant='h5' color="textPrimary">
-                  <b>Items</b>
-                </Typography>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item>
-                    <Box>
+              <Paper>
+                <div className={classes.tiles}>
+                  <Grid container justify="space-between" alignItems="center">
+                    <Grid item>
                       <Typography variant='subtitle2' color="textSecondary">
-                        Basmati Rice 6 <b style={{color:'#000'}}>X 1</b>
+                        {order?.created_at}
                       </Typography>
-                    </Box>
+                    </Grid>
+                    {(order?.order_status == ORDER_STATUS["pending"] || order?.order_status == ORDER_STATUS["ongoing"]) && <Grid item>
+                      <Button onClick={() => {
+                        handleOrderOpen();
+                      }} variant="contained" color="primary" size="large">Cancel Order</Button>
+                    </Grid>}
                   </Grid>
-                  <Grid item>
-                    <Box>
-                      <Grid container alignItems="center">
+                </div>
+                <Divider />
+
+                <div className={classes.tiles}>
+                  <Typography variant='h5' color="textPrimary">
+                    <b>Order Status</b>
+                  </Typography>
+                  <Box>
+                    <Typography variant='subtitle2' color="textSecondary">
+                      {order?.order_status}
+                    </Typography>
+                  </Box>
+                </div>
+                <Divider />
+
+                <div className={classes.tiles}>
+                  <Typography variant='h5' color="textPrimary">
+                    <b>Destination</b>
+                  </Typography>
+                  <Box>
+                    <Typography variant='subtitle2' color="textSecondary">
+                      {order?.address1}, {order?.address2}, {order?.city}, {order?.state} {order?.pincode}
+                    </Typography>
+                  </Box>
+                </div>
+                <Divider />
+
+                <div className={classes.tiles}>
+                  <Typography variant='h5' color="textPrimary">
+                    <b>Payment Type</b>
+                  </Typography>
+                  <Box>
+                    <Typography variant='subtitle2' color="textSecondary">
+                      {order?.payment_type?.toUpperCase()}
+                    </Typography>
+                  </Box>
+                </div>
+                <Divider />
+
+                <div className={classes.tiles}>
+                  <Typography variant='h5' color="textPrimary">
+                    <b>Items</b>
+                  </Typography>
+                  {order?.items?.map(item => <Grid container justify="space-between" alignItems="center">
+                    <Grid item>
+                      <Box>
+                        <Typography variant='subtitle2' color="textSecondary">
+                          {item.product_name} ({item.displayWeight}) <b style={{ color: '#000' }}>X {item.qty}</b>
+                        </Typography>
+                      </Box>
+                    </Grid>
+                    <Grid item>
+                      <Box>
+                        <Grid container alignItems="center">
                           <Grid>
                             <Typography variant='subtitle2'>
-                              <b>Rs. 500</b>
+                              <b>Rs. {item.total}</b>
                             </Typography>
                           </Grid>
                           <Grid>
-                            <IconButton onClick={handleClickOpen} size="small" aria-label="delete" className={classes.margin}>
+                            {item.status == "ordered" && order?.order_status != ORDER_STATUS["cancelled"] && order?.order_status != ORDER_STATUS["delivered"] && <IconButton onClick={() => {
+                              setCancelItemId(item.item_id);
+                              handleItemOpen();
+                            }} size="small" aria-label="delete" className={classes.margin}>
                               <HighlightOffIcon fontSize="medium" />
-                            </IconButton>
+                            </IconButton>}
                           </Grid>
-                      </Grid>
-                     
-                    </Box>
-                    <Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-                <Grid container justify="space-between" alignItems="center">
-                  <Grid item>
-                    <Box>
-                      <Typography variant='subtitle2' color="textSecondary">
-                        Basmati Rice 6 <b style={{color:'#000'}}>X 1</b>
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item>
-                    <Box>
-                      <Grid container alignItems="center">
-                          <Grid>
-                            <Typography variant='subtitle2'>
-                              <b>Rs. 500</b>
-                            </Typography>
-                          </Grid>
-                          <Grid>
-                            <IconButton  onClick={handleClickOpen} size="small" aria-label="delete" className={classes.margin}>
-                              <HighlightOffIcon fontSize="medium" />
-                            </IconButton>
-                          </Grid>
-                      </Grid>
-                     
-                    </Box>
-                    <Box>
-                    </Box>
-                  </Grid>
-                </Grid>
-              </div>
-              <Divider/>
+                        </Grid>
 
-              <div className={classes.tiles}>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography variant='subtitle2' color="textSecondary">
-                      Price Total
-                    </Typography>
+                      </Box>
+                      <Box>
+                      </Box>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography variant='caption'>
-                      <b>Rs. 600</b>
-                    </Typography>
+                  )}
+
+                </div>
+                <Divider />
+
+                <div className={classes.tiles}>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Price Total
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='caption'>
+                        <b>Rs. {order?.sub_total}</b>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography variant='subtitle2' color="textSecondary">
-                      Selling Price Total
-                    </Typography>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Selling Price Total
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2'>
+                        <b>Rs. {order?.sub_total - order?.total_discount}</b>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography variant='subtitle2'>
-                      <b>Rs. 500</b>
-                    </Typography>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Discount Total
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2' color="primary">
+                        <b>- Rs. {order?.total_discount}</b>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography variant='subtitle2' color="textSecondary">
-                      Discount Total
-                    </Typography>
+                  <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Total Tax
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2'>
+                        <b>Rs. {order?.total_tax_amount}</b>
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography variant='subtitle2' color="primary">
-                      <b>- Rs. 100</b>
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid container justify="space-between">
-                  <Grid item>
-                    <Typography variant='subtitle2' color="textSecondary">
-                      Total Tax
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant='subtitle2'>
-                      <b>Rs. 0</b>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </div>
-                
-                <Divider/>
+                  {(order?.delivery_charge != 0) && <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Delivery Charge
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2'>
+                        <b>Rs. {order?.delivery_charge}</b>
+                      </Typography>
+                    </Grid>
+                  </Grid>}
+                  {(order?.coupon_value != 0) && <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Coupon Discount
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2'>
+                        <b>Rs. {order?.coupon_value}</b>
+                      </Typography>
+                    </Grid>
+                  </Grid>}
+                  {(order?.total_cancelled_amount != 0) && <Grid container justify="space-between">
+                    <Grid item>
+                      <Typography variant='subtitle2' color="textSecondary">
+                        Cancellation Amount
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant='subtitle2'>
+                        <b>Rs. {order?.total_cancelled_amount}</b>
+                      </Typography>
+                    </Grid>
+                  </Grid>}
+                </div>
+
+                <Divider />
                 <div className={classes.tiles}>
                   <Grid container justify="space-between">
                     <Grid item>
                       <Typography variant='h5'>
-                      <b>Total Cost</b>
+                        <b>Total Cost</b>
                       </Typography>
                     </Grid>
                     <Grid item>
                       <Typography variant='h5'>
-                        <b>Rs. 500.00</b>
+                        <b>Rs. {order?.grant_total}</b>
                       </Typography>
                     </Grid>
                   </Grid>
                 </div>
 
 
-          </Paper>   
+              </Paper>
 
 
             </Grid>
@@ -296,10 +354,10 @@ export default function OrderDetail() {
 
 
 
-             
 
-      </div>
-    </Container>
+
+        </div>
+      </Container>
     </>
   );
 }

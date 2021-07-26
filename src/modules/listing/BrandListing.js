@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Breadcrumbs, Link, Typography, Grid, Paper, Button } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchBrands } from '../../redux/actions/home';
+import { useHistory } from 'react-router-dom';
 
 const Category = [
   { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
@@ -22,7 +25,7 @@ const Category = [
   { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' },
   { id: 16, name: 'Organic', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/8.svg' },
   { id: 14, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/6.svg' },
-  { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg'}
+  { id: 15, name: 'Frozen', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/7.svg' }
 ]
 
 
@@ -42,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     '& img': {
       height: 60,
       display: 'inline-block',
-      marginBottom:20
+      marginBottom: 20
     }
   },
   paper: {
@@ -51,12 +54,20 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function CategoryListing({ products }) {
+export default function BrandListing() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchBrands());
+  }, []);
+
+  const brands = useSelector(state => state.home.brands);
 
   return (
     <>
-    
+
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
@@ -71,20 +82,22 @@ export default function CategoryListing({ products }) {
         <div className={classes.sectionGap}>
 
           <Grid container spacing={2}>
-            {Category.map((item)=> (
+            {brands?.map((item) => (
               <Grid item lg={2}>
-                  
+
                 <div className={classes.categoryBox}>
-                  <Paper elevation={1} classes={{ root: classes.paper }}>
-                    <img src={item.icon} />
-                    <Typography variant="h6" display="block" gutterBottom>{item.name}</Typography>
+                  <Paper elevation={1} classes={{ root: classes.paper }}
+                    onClick={() => history.push("/brands/" + item.brand_id)}
+                  >
+                    <img src={item.image} />
+                    <Typography variant="h6" display="block" gutterBottom>{item.brand_name}</Typography>
                   </Paper>
                 </div>
 
               </Grid>
             ))}
           </Grid>
-          
+
         </div>
       </Container>
     </>

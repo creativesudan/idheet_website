@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
-import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box,TextField } from '@material-ui/core';
+import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box, TextField } from '@material-ui/core';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -22,7 +22,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 import { HeadingBar, QtyController } from '../component/index'
 import { useTheme } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { order, removeItem, updateItem } from '../../redux/actions/cart';
+import { addCouponToCart, order, removeItem, updateItem } from '../../redux/actions/cart';
 import { fetchDeliverySlots, selectDeliveryAddress, selectDeliverySlot, setPaymentType } from '../../redux/actions/app';
 import { useHistory } from 'react-router-dom';
 import { clearOrderPlaced } from '../../redux/actions/order';
@@ -30,18 +30,18 @@ import { clearOrderPlaced } from '../../redux/actions/order';
 
 const useStyles = makeStyles((theme) => ({
 
-  subscriber:{
-    margin:'20px 0'
+  subscriber: {
+    margin: '20px 0'
   },
   subscriberBtn: {
-    width:'100%',
+    width: '100%',
     height: 40,
     borderTopLeftRadius: 0,
     borderBottomLeftRadius: 0,
-    marginTop:10
+    marginTop: 10
   },
   subcribeField: {
-    width:'100%',
+    width: '100%',
     borderTopRightRadius: 0,
 
   },
@@ -441,6 +441,12 @@ export default function CartView() {
   const couponCode = cart.appliedCoupon ? cart.appliedCoupon.coupon_code : "";
   const orderSuccess = useSelector(state => state.order.orderSuccess);
 
+  const [couponState, setCouponState] = useState(null);
+
+  useEffect(() => {
+    if (couponCode) setCouponState(couponCode);
+  }, [couponCode]);
+
   const paymentGateway = () => {
 
     const tempKey = settings ? settings.payment_gateway_key_id : "";
@@ -484,6 +490,10 @@ export default function CartView() {
 
 
   const handleNext = () => {
+    if (!cart.orderAllowed) {
+      alert("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
+      return;
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -552,20 +562,20 @@ export default function CartView() {
                           Back
                         </Button>
 
-                        
 
 
-                          <Button
+
+                        <Button
                           variant="contained"
                           color="primary"
                           onClick={handleNext}
                           className={classes.button}
-                          >
-                         {activeStep === steps.length - 1 ? 'Pay Now': 'Next' }
+                        >
+                          {activeStep === steps.length - 1 ? 'Pay Now' : 'Next'}
                         </Button>
-                        
-                        
-                        
+
+
+
                       </div>
                     </div>
                   </StepContent>
@@ -589,10 +599,10 @@ export default function CartView() {
           <Grid item lg={4}>
             <Paper>
               <div className={classes.cartOverview}>
-                <Typography><b>Bill Details</b> <br/></Typography>
+                <Typography><b>Bill Details</b> <br /></Typography>
 
-                
-          
+
+
 
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
@@ -622,38 +632,60 @@ export default function CartView() {
                   </div>
                   <Typography><b>₹{cart?.totalTax}</b></Typography>
                 </div>
-                <div className={classes.cartDetailRow}>
+                {cart?.appliedCoupon && <div className={classes.cartDetailRow}>
+                  <div className={classes.content}>
+                    <Typography color="textSecondary"><span style={{ color: '#000' }}>Coupon Discount</span></Typography>
+
+                  </div>
+                  <Typography><b>₹{cart?.couponDiscount}</b></Typography>
+                </div>}
+                {cart?.deliveryCharge > 0 && <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
                     <Typography color="textSecondary"><span style={{ color: '#000' }}>Delivery Charges</span></Typography>
 
                   </div>
                   <Typography><b>₹{cart?.deliveryCharge}</b></Typography>
-                </div>
-                
+                </div>}
+
+
                 <form className={classes.subscriber} noValidate autoComplete="off">
-                  <TextField id="outlined-basic" label="Code" variant="outlined" size="small" classes={{ root: classes.subcribeField }} />
-                  <Button variant="contained" color="primary" disableElevation classes={{ root: classes.subscriberBtn }}>
+                  <TextField
+                    id="outlined-basic"
+                    label="Code"
+                    variant="outlined"
+                    size="small"
+                    classes={{ root: classes.subcribeField }}
+                    value={couponState}
+                    onChange={e => setCouponState(e.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disableElevation
+                    classes={{ root: classes.subscriberBtn }}
+                    onClick={() => dispatch(addCouponToCart(couponState))}
+                  >
                     Apply Code
                   </Button>
                 </form>
 
                 <Divider />
-                <div style={{padding:'10px 0px'}}>
+                <div style={{ padding: '10px 0px' }}>
                   <Typography variant="subtitle2" color={"textSecondary"}>Your Total Savings on this order ₹{cart?.totalDiscount + cart?.couponDiscount}</Typography>
                 </div>
                 <Divider />
-                
-                <div style={{padding:'10px 0px'}}>
-                  
-                <div className={classes.cartDetailRow}>
-                  <div className={classes.content}>
-                    <Typography variant="h5">To Pay</Typography>
-                  </div>
-                  <Typography variant="h5" color={'error'}>₹{cart?.total}</Typography>
-                </div>
-              </div>
 
+                <div style={{ padding: '10px 0px' }}>
+
+                  <div className={classes.cartDetailRow}>
+                    <div className={classes.content}>
+                      <Typography variant="h5">To Pay</Typography>
+                    </div>
+                    <Typography variant="h5" color={'error'}>₹{cart?.total}</Typography>
+                  </div>
                 </div>
+
+              </div>
             </Paper>
           </Grid>
         </Grid>

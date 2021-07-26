@@ -30,7 +30,7 @@ import { initAuth, fetchUser, register, logout } from "../redux/actions/auth";
 import { fetchAddressList, verifyPincode } from "../redux/actions/address";
 import { fetchCartItems, fetchTax } from "../redux/actions/cart";
 import lazyLoad from "./actions/lazyLoad";
-import { selectDeliveryAddress, removeDeliveryAddress, fetchAppSettings, fetchDeliveryAreas, fetchEnquiryList } from "./actions/app";
+import { selectDeliveryAddress, removeDeliveryAddress, fetchAppSettings, fetchDeliveryAreas, fetchEnquiryList, fetchCmsList } from "./actions/app";
 import { evaluateCart } from "../redux/actions/cart";
 import rootReducer from './reducers/index';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -95,6 +95,8 @@ const appInitMiddleware = store => next => action => {
         console.log('Initializing App');
         store.dispatch(lazyLoad(fetchAppSettings()));
         store.dispatch(lazyLoad(fetchCategories()));
+        store.dispatch(lazyLoad(fetchDeliveryAreas()));
+        store.dispatch(lazyLoad(fetchCmsList()));
         const token = localStorage.getItem('token');
 
         console.log("Token: " + token);
@@ -105,7 +107,7 @@ const appInitMiddleware = store => next => action => {
             store.dispatch(fetchUser());
             store.dispatch(lazyLoad(fetchAddressList()));
             store.dispatch(lazyLoad(fetchCartItems()));
-            store.dispatch(lazyLoad(fetchDeliveryAreas()));
+
 
             // try {
             //     AsyncStorage.getItem('delivery_address')

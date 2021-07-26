@@ -117,7 +117,8 @@ const Order = {
     codOrder: (orderId) => requests.post(`?type=codorder&order_id=${orderId}`),
     onlineOrder: (orderId, txnid, type) => requests.post(`?type=paymentorder&order_id=${orderId}&txnid=${txnid}&payment_type=${type}`),
     cancel: (itemId) => requests.post(`/changeorderitemstatus?item_id=${itemId}&status=cancelled`),
-    cancelOrder: (orderId) => requests.post(`/ordercancel?order_id=${orderId}`)
+    cancelOrder: (orderId) => requests.post(`/ordercancel?order_id=${orderId}`),
+    getOrderById: (orderId) => requests.post(`/showorder?order_id=${orderId}`)
 }
 
 const Address = {

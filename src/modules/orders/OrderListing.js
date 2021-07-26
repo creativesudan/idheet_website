@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const ORDER_STATUS = { "pending": "pending", "ongoing": "ongoing", "delivered": "delivered", "cancelled": "cancelled" };
+export const ORDER_STATUS = { "pending": "pending", "ongoing": "ongoing", "delivered": "delivered", "cancelled": "cancelled" };
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -121,7 +121,7 @@ export const CompleteOrders = ({ orders }) => {
   return (
     <>
       {orders.map((items) => (
-        <Link href="/order-detail">
+        <Link href={"/orders/" + items.id}>
           <Paper className={classes.List}>
             <div className={classes.bar}>
               <div className={classes.header}>
@@ -132,7 +132,7 @@ export const CompleteOrders = ({ orders }) => {
                 </div>
                 <AccessTimeIcon fontSize="small" color="action" />&nbsp;
                 <Typography variant='subtitle1' color="textSecondary">
-                  {items.displayDate}
+                  {items.created_at}
                 </Typography>
               </div>
 
@@ -168,7 +168,58 @@ export const OpenOrders = ({ orders }) => {
   return (
     <>
       {orders.map((items) => (
-        <Link href="/order-detail">
+        <Link href={"/orders/" + items.id}>
+          <Paper className={classes.List}>
+
+            <div className={classes.bar}>
+              <div className={classes.header}>
+                <div className={classes.flex1}>
+                  <CustomBadge color={items.order_status === ORDER_STATUS.pending ? 1 : items.order_status === ORDER_STATUS.cancelled ? 2 : 0}>
+                    {items.order_status}
+                  </CustomBadge>
+                </div>
+                <AccessTimeIcon fontSize="small" color="action" />&nbsp;
+                <Typography variant='subtitle1' color="textSecondary">
+                  {items.created_at}
+                </Typography>
+              </div>
+
+              <div className={classes.table}>
+                <div className={classes.flex2}>
+                  <Typography variant='subtitle2' color="textSecondary">Transaction. ID</Typography>
+                  <Typography variant='subtitle2' ><b>{items.order_no}</b></Typography>
+                </div>
+                <div className={classes.flex2}>
+                  <Typography variant='subtitle2' color="textSecondary">Delivered to</Typography>
+                  <Typography variant='subtitle2' ><b>{items.address1}, {items.address2 && items.address2}, {items.city}</b></Typography>
+                </div>
+                <div>
+                  <Typography variant='subtitle2' color="textSecondary">Total Payment</Typography>
+                  <Typography variant='subtitle2' ><b>₹{items.grant_total}</b></Typography>
+                </div>
+              </div>
+            </div>
+
+          </Paper>
+        </Link>
+
+      ))
+      }
+    </>
+  )
+}
+
+
+export const CancelledOrders = ({ orders }) => {
+
+  const orderList = [
+    { orderid: '321DERS', delivery: 'Home', date: '06/04/2020', amount: '12.74', status: 'Cancelled', }
+  ]
+  const classes = useStyles();
+  return (
+    <>
+      {orders.map((items) => (
+        <Link href={"/orders/" + items.id}>
           <Paper className={classes.List}>
             <div className={classes.bar}>
               <div className={classes.header}>
@@ -179,7 +230,7 @@ export const OpenOrders = ({ orders }) => {
                 </div>
                 <AccessTimeIcon fontSize="small" color="action" />&nbsp;
                 <Typography variant='subtitle1' color="textSecondary">
-                  {items.displayDate}
+                  {items.created_at}
                 </Typography>
               </div>
 
@@ -200,51 +251,6 @@ export const OpenOrders = ({ orders }) => {
             </div>
           </Paper>
         </Link>
-      ))}
-    </>
-  )
-}
-
-
-export const CancelledOrders = ({ orders }) => {
-
-  const orderList = [
-    { orderid: '321DERS', delivery: 'Home', date: '06/04/2020', amount: '12.74', status: 'Cancelled', }
-  ]
-  const classes = useStyles();
-  return (
-    <>
-      {orders.map((items) => (
-        <Paper className={classes.List}>
-          <div className={classes.bar}>
-            <div className={classes.header}>
-              <div className={classes.flex1}>
-                <CustomBadge color={items.order_status === ORDER_STATUS.pending ? 1 : items.order_status === ORDER_STATUS.cancelled ? 2 : 0}>
-                  {items.order_status}
-                </CustomBadge>
-              </div>
-              <AccessTimeIcon fontSize="small" color="action" />&nbsp;
-              <Typography variant='subtitle1' color="textSecondary">
-                {items.date}
-              </Typography>
-            </div>
-
-            <div className={classes.table}>
-              <div className={classes.flex2}>
-                <Typography variant='subtitle2' color="textSecondary">Transaction. ID</Typography>
-                <Typography variant='subtitle2' ><b>{items.order_no}</b></Typography>
-              </div>
-              <div className={classes.flex2}>
-                <Typography variant='subtitle2' color="textSecondary">Delivered to</Typography>
-                <Typography variant='subtitle2' ><b>{items.address1}, {items.address2 && items.address2}, {items.city}</b></Typography>
-              </div>
-              <div>
-                <Typography variant='subtitle2' color="textSecondary">Total Payment</Typography>
-                <Typography variant='subtitle2' ><b>₹{items.grant_total}</b></Typography>
-              </div>
-            </div>
-          </div>
-        </Paper>
       ))}
     </>
   )

@@ -16,6 +16,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import LeftPanel from './LeftPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, updateUser } from '../../redux/actions/auth';
+import { fetchCoupons } from '../../redux/actions/cart';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,27 +31,27 @@ const useStyles = makeStyles((theme) => ({
   frame: {
     padding: 20
   },
-  list:{
-    background:'#28a745',
-    padding:'16px',
-    borderRadius:4,
-    margin:'20px 0'
+  list: {
+    background: '#28a745',
+    padding: '16px',
+    borderRadius: 4,
+    margin: '20px 0'
   },
-  listDetails:{
-    marginBottom:15
+  listDetails: {
+    marginBottom: 15
   },
-  Avatar:{
-    display:'inline-block',
-    '& img':{
-      objectFit:'cover',
-      objectPositon:'center',
-      width:100,
-      height:100,
-      borderRadius:4
+  Avatar: {
+    display: 'inline-block',
+    '& img': {
+      objectFit: 'cover',
+      objectPositon: 'center',
+      width: 100,
+      height: 100,
+      borderRadius: 4
     }
   },
-  textWhite:{
-    color:'#fff'
+  textWhite: {
+    color: '#fff'
   }
 }))
 
@@ -57,8 +59,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function PromoListView() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const history = useHistory();
   const user = useSelector(state => state.auth.user);
+  const list = useSelector(state => state.cart.coupons);
 
+  useEffect(() => {
+    if (!list) dispatch(fetchCoupons());
+  }, []);
 
 
   return (
@@ -86,57 +94,28 @@ export default function PromoListView() {
               <Paper>
                 <div className={classes.frame}>
                   <Typography variant="h4"><b>Avaiable Promos</b></Typography>
-                  
-                  <div className={classes.list}>
-                    <Grid container justify="space-between">
+
+                  {list?.map(item => (
+                    <div className={classes.list}>
+                      <Grid container justify="space-between">
                         <Grid item>
                           <div className={classes.listDetails}>
-                          <Typography variant="h5" className={classes.textWhite}>Grocery</Typography>
-                          <Typography variant="caption" className={classes.textWhite}>BANANA'S 25% OFF</Typography>
+                            <Typography variant="h5" className={classes.textWhite}>{item.title}</Typography>
+                            <Typography variant="caption" className={classes.textWhite}>{item.description}</Typography>
                           </div>
-                          <Button variant="contained" color="secondary">Check Now</Button>
+                          <Button variant="contained" color="secondary"
+                            onClick={() => history.push("/promo/" + item.coupon_id)}
+                          >Check Now</Button>
                         </Grid>
                         <Grid item>
                           <span className={classes.Avatar}>
-                            <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
+                            <img src={item.image} />
                           </span>
                         </Grid>
-                    </Grid>
-                  </div>
-                  
-                  <div className={classes.list}>
-                    <Grid container justify="space-between">
-                        <Grid item>
-                          <div className={classes.listDetails}>
-                          <Typography variant="h5" className={classes.textWhite}>Grocery</Typography>
-                          <Typography variant="caption" className={classes.textWhite}>BANANA'S 25% OFF</Typography>
-                          </div>
-                          <Button variant="contained" color="secondary">Check Now</Button>
-                        </Grid>
-                        <Grid item>
-                          <span className={classes.Avatar}>
-                            <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
-                          </span>
-                        </Grid>
-                    </Grid>
-                  </div>
-                  
-                  <div className={classes.list}>
-                    <Grid container justify="space-between">
-                        <Grid item>
-                          <div className={classes.listDetails}>
-                          <Typography variant="h5" className={classes.textWhite}>Grocery</Typography>
-                          <Typography variant="caption" className={classes.textWhite}>BANANA'S 25% OFF</Typography>
-                          </div>
-                          <Button variant="contained" color="secondary">Check Now</Button>
-                        </Grid>
-                        <Grid item>
-                          <span className={classes.Avatar}>
-                            <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
-                          </span>
-                        </Grid>
-                    </Grid>
-                  </div>
+                      </Grid>
+                    </div>))}
+
+
 
                 </div>
               </Paper>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button, Card, CardContent, CardMedia, Grid, Box } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
@@ -42,9 +42,171 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+const BRACKETS = 4;
+const SORT_DEFAULT = 0;
+const SORT_INCREASING_BY_PRICE = 1;
+const SORT_DECREASING_BY_PRICE = 2;
 
+const getBrands = (products) => {
+  if (!products || products.length == 0) return [];
+  return Array.from(new Set(products.filter(product => !!product.brand).map(product => product.brand.brand_id))).map(id => {
+    const brand = products.find(product => product.brand.brand_id === id).brand.brand;
+    if (brand) {
+      return {
+        brand_id: id,
+        brand: brand
+      }
+    }
+  });
+}
+
+const getDynamicPriceBrackets = (products) => {
+  if (!products || products.length == 0) return [];
+
+  const prices = products.map(product => product.discountedPrice);
+  if (!prices) return [];
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+  const diff = (maxPrice - minPrice) / BRACKETS;
+
+  let result = [];
+  for (let i = 1; i <= BRACKETS; i++) {
+    let count = 0;
+    let tempMin = minPrice + (i - 1) * diff;
+    let tempMax = minPrice + i * diff;
+    prices.map(price => {
+      if (price >= tempMin && price < tempMax) count += 1;
+    });
+    result.push({
+      id: i,
+      minPrice: tempMin,
+      maxPrice: tempMax,
+      count: count
+    });
+
+  }
+
+  return result;
+
+}
+
+const getPriceBrackets = (products) => {
+  if (!products || products.length == 0) return [];
+
+  const prices = products.map(product => product.discountedPrice);
+
+  const minPrice = 0;
+  const maxPrice = 2000;
+  const diff = (maxPrice - minPrice) / BRACKETS;
+
+  let result = [];
+  for (let i = 1; i <= BRACKETS; i++) {
+    let count = 0;
+    let tempMin = minPrice + (i - 1) * diff;
+    let tempMax = minPrice + i * diff;
+    prices.map(price => {
+      if (price >= tempMin && price < tempMax) count += 1;
+    });
+    result.push({
+      id: i,
+      minPrice: tempMin,
+      maxPrice: tempMax,
+      count: count
+    });
+
+  }
+
+  return result;
+
+}
+
+const applyFilterAndSort = (products, filter, sort) => {
+  if (!products || products.length == 0) return [];
+  let resultProducts = [...products];
+
+  // Filter
+  const filterBrands = filter.brands && filter.brands.filter(brand => brand.checked);
+  const filterBrackets = filter.priceBrackets && filter.priceBrackets.filter(bracket => bracket.checked);
+  if (filterBrands && filterBrands.length != 0) {
+    resultProducts = resultProducts.filter(product => {
+      let keep = false;
+      for (let i = 0; i < filterBrands.length; i++) {
+        if (product.brand && product.brand.brand_id == filterBrands[i].brand_id) {
+          keep = true;
+          break;
+        }
+      }
+      return keep;
+    })
+  }
+
+  if (filterBrackets && filterBrackets.length != 0) {
+    resultProducts = resultProducts.filter(product => {
+      let keep = false;
+      for (let i = 0; i < filterBrackets.length; i++) {
+        console.log(filterBrackets[i], product);
+        if (product.price && product.discountedPrice >= filterBrackets[i].minPrice && product.discountedPrice < filterBrackets[i].maxPrice) {
+          keep = true;
+          break;
+        }
+      }
+      return keep;
+    })
+  }
+
+  // Sort
+
+  if (sort == SORT_INCREASING_BY_PRICE) {
+    resultProducts = resultProducts.sort((p1, p2) => p1.discountedPrice - p2.discountedPrice);
+  }
+
+  if (sort == SORT_DECREASING_BY_PRICE) {
+    resultProducts = resultProducts.sort((p1, p2) => p2.discountedPrice - p1.discountedPrice);
+  }
+
+  return resultProducts;
+}
 export default function Products({ products }) {
   const classes = useStyles();
+  const [filter, setFilter] = useState({});
+  const [sort, setSort] = useState(SORT_DEFAULT);
+  const [localProducts, setLocalProducts] = useState(products);
+
+
+  useEffect(() => {
+    setLocalProducts(applyFilterAndSort(products, filter, sort));
+  }, [filter]);
+
+  useEffect(() => {
+    setLocalProducts(applyFilterAndSort(products, filter, sort));
+  }, [sort]);
+
+  useEffect(() => {
+    setLocalProducts(products);
+    return () => setLocalProducts([]);
+  }, [products]);
+
+  useEffect(() => {
+    const brands = getBrands(products);
+    const priceBrackets = getPriceBrackets(products);
+    setFilter({ brands, priceBrackets });
+    return () => setFilter({});
+  }, [products]);
+
+
+  const isBrandChecked = (filter, brand) => {
+    if (!filter.brands) return false;
+    const found = filter.brands.find(b => b.brand_id == brand.brand_id);
+    if (found) return found.checked;
+    return false;
+  }
+
+  const isBracketChecked = (filter, bracket) => {
+    if (!filter.priceBrackets) return false;
+    const found = filter.priceBrackets.find(p => p.id == bracket.id);
+    if (found) return found.checked;
+    return false;
+  }
 
   return (
     <>
@@ -52,7 +214,7 @@ export default function Products({ products }) {
 
       <Grid container spacing={2}>
 
-        {products && products.map(item => {
+        {localProducts?.map(item => {
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>

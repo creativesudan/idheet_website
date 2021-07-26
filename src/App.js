@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { Header, Footer, ContentView} from './modules/common'
+import { Header, Footer, ContentView } from './modules/common'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Home } from './modules/home'
@@ -14,6 +14,7 @@ import PromoListView from './modules/myAccount/PromoList';
 import PromoDetailView from './modules/myAccount/PromoDetails';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
+import BrandProductListing from './modules/listing/BrandProductListing';
 
 
 
@@ -52,15 +53,19 @@ function App() {
           <Route path="/listing">
             <ProductListing />
           </Route>
+          <Route path="/category/:category_id">
+            <ProductListing />
+          </Route>
           <Route path="/category">
             <CategoryListing />
+          </Route>
+          <Route path="/brands/:brand_id">
+            <BrandProductListing />
           </Route>
           <Route path="/brands">
             <BrandListing />
           </Route>
-          <Route path="/category/:category_id">
-            <ProductListing />
-          </Route>
+
           <Route path="/trending">
             <Trending />
           </Route>
@@ -73,12 +78,10 @@ function App() {
           <Route path="/cart">
             <CheckoutProcess />
           </Route>
-          <PrivateRoute path="/orders" component={OrderListing}>
 
-          </PrivateRoute>
-          <Route path="/order-detail">
-            <OrderDetail />
-          </Route>
+          <PrivateRoute path="/orders/:order_id" component={OrderDetail} />
+
+          <PrivateRoute path="/orders" component={OrderListing} />
           <Route path="/login">
             <LoginView />
           </Route>
@@ -88,21 +91,24 @@ function App() {
           <Route path="/register">
             <RegisterView />
           </Route>
+          <Route path="/promo/:promo_id">
+            <PromoDetailView />
+          </Route>
           <Route path="/promo">
             <PromoListView />
           </Route>
-          <Route path="/promo-detail">
-            <PromoDetailView />
-          </Route>
-          <Route path="/Content">
-            <ContentView />
-          </Route>
-          
+
+
+
+
 
 
           <PrivateRoute path="/my-account" component={MyAccount}>
           </PrivateRoute>
-          <Route path="/" component={Home}></Route>
+          <Route path="/" component={Home} exact></Route>
+          <Route path={"/:content_slug"} exact>
+            <ContentView />
+          </Route>
         </Switch>
         <Footer />
       </Router>

@@ -6,6 +6,7 @@ import { HeadingBar } from '../component/index'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAppSettings } from '../../redux/actions/app';
 import { fetchExclusiveProducts, fetchOtherProducts, fetchPopularProducts, fetchRecommendedProducts } from '../../redux/actions/home';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   sectionGap: {
@@ -20,6 +21,10 @@ export default function Home() {
   const popularProducts = useSelector(state => state.home.popularProducts || []);
   const recommendedProducts = useSelector(state => state.home.recommendedProducts || []);
   const otherProducts = useSelector(state => state.home.otherProducts || []);
+  const categories = useSelector(state => state.home.categories?.filter(item => item.show_on_home && !item.parent).sort((a, b) => (a.rank || 0) - (b.rank || 0)));
+  const history = useHistory();
+
+
 
   useEffect(() => {
     dispatch(fetchAppSettings());
@@ -36,7 +41,7 @@ export default function Home() {
     <>
       <Container>
         <div className={classes.sectionGap}>
-          <CategorySlider />
+          <CategorySlider categories={categories} onClick={(category) => history.push("/category/" + category.id)} title="What are you looking for?" />
           <PromoSlider />
           <HotProducts title={settings && settings.home_section1} products={exclusiveProducts} />
           <HotProducts title={settings && settings.home_section2} products={popularProducts} />
