@@ -6,7 +6,7 @@ import _superagent from 'superagent';
 
 const superagent = superagentPromise(_superagent, global.Promise);
 
-const API_ROOT = 'https://kisanhaat.co.in/backend/api';
+const API_ROOT = 'https://idheet.com/backend/api';
 const MEDIA_ROOT = '';
 
 const encode = encodeURIComponent;

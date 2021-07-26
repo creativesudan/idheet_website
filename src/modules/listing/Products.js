@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button, Card, CardContent, CardMedia, Grid, Box } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
+import FilterListIcon from '@material-ui/icons/FilterList';
+import SortIcon from '@material-ui/icons/Sort';
 
 
 const Product = [
@@ -166,11 +168,12 @@ const applyFilterAndSort = (products, filter, sort) => {
 
   return resultProducts;
 }
-export default function Products({ products }) {
+export default function Products({ products, title }) {
   const classes = useStyles();
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState(SORT_DEFAULT);
   const [localProducts, setLocalProducts] = useState(products);
+  const [open, setOpen] = React.useState(false);
 
 
   useEffect(() => {
@@ -185,6 +188,10 @@ export default function Products({ products }) {
     setLocalProducts(products);
     return () => setLocalProducts([]);
   }, [products]);
+
+  // useEffect(() => {
+  //   setOpen(filterOpen);
+  // }, [filterOpen]);
 
   useEffect(() => {
     const brands = getBrands(products);
@@ -210,6 +217,23 @@ export default function Products({ products }) {
 
   return (
     <>
+      <Filter drawerState={open} onClose={() => setOpen(false)} />
+      <HeadingBar
+        variant="h4"
+        title={title}
+        button={
+          <>
+            <Box mx={1}>
+              <Button variant="outlined" size="small" onClick={() => setOpen(true)}>
+                <FilterListIcon fontSize="small" />&nbsp;Filter
+              </Button>
+            </Box>
+            <Button variant="outlined" size="small" onClick={() => setOpen(true)}>
+              <SortIcon fontSize="small" />&nbsp;Sort
+            </Button>
+          </>
+        }
+      />
 
 
       <Grid container spacing={2}>

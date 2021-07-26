@@ -72,25 +72,25 @@ export default function ProductListing() {
       <Container>
         <div className={classes.sectionGap}>
           <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" />
-          <Filter drawerState={open} />
+          {/* <Filter drawerState={open} /> */}
 
-          <HeadingBar
+          {/* <HeadingBar
             variant="h4"
             title={category.name}
             button={
               <>
                 <Box mx={1}>
-                  <Button variant="outlined" size="small" onClick={() => setOpen(!open)}>
+                  <Button variant="outlined" size="small" onClick={() => setOpen(true)}>
                     <FilterListIcon fontSize="small" />&nbsp;Filter
                   </Button>
                 </Box>
-                <Button variant="outlined" size="small" onClick={() => setOpen(!open)}>
+                <Button variant="outlined" size="small" onClick={() => setOpen(true)}>
                   <SortIcon fontSize="small" />&nbsp;Sort
                 </Button>
               </>
             }
-          />
-          <Products products={products} />
+          /> */}
+          <Products products={products} title={category.name} />
         </div>
       </Container>
     </>
