@@ -6,6 +6,9 @@ import { Filter } from './index'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
 import { useHistory } from 'react-router-dom';
+import { getCartItem } from '../../redux/lib/cart';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateItem } from '../../redux/actions/cart';
 
 
 const Product = [
@@ -176,6 +179,10 @@ export default function Products({ products, title }) {
   const [localProducts, setLocalProducts] = useState(products);
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+  const dispatch = useDispatch();
+
 
 
   useEffect(() => {
@@ -217,6 +224,14 @@ export default function Products({ products, title }) {
     return false;
   }
 
+  const handleQtyDec = (cartItem) => {
+    dispatch(removeItem(cartItem));
+  }
+
+  const handleQtyInc = (cartItem) => {
+    dispatch(updateItem(cartItems, cartItem));
+  }
+
   return (
     <>
       <Filter
@@ -250,6 +265,7 @@ export default function Products({ products, title }) {
       <Grid container spacing={2}>
 
         {localProducts?.map(item => {
+          const cartItem = getCartItem(cartItems, item);
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>
@@ -277,7 +293,7 @@ export default function Products({ products, title }) {
 
 
                     <Grid item>
-                      <QtyController />
+                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
                     </Grid>
                   </Grid>
 
