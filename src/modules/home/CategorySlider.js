@@ -85,7 +85,7 @@ function SamplePrevArrow(props) {
   );
 }
 
-export default function CategorySlider({ title, categories, onClick, selectedId }) {
+export default function CategorySlider({ title, categories, onClick, selectedId, button }) {
   const history = useHistory();
 
   const classes = useStyles();
@@ -130,7 +130,7 @@ export default function CategorySlider({ title, categories, onClick, selectedId 
 
       {categories && categories.length > 0 && <HeadingBar
         title={title}
-        button={<Button color="primary" variant="outlined" size="small"
+        button={button === false ? <></> : <Button color="primary" variant="outlined" size="small"
           onClick={() => history.push("/category")}
         >See more</Button>}
       />}

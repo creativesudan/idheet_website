@@ -5,6 +5,7 @@ import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { CategorySlider } from '../home';
 
 const Category = [
   { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/categorie/1.svg' },
@@ -58,6 +59,10 @@ export default function CategoryListing() {
   const categories = useSelector(state => state.home.categories?.sort((a, b) => (a.rank || 0) - (b.rank || 0)));
   const history = useHistory();
 
+  const getSubs = (parent) => {
+    return categories?.filter(category => category.parent == parent.name);
+  }
+
   return (
     <>
 
@@ -74,20 +79,33 @@ export default function CategoryListing() {
       <Container>
         <div className={classes.sectionGap}>
 
-          <Grid container spacing={2}>
-            {categories?.map((item) => (
-              <Grid item lg={2}>
+          <CategorySlider categories={categories?.filter(category => !category.parent)} onClick={(category) => history.push("/category/" + category.id)} title="What are you looking for?" button={false} />
 
-                <div className={classes.categoryBox}>
-                  <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/category/" + item.id)}>
-                    <img src={item.icon} />
-                    <Typography variant="h6" display="block" gutterBottom>{item.name}</Typography>
-                  </Paper>
-                </div>
+          {categories?.filter(category => !category.parent).map((parent) => {
+            const subs = getSubs(parent);
+            return subs.length > 0 ? <>
+              <div className={classes.sectionGap}>
+                <Typography variant="h6" display="block" gutterBottom>{parent.name}</Typography>
+                <Grid container spacing={2}>
+                  {subs?.map(sub => {
 
-              </Grid>
-            ))}
-          </Grid>
+                    return <Grid item lg={2}>
+
+                      <div className={classes.categoryBox}>
+                        <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/category/" + sub.id)}>
+                          <img src={sub.icon} />
+                          <Typography variant="h6" display="block" gutterBottom>{sub.name}</Typography>
+                        </Paper>
+                      </div>
+
+                    </Grid>
+                  })}
+                </Grid>
+              </div>
+            </> : <></>
+
+          })}
+
 
         </div>
       </Container>

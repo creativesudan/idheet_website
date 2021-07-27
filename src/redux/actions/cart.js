@@ -82,7 +82,7 @@ const verifyAndApplyCoupon = (cart, priceTotal) => {
     // const coupon_end = Date.parse(cart.appliedCoupon.end_date);
     // const today = new Date();
     let couponDiscount = 0;
-    console.log("Evaluating coupon", cart.appliedCoupon);
+    // console.log("Evaluating coupon", cart.appliedCoupon);
 
     if (cart.appliedCoupon.type == "percent") {
         couponDiscount = priceTotal * (parseFloat(cart.appliedCoupon.value) / 100);
@@ -106,7 +106,7 @@ export const evaluateCart = (cart, categories, settings) => {
         // cart.tax.filter(t => parseInt(t.status) == 1).map(t => { tax_slabs[t.id] = t.percentage });
         cart.items.map(item => {
             const tax = getCategoryTax(item.category_id, categories);
-            console.log(tax);
+            // console.log(tax);
             totalTax += item.total * (tax / 100);
         })
     }

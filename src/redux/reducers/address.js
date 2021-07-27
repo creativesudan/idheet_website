@@ -6,7 +6,8 @@ import {
     PINCODE_VERIFIED,
     UPDATE_EDITADDRESS_FIELD,
     UPDATE_ADDADDRESS_FIELD,
-    UPDATE_ADDRESS_FIELD
+    UPDATE_ADDRESS_FIELD,
+    LOGOUT
 } from "../actions/types";
 
 const initialState = {}
@@ -66,7 +67,8 @@ export default function (state = initialState, action) {
                     area: action.payload.area,
                 }
             }
-
+        case LOGOUT:
+            return initialState;
 
         default:
             return state;

@@ -135,7 +135,7 @@ export default function PromoSlider() {
                     history.push("/category/" + item.typeData?.id);
                   }
                   else if (item.type == "coupon") {
-                    console.log(item);
+
                     history.push('/promo/' + item.typeData?.coupon_id);
                   }
                 }}

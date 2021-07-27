@@ -18,6 +18,7 @@ import PromoDetailView from './modules/myAccount/PromoDetails';
 import { useDispatch } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
 import BrandProductListing from './modules/listing/BrandProductListing';
+import ScrollToTop from './modules/common/ScrollToTop';
 
 
 
@@ -51,6 +52,7 @@ function App() {
   return (
     <>
       <Router>
+        <ScrollToTop />
         <Header />
         <Switch>
           <Route path="/listing">
@@ -97,9 +99,8 @@ function App() {
           <Route path="/enquiry">
             <EnquiryListView />
           </Route>
-          <Route path="/address">
-            <AddressListView />
-          </Route>
+          <PrivateRoute path="/address" component={AddressListView} />
+
           <Route path="/enquiry-detail">
             <EnquiryDetailView />
           </Route>

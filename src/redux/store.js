@@ -41,13 +41,13 @@ import { fetchOrders } from './actions/order';
 import { fetchCategories } from './actions/home';
 
 const promiseMiddleware = store => next => action => {
-    console.log(action)
+    // console.log(action)
     if (isPromise(action.payload)) {
         if (!action.lazyLoad) store.dispatch({ type: ASYNC_START, subtype: action.type });
 
         return action.payload.then(
             res => {
-                console.log('RESULT', res);
+                // console.log('RESULT', res);
                 if (parseInt(res.status) === 0) {
                     action.error = true;
                     action.payload = res.message || res.errors;
@@ -68,11 +68,11 @@ const promiseMiddleware = store => next => action => {
                 //     text1: 'API Error',
                 //     text2: error.response.body.message || error.response.body.toString()
                 // });
-                console.log('ERROR', error);
+                console.error('ERROR', error);
                 if (!action.lazyLoad) store.dispatch({ type: ASYNC_END, promise: action.payload });
 
                 if (error.response?.status == 401 || error.response?.status == 302) {
-                    console.log("Unauthorized Access. Logging Out.");
+                    console.error("Unauthorized Access. Logging Out.");
                     store.dispatch(logout());
                 } else {
                     action.error = true;
@@ -92,14 +92,14 @@ const promiseMiddleware = store => next => action => {
 const appInitMiddleware = store => next => action => {
 
     if (action.type == APP_LOADING) {
-        console.log('Initializing App');
+        // console.log('Initializing App');
         store.dispatch(lazyLoad(fetchAppSettings()));
         store.dispatch(lazyLoad(fetchCategories()));
         store.dispatch(lazyLoad(fetchDeliveryAreas()));
         store.dispatch(lazyLoad(fetchCmsList()));
         const token = localStorage.getItem('token');
 
-        console.log("Token: " + token);
+        // console.log("Token: " + token);
         if (token !== null) {
             // token = token + "a";
             store.dispatch(initAuth(token));
@@ -128,15 +128,15 @@ const appInitMiddleware = store => next => action => {
 
 const loginMiddleware = store => next => action => {
     if (action.type == OTP_REQUEST && action.error) {
-        console.log("OTP Failed. Need to register.")
+        console.error("OTP Failed. Need to register.")
         const mobile = store.getState().auth.mobile;
-        console.log(mobile);
+
         store.dispatch(register(mobile));
     }
     else if (action.type === LOGIN) {
         if (!action.error) {
             try {
-                console.log("Setting Token after logging in.");
+                // console.log("Setting Token after logging in.");
                 localStorage.setItem('token', action.payload.token);
                 agent.setToken(action.payload.token);
                 // store.dispatch(fetchUser(action.payload.response.data.id));
@@ -146,7 +146,7 @@ const loginMiddleware = store => next => action => {
                 store.dispatch(lazyLoad(fetchDeliveryAreas()));
                 // store.dispatch(lazyLoad(fetchAppSettings()));
             } catch (e) {
-                console.log(e);
+                console.error(e);
             }
         }
 
@@ -154,7 +154,7 @@ const loginMiddleware = store => next => action => {
         try {
             localStorage.removeItem('token');
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 
@@ -165,7 +165,7 @@ const cartMiddleware = store => next => action => {
     if (action.type && !isPromise(action.payload) && (action.type == CART_COUPON_APPLIED ||
         action.type == CART_TAX_APPLIED || action.type == CART_ITEMS_LOADED || action.type == APP_SETTINGS_LOADED)) {
 
-        console.log(store.getState().cart);
+        // console.log(store.getState().cart);
 
         // store.dispatch(lazyLoad(fetchTax()));
 
@@ -174,7 +174,7 @@ const cartMiddleware = store => next => action => {
         const cart = store.getState().cart;
         const categories = store.getState().home.categories;
         const settings = store.getState().app.settings;
-        console.log(cart);
+        // console.log(cart);
 
         store.dispatch(evaluateCart(cart, categories, settings));
 

@@ -78,6 +78,7 @@ export default function DetailView({ product }) {
 
   const cartItems = useSelector(state => state.cart.items);
   const cartLoading = useSelector(state => state.cart.cartLoading);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const cartItem = getCartItem(cartItems, product);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -95,7 +96,7 @@ export default function DetailView({ product }) {
 
 
   const handleVariant = (event, newVariant) => {
-    console.log(newVariant);
+
     if (newVariant !== null && product.variants) {
       setSelectedVariant(product.variants.find(item => item.id == newVariant));
     }
@@ -148,8 +149,12 @@ export default function DetailView({ product }) {
               <Grid item sm={6}>
                 <Button classes={{ root: classes.largeBtn }} color="secondary" variant="contained" disableElevation fullWidth size="large"
                   onClick={() => {
-                    const tempCartItem = { ...cartItem, qty: 1 };
-                    handleQtyInc(tempCartItem);
+                    if (!isAuthenticated) {
+                      history.push("/login");
+                    } else {
+                      const tempCartItem = { ...cartItem, qty: 1 };
+                      handleQtyInc(tempCartItem);
+                    }
                   }}
                 >
                   <AddIcon /> Add to Cart</Button>

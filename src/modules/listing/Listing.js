@@ -53,7 +53,7 @@ export default function ProductListing() {
   }, [category_id]);
 
   useEffect(() => {
-    console.log("DKJCWVKEWVK")
+
     if (subcategories && subcategories.length > 0) setSelectedCategory(subcategories[0]?.id);
   }, [subcategories]);
 

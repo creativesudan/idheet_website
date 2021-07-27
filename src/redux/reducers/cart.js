@@ -8,7 +8,8 @@ import {
     CART_EVALUATED,
     CART_CLEARED,
     CART_ITEMS_LOADED,
-    ASYNC_START
+    ASYNC_START,
+    LOGOUT
 } from "../actions/types";
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getDefaultImage } from "./home";
@@ -163,6 +164,8 @@ export default function (state = initialCart, action) {
                 }
             }
             return state;
+        case LOGOUT:
+            return initialCart;
         default:
             return state;
     }

@@ -12,6 +12,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateItem } from '../../redux/actions/cart';
 import { getCartItem } from '../../redux/lib/cart';
+import { useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,12 +38,12 @@ const useStyles = makeStyles((theme) => ({
   media: {
     flex: 1,
     height: 170,
-    maxWidth:'100%',
-    objectFit:'cover',
-    objectPosition:'center'
+    maxWidth: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center'
   },
-  thumb_cover:{
-    textAlign:'center'
+  thumb_cover: {
+    textAlign: 'center'
   },
   textContent: {
     marginTop: 20, marginBottom: 10
@@ -85,6 +86,7 @@ export default function RecommendedProducts({ title, products }) {
   const cartItems = useSelector(state => state.cart.items);
   const cartLoading = useSelector(state => state.cart.cartLoading);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleQtyDec = (cartItem) => {
     dispatch(removeItem(cartItem));
@@ -118,16 +120,16 @@ export default function RecommendedProducts({ title, products }) {
           return (
             <Grid item md={3} xs={12}>
               <Card>
-                <CardContent classes={{ root: classes.cardRoot }}>
+                <CardContent classes={{ root: classes.cardRoot }} onClick={() => history.push("/product/" + item.id)}>
 
                   <Slider {...settings} style={{ margin: -5 - 5 }}>
                     {item.images.map((item) => (
                       <div className={classes.categoryBox}>
                         <div style={{ padding: 10 }}>
                           <Paper elevation={0} classes={{ root: classes.paper }}>
-                            
+
                             <div className={classes.thumb_cover}>
-                              <img src={item.image} className={classes.media} title={item.name}/>
+                              <img src={item.image} className={classes.media} title={item.name} />
                             </div>
 
                           </Paper>
@@ -137,7 +139,7 @@ export default function RecommendedProducts({ title, products }) {
                   </Slider>
 
                   <div className={classes.textContent}>
-                    <Typography variant="h6" color="primary">
+                    <Typography variant="h6" color="primary" onClick={() => history.push("/product/" + item.id)}>
                       {item.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
