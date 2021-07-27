@@ -11,6 +11,9 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Slider from '@material-ui/core/Slider';
 
 
+const SORT_DEFAULT = 0;
+const SORT_INCREASING_BY_PRICE = 1;
+const SORT_DECREASING_BY_PRICE = 2;
 
 const useStyles = makeStyles((theme) => ({
 
@@ -98,23 +101,70 @@ export default function Filter(props) {
 
         <FormLabel component="legend" color="default" className={classes.subHeading}>Sort By</FormLabel>
         <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Top Rated" control={<Radio color="primary" />} label="Price Low to High" />
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Nearest Me" control={<Radio color="primary" />} label="Price High to Low" />
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Top Rated" control={
+            <Radio
+              color="primary"
+              checked={props.sort == SORT_INCREASING_BY_PRICE}
+              onClick={() => {
+                props.setSort(SORT_INCREASING_BY_PRICE);
+                // SortDrawer.current?.close()
+              }}
+            />} label="Price Low to High" />
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Nearest Me" control={
+            <Radio
+              color="primary"
+              checked={props.sort == SORT_DECREASING_BY_PRICE}
+              onClick={() => {
+                props.setSort(SORT_DECREASING_BY_PRICE);
+                // SortDrawer.current?.close()
+              }}
+            />} label="Price High to Low" />
           {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="High to Low" control={<Radio color="primary" />} label="Cost High to Low" />
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Low to High" control={<Radio color="primary" />} label="Cost Low to High" />
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Most Popular" control={<Radio color="primary" />} label="Most Popular" /> */}
         </RadioGroup>
 
         <FormLabel component="legend" className={classes.subHeading}>Filter By Brand</FormLabel>
-        {props.filter?.brands?.map(brand => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label={brand.brand} />)}
+        {props.filter?.brands?.map(brand => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={
+          <Checkbox
+            color="primary"
+            checked={props.isBrandChecked(props.filter, brand)}
+            onClick={() => {
+
+              const newBrands = props.filter?.brands?.map(b => {
+
+                if (b.brand_id == brand.brand_id) {
+                  b.checked = !b.checked;
+                }
+                return b;
+              });
+              props.setFilter({ ...props.filter, brands: newBrands });
+              // SortDrawer.current?.close()
+            }}
+
+          />} label={brand.brand} />)}
         {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Credit Cards" />
         <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Alcohol Served" /> */}
 
         <FormLabel component="legend" className={classes.subHeading}>Filter by Price</FormLabel>
-        {props.filter?.priceBrackets?.map((bracket, index) => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label={index == 0 ? `Less than Rs. ${bracket.maxPrice} (${bracket.count})` :
-          index == props.filter?.priceBrackets?.length - 1 ? `More than Rs. ${bracket.minPrice} (${bracket.count})` :
-            `Rs. ${bracket.minPrice} to Rs ${bracket.maxPrice} (${bracket.count})`
-        } />)}
+        {props.filter?.priceBrackets?.map((bracket, index) => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={
+          <Checkbox
+            color="primary"
+            checked={props.isBracketChecked(props.filter, bracket)}
+            onClick={() => {
+              const newBrackets = props.filter?.priceBrackets.map(b => {
+
+                if (b.id == bracket.id) {
+                  b.checked = !b.checked;
+                }
+                return b;
+              });
+              props.setFilter({ ...props.filter, priceBrackets: newBrackets });
+            }}
+          />} label={index == 0 ? `Less than Rs. ${bracket.maxPrice} (${bracket.count})` :
+            index == props.filter?.priceBrackets?.length - 1 ? `More than Rs. ${bracket.minPrice} (${bracket.count})` :
+              `Rs. ${bracket.minPrice} to Rs ${bracket.maxPrice} (${bracket.count})`
+          } />)}
         {/* <div className={classes.slider}>
           <Slider
             value={ranger}

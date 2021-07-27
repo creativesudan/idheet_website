@@ -27,7 +27,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import LeftPanel from './LeftPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, updateUser } from '../../redux/actions/auth';
-import { saveAddress, updateAddAddressField, updateAddress, updateAddressField, updateEditAddressField } from '../../redux/actions/address';
+import { deleteAddress, saveAddress, updateAddAddressField, updateAddress, updateAddressField, updateEditAddressField, verifyPincode } from '../../redux/actions/address';
+import lazyLoad from '../../redux/actions/lazyLoad';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -129,13 +130,13 @@ export default function AddressListView() {
   const handleFormat = (event, newFormats) => {
     // setFormats(newFormats);
     dispatch(updateEditAddressField("type", { "id": newFormats }))
-    console.log(newFormats);
+
   };
 
   const handleAddType = (event, newFormats) => {
     // setFormats(newFormats);
     dispatch(updateAddAddressField("type", { "id": newFormats }))
-    console.log(newFormats);
+
   };
 
   return (
@@ -201,7 +202,9 @@ export default function AddressListView() {
                 onChange={(e) => {
                   dispatch(updateEditAddressField("pincode", e.target.value))
                 }}
+                onBlur={() => dispatch(lazyLoad(verifyPincode(editAddress.pincode)))}
               />
+              {editAddress.error && <p>{editAddress.error}</p>}
             </div>
 
             <div className={classes.addressField}>
@@ -265,7 +268,19 @@ export default function AddressListView() {
           <Button onClick={handleClose} color="primary">
             Close
           </Button>
-          <Button onClick={() => dispatch(updateAddress(editAddress)).then(() => setEditAccount(false))} color="primary" autoFocus>
+          <Button onClick={() => dispatch(updateAddress(editAddress)).then(() => setEditAccount(false))} color="primary" autoFocus
+            disabled={
+
+              (editAddress.address1 ? editAddress.address1.length < 2 : true) ||
+
+              (editAddress.city ? editAddress.city.length < 2 : true) ||
+              (editAddress.state ? editAddress.state.length < 2 : true) ||
+              (editAddress.pincode ? editAddress.pincode.length !== 6 : true) ||
+              (editAddress.phone ? editAddress.phone.length !== 10 : true) ||
+              !editAddress.pincode_verified
+
+            }
+          >
             Save Changes
           </Button>
         </DialogActions>
@@ -341,7 +356,9 @@ export default function AddressListView() {
                 onChange={(e) => {
                   dispatch(updateAddAddressField("pincode", e.target.value))
                 }}
+                onBlur={() => dispatch(lazyLoad(verifyPincode(addAddress.pincode)))}
               />
+              {addAddress.error && <p>{addAddress.error}</p>}
             </div>
 
             <div className={classes.addressField}>
@@ -407,7 +424,18 @@ export default function AddressListView() {
           <Button onClick={AddClose} color="primary">
             Close
           </Button>
-          <Button onClick={() => dispatch(saveAddress(addAddress)).then(() => setAddAccount(false))} color="primary" autoFocus>
+          <Button onClick={() => dispatch(saveAddress(addAddress)).then(() => setAddAccount(false))} color="primary" autoFocus
+            disabled={
+
+              (addAddress.address1 ? addAddress.address1.length < 2 : true) ||
+
+              (addAddress.city ? addAddress.city.length < 2 : true) ||
+              (addAddress.state ? addAddress.state.length < 2 : true) ||
+              (addAddress.pincode ? addAddress.pincode.length !== 6 : true) ||
+              (addAddress.phone ? addAddress.phone.length != 10 : true) ||
+              !addAddress.pincode_verified
+            }
+          >
             Save
           </Button>
         </DialogActions>
@@ -458,7 +486,9 @@ export default function AddressListView() {
                               {address.address1}, {address.address2}, {address.city}, {address.state} {address.pincode}
                             </Typography>
                             <div className={classes.editBtn}>
-                              <Button variant="outlined" color="secoundry" size="small">
+                              <Button variant="outlined" color="secoundry" size="small"
+                                onClick={() => dispatch(deleteAddress(address.address_id))}
+                              >
                                 Delete
                               </Button> &nbsp;
                               <Button variant="outlined" color="primary" size="small" onClick={() => handleClickOpen(address)}>

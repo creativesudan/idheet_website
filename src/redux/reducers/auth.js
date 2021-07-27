@@ -45,7 +45,7 @@ export default function (state = initialState, action) {
                 }
             }
             else {
-                console.log("LOGGED IN")
+                // console.log("LOGGED IN")
                 return {
                     ...state,
                     isAuthenticated: true,

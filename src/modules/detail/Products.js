@@ -5,6 +5,10 @@ import { HeadingBar, QtyController } from '../component/index'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
 import { Filter } from './index'
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCartItem } from '../../redux/lib/cart';
+import { removeItem, updateItem } from '../../redux/actions/cart';
 
 
 const Product = [
@@ -47,6 +51,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductSuggestion({ products }) {
   const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+
+  const handleQtyDec = (cartItem) => {
+    dispatch(removeItem(cartItem));
+  }
+
+  const handleQtyInc = (cartItem) => {
+    dispatch(updateItem(cartItems, cartItem));
+  }
+
 
   return (
     <>
@@ -58,6 +75,7 @@ export default function ProductSuggestion({ products }) {
       <Grid container spacing={2}>
 
         {products && products.map(item => {
+          const cartItem = getCartItem(cartItems, item);
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>
@@ -69,6 +87,7 @@ export default function ProductSuggestion({ products }) {
                     className={classes.media}
                     image={item.image}
                     title={item.name}
+                    onClick={() => history.push("/product/" + item.id)}
                   />
                   <Typography variant="h6">
                     {item.name}
@@ -84,7 +103,7 @@ export default function ProductSuggestion({ products }) {
 
 
                     <Grid item>
-                      <QtyController />
+                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
                     </Grid>
                   </Grid>
 

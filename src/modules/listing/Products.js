@@ -5,6 +5,7 @@ import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
+import { useHistory } from 'react-router-dom';
 
 
 const Product = [
@@ -146,7 +147,7 @@ const applyFilterAndSort = (products, filter, sort) => {
     resultProducts = resultProducts.filter(product => {
       let keep = false;
       for (let i = 0; i < filterBrackets.length; i++) {
-        console.log(filterBrackets[i], product);
+
         if (product.price && product.discountedPrice >= filterBrackets[i].minPrice && product.discountedPrice < filterBrackets[i].maxPrice) {
           keep = true;
           break;
@@ -174,6 +175,7 @@ export default function Products({ products, title }) {
   const [sort, setSort] = useState(SORT_DEFAULT);
   const [localProducts, setLocalProducts] = useState(products);
   const [open, setOpen] = React.useState(false);
+  const history = useHistory();
 
 
   useEffect(() => {
@@ -217,7 +219,16 @@ export default function Products({ products, title }) {
 
   return (
     <>
-      <Filter drawerState={open} onClose={() => setOpen(false)} filter={filter} />
+      <Filter
+        drawerState={open}
+        onClose={() => setOpen(false)}
+        filter={filter}
+        sort={sort}
+        setFilter={setFilter}
+        setSort={setSort}
+        isBracketChecked={isBracketChecked}
+        isBrandChecked={isBrandChecked}
+      />
       <HeadingBar
         variant="h4"
         title={title}
@@ -250,8 +261,9 @@ export default function Products({ products, title }) {
                     className={classes.media}
                     image={item.image}
                     title={item.name}
+                    onClick={() => history.push("/product/" + item.id)}
                   />
-                  <Typography variant="h6">
+                  <Typography variant="h6" onClick={() => history.push("/product/" + item.id)}>
                     {item.name}
                   </Typography>
 

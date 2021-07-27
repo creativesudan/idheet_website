@@ -218,8 +218,8 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton> */}
-          <Link href="/"><img src={settings?.app_logo} style={{ height: 38 }} /></Link>
-            
+            <Link href="/"><img src={settings?.app_logo} style={{ height: 38 }} /></Link>
+
             <div className={classes.locationPicker}>
 
               <Avatar classes={{ colorDefault: classes.locationAvatar }}>
@@ -279,10 +279,14 @@ export default function Header() {
         >
           <Container classes={{ root: classes.menuContainer }}>
             <ul className={classes.menu}>
-              <li><Link onClick={() => history.push("/")}  classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-              <li><Link onClick={() => history.push("/category")}  classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Categories</Link></li>
-              <li><Link onClick={() => history.push("/brands")}  classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Brands</Link></li>
-              {cmsList?.map(cms => <li><Link onClick={() => history.push("/" + slugify(cms.title))} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">{cms.title}</Link></li>)}
+              <li><Link onClick={() => history.push("/")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
+              <li><Link onClick={() => history.push("/category")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Categories</Link></li>
+              <li><Link onClick={() => history.push("/brands")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Brands</Link></li>
+              <li><Link onClick={() => history.push("/about-us")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">About Us</Link></li>
+              <li><Link onClick={() => history.push("/terms-conditions")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Terms &amp; Conditions</Link></li>
+              <li><Link onClick={() => history.push("/contact-us")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Contact Us</Link></li>
+              <li><Link onClick={() => history.push("/privacy-policy")} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Privacy Policy</Link></li>
+              {/* {cmsList?.map(cms => <li><Link onClick={() => history.push("/" + slugify(cms.title))} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">{cms.title}</Link></li>)} */}
               {/* <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
               <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
               <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>

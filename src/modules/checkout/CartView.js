@@ -317,6 +317,7 @@ export function TimeSlot() {
   const classes = useStyles();
   const deliverySlots = useSelector(state => state.app.deliverySlots);
   const selectedSlot = useSelector(state => state.app.selectedDeliverySlot || {});
+  const settings = useSelector(state => state.app.settings);
   const dispatch = useDispatch();
 
   const handleChange = (event, newValue) => {
@@ -327,7 +328,7 @@ export function TimeSlot() {
     // setTime(event.target.value);
     const id = event.target.value;
     const newSlot = deliverySlots?.find(slot => slot.id == id);
-    console.log(newSlot);
+    // console.log(newSlot);
     dispatch(selectDeliverySlot(newSlot));
   };
 
@@ -353,7 +354,7 @@ export function TimeSlot() {
             aria-label="simple tabs example"
           // aria-label="scrollable auto tabs example"
           >
-            <Tab label={<div><b>MON</b><span className={classes.dateLabel}>7 Sep</span></div>} {...a11yProps(0)} />
+            <Tab label={<div><b>{settings?.delivery_msg}</b><span className={classes.dateLabel}></span></div>} {...a11yProps(0)} />
             {/* <Tab label={<div><b>TUE</b><span className={classes.dateLabel}>8 Sep</span></div>}  {...a11yProps(1)} />
             <Tab label={<div><b>WED</b><span className={classes.dateLabel}>9 Sep</span></div>}  {...a11yProps(2)} />
             <Tab label={<div><b>THU</b><span className={classes.dateLabel}>10 Sep</span></div>}  {...a11yProps(3)} /> */}
@@ -494,6 +495,20 @@ export default function CartView() {
       alert("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
       return;
     }
+    let error = false;
+    if (activeStep == 1 && !deliveryAddress) {
+      error = true;
+      alert("Select Delivery Address");
+    }
+    if (activeStep == 2 && !selectedSlot) {
+      error = true;
+      alert("Select Delivery Slot");
+    }
+    if (activeStep == 3) {
+      handlePayment();
+      return;
+    }
+    if (error) return;
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -506,9 +521,9 @@ export default function CartView() {
   };
 
   useEffect(() => {
-    console.log("ORDER SUCCESS TRIGGERED", orderSuccess);
+    // console.log("ORDER SUCCESS TRIGGERED", orderSuccess);
     if (orderSuccess) {
-      console.log("ORDER SUCCESS TRIGGERED TRUE");
+      // console.log("ORDER SUCCESS TRIGGERED TRUE");
       // navigation.reset({
       //   index: 0,
       //   routes: [{ name: 'Success' }],
@@ -520,11 +535,11 @@ export default function CartView() {
 
   const handlePayment = () => {
     let error = false;
-    if (!!deliveryAddress) {
+    if (!deliveryAddress) {
       error = true;
       alert("Select Delivery Address");
     }
-    if (!!selectedSlot) {
+    if (!selectedSlot) {
       error = true;
       alert("Select Delivery Slot");
     }

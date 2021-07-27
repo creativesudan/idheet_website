@@ -41,7 +41,7 @@ export const getCartItem = (cartItems, product) => {
 
     if (!cartItems) return initialCartItem;
     const items = cartItems.find(item => item.product_id == product.id) || initialCartItem;
-    console.log("getting cart item : ", items);
+    // console.log("getting cart item : ", items);
     return items;
 }
 

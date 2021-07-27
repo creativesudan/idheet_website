@@ -22,7 +22,7 @@ import {
 // import Toast from "react-native-toast-message";
 
 
-export default function (state = { siteLoading: true }, action) {
+export default function (state = { siteLoading: true, paymentType: "COD" }, action) {
     if (action.error) {
         return state;
     }
@@ -97,8 +97,8 @@ export default function (state = { siteLoading: true }, action) {
                 ...state,
                 selectedDeliverySlot: action.payload
             }
-        case LOGOUT:
-            return {};
+        // case LOGOUT:
+        //     return {};
 
         case APP_SETTINGS_LOADED:
             return {

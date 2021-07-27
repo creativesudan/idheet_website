@@ -28,7 +28,7 @@ import { useHistory } from 'react-router-dom';
 // ]
 
 const useStyles = makeStyles((theme) => ({
-  cardDiv:{
+  cardDiv: {
     // padding:10
   },
   sliderArrow: {
@@ -56,12 +56,12 @@ const useStyles = makeStyles((theme) => ({
   media: {
     flex: 1,
     height: 170,
-    maxWidth:'100%',
-    objectFit:'cover',
-    objectPosition:'center'
+    maxWidth: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center'
   },
-  thumb_cover:{
-    textAlign:'center'
+  thumb_cover: {
+    textAlign: 'center'
   },
   priceBar: {
     display: 'flex',
@@ -191,7 +191,7 @@ export default function HotProducts({ title, products }) {
         title={title}
         button={products.length > 4 && <Button color="primary" variant="outlined" size="small">See More</Button>}
       />
-      
+
 
       <Slider {...settings} style={{ margin: -10, }}>
         {products && products.map(item => {
@@ -209,9 +209,9 @@ export default function HotProducts({ title, products }) {
                     title={item.name}
                     onClick={() => history.push("/product/" + item.id)}
                   /> */}
-                <div className={classes.thumb_cover}>
-                  <img src={item.image} className={classes.media} title={item.name}onClick={() => history.push("/product/" + item.id)}/>
-                </div>
+                  <div className={classes.thumb_cover}>
+                    <img src={item.image} className={classes.media} title={item.name} onClick={() => history.push("/product/" + item.id)} />
+                  </div>
                   <Typography variant="h6" gutterBottom noWrap="true" onClick={() => history.push("/product/" + item.id)}>
                     {item.name}
                   </Typography>
@@ -233,11 +233,11 @@ export default function HotProducts({ title, products }) {
                 </CardContent>
 
               </Card>
-              </div>
+            </div>
           )
         })}
-        </Slider>
-        
+      </Slider>
+
     </>
   );
 }

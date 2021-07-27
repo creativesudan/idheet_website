@@ -51,7 +51,7 @@ export default function QtyController(props) {
 
   const handleQtyInc = () => {
     // setQty(newQty);
-    console.log("ISAOTH", isAuthenticated);
+
     if (!isAuthenticated) {
       history.push("/login");
     }

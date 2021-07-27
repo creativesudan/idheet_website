@@ -29,7 +29,7 @@ const requests = {
     put: (url, body) =>
         superagent.put(`${API_ROOT}${url}`, body).use(tokenPlugin).then(responseBody),
     post: (url, body) => {
-        console.log(url);
+        // console.log(url);
         return superagent.post(`${API_ROOT}${url}`, body).use(tokenPlugin).ok(res => res.status < 300 || res.status == 422).then(responseBody)
     }
 };
