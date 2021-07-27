@@ -161,9 +161,51 @@ export default function Footer() {
                 <FooterLinks label="Logout" link="#" /> */}
               </Grid>
 
+              
+              <Grid item md={8}>
+                <Box component="span" display="block" py={1}>
+                  <Typography variant="h6">Category</Typography>
+                </Box>
+                <Grid container>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                  <Grid item md={3}>
+                      <FooterLinks label="Category 1" link="/my-account" />
+                  </Grid>
+                </Grid>
+              </Grid>
+
               <Grid item>
                 <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">Extra Pages</Typography>
+                  <Typography variant="h6">Information</Typography>
                 </Box>
                 {cmsList?.map(cms => <FooterLinks label={cms?.title} link={"/" + slugify(cms.title)} />)}
                 {/* <FooterLinks label="Conditions" link="#" />
@@ -184,12 +226,12 @@ export default function Footer() {
                 <Box component="span" display="inline">
                   <Typography variant="caption">© 2021 {settings?.app_name}</Typography>
                 </Box>
-                <Box component="span" display="inline" mx={2}>
+                {/* <Box component="span" display="inline" mx={2}>
                   <Link href="#" variant="caption" color="textSecondary">Privacy</Link>
                 </Box>
                 <Box component="span" display="inline">
                   <Link href="#" variant="caption" color="textSecondary">Terms & Conditions</Link>
-                </Box>
+                </Box> */}
               </Grid>
 
               <Grid >

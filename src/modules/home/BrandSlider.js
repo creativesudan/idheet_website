@@ -41,8 +41,11 @@ const useStyles = makeStyles((theme) => ({
     // margin: theme.spacing(1, 0),
     // padding: theme.spacing(0, 1),
     '& img': {
-      height: 40,
-      display: 'inline-block'
+      height: 70,
+      display: 'inline-block',
+      maxWidth:'100%',
+      objectFit:'cover',
+      objectPosition:'center'
     }
   },
   paper: {
@@ -141,7 +144,7 @@ export default function CategorySlider() {
             <div style={{ padding: 10 }}>
               <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/brands/" + item.brand_id)}>
                 <img src={item.image} />
-                <Typography variant="caption" display="block" gutterBottom>{item.brand_name}</Typography>
+                <Typography variant="caption" display="block" >{item.brand_name}</Typography>
               </Paper>
             </div>
           </div>

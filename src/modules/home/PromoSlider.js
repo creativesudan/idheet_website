@@ -118,7 +118,6 @@ export default function PromoSlider() {
     <>
       <HeadingBar
         title="Promos for you"
-        button={<Button color="primary" variant="outlined" size="small">See more</Button>}
       />
       <Slider {...settings} style={{ margin: -5 - 5 }}>
         {banners && banners.map((item) => (

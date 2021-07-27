@@ -14,18 +14,6 @@ import { removeItem, updateItem } from '../../redux/actions/cart';
 import { getCartItem } from '../../redux/lib/cart';
 
 
-
-const Product = [
-  { id: 1, name: 'Fresh Orange', discPer: '10', price: '0.8', perunit: 'kg' },
-  { id: 2, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg' },
-  { id: 3, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg' },
-]
-const Category = [
-  { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/promo1.jpg' },
-  { id: 2, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/promo2.jpg' },
-  { id: 3, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/promo3.jpg' },
-]
-
 const useStyles = makeStyles((theme) => ({
   sliderArrow: {
     width: 30, height: 30, borderRadius: 100, background: "#fff",
@@ -37,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
     // margin: theme.spacing(1, 0),
     // padding: theme.spacing(0, 1),
     '& img': {
-      width: '100%',
-      display: 'block',
+      display: 'inline-block',
     }
   },
   paper: {
@@ -46,6 +33,16 @@ const useStyles = makeStyles((theme) => ({
   },
   cardRoot: {
     paddingBottom: '16px!important'
+  },
+  media: {
+    flex: 1,
+    height: 170,
+    maxWidth:'100%',
+    objectFit:'cover',
+    objectPosition:'center'
+  },
+  thumb_cover:{
+    textAlign:'center'
   },
   textContent: {
     marginTop: 20, marginBottom: 10
@@ -119,7 +116,7 @@ export default function RecommendedProducts({ title, products }) {
         {products.map(item => {
           const cartItem = getCartItem(cartItems, item);
           return (
-            <Grid item md={4} xs={12}>
+            <Grid item md={3} xs={12}>
               <Card>
                 <CardContent classes={{ root: classes.cardRoot }}>
 
@@ -128,7 +125,11 @@ export default function RecommendedProducts({ title, products }) {
                       <div className={classes.categoryBox}>
                         <div style={{ padding: 10 }}>
                           <Paper elevation={0} classes={{ root: classes.paper }}>
-                            <img src={item.image} />
+                            
+                            <div className={classes.thumb_cover}>
+                              <img src={item.image} className={classes.media} title={item.name}/>
+                            </div>
+
                           </Paper>
                         </div>
                       </div>

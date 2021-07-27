@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Typography, Button, Card, CardContent, CardActions, CardMedia, Grid, Fab } from '@material-ui/core';
+import { Typography, Button, IconButton, Card, CardContent, CardActions, CardMedia, Grid, Fab } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar, QtyController } from '../component/index'
@@ -16,19 +16,26 @@ import { useHistory } from 'react-router-dom';
 
 
 
-const Product = [
-  { id: 1, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v1.jpg" },
-  { id: 2, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v2.jpg" },
-  { id: 3, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v3.jpg" },
-  { id: 4, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v4.jpg" },
-  { id: 5, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v5.jpg" },
-  { id: 6, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v1.jpg" },
-  { id: 7, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v2.jpg" },
-  { id: 8, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v3.jpg" },
-]
+// const Product = [
+//   { id: 1, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v1.jpg" },
+//   { id: 2, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v2.jpg" },
+//   { id: 3, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v3.jpg" },
+//   { id: 4, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v4.jpg" },
+//   { id: 5, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v5.jpg" },
+//   { id: 6, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v1.jpg" },
+//   { id: 7, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v2.jpg" },
+//   { id: 8, name: 'chilli', discPer: '10', price: '0.8', perunit: 'kg', image: "https://www.zoovi.in/kisanhaat/img/listing/v3.jpg" },
+// ]
 
 const useStyles = makeStyles((theme) => ({
-
+  cardDiv:{
+    // padding:10
+  },
+  sliderArrow: {
+    width: 30, height: 30, borderRadius: 100, background: "#fff",
+    boxShadow: '1px 1px 5px #ccc', position: 'absolute',
+    top: 0, bottom: 0, margin: 'auto', zIndex: 1
+  },
   bullet: {
     display: 'inline-block',
     margin: '0 2px',
@@ -48,7 +55,13 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     flex: 1,
-    height: 170
+    height: 170,
+    maxWidth:'100%',
+    objectFit:'cover',
+    objectPosition:'center'
+  },
+  thumb_cover:{
+    textAlign:'center'
   },
   priceBar: {
     display: 'flex',
@@ -84,6 +97,38 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
+function SampleNextArrow(props) {
+  const classes = useStyles();
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={classes.sliderArrow}
+      style={{ ...style, right: -5 }}
+    >
+      <IconButton size="small" color="primary" onClick={onClick} aria-label="upload picture" component="span">
+        <ChevronRightIcon />
+      </IconButton>
+    </div>
+  );
+}
+
+function SamplePrevArrow(props) {
+  const classes = useStyles();
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={classes.sliderArrow}
+      style={{ ...style, left: -5 }}
+    >
+      <IconButton size="small" color="primary" onClick={onClick} aria-label="upload picture" component="span">
+        <ChevronLeftIcon />
+      </IconButton>
+    </div>
+
+  );
+}
+
 export default function HotProducts({ title, products }) {
   const classes = useStyles();
   const cartItems = useSelector(state => state.cart.items);
@@ -102,30 +147,72 @@ export default function HotProducts({ title, products }) {
   const handleQtyInc = (cartItem) => {
     dispatch(updateItem(cartItems, cartItem));
   }
+
+  var settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
+  };
+
+
   return (
     <>
       <HeadingBar
         title={title}
         button={products.length > 4 && <Button color="primary" variant="outlined" size="small">See More</Button>}
       />
-      <Grid container spacing={2}>
+      
 
+      <Slider {...settings} style={{ margin: -10, }}>
         {products && products.map(item => {
           const cartItem = getCartItem(cartItems, item);
           return (
-            <Grid item md={3} sm={6} xs={12} >
+            <div className={classes.cardDiv}>
               <Card className={classes.root} >
                 <CardContent classes={{ root: classes.card }}>
                   <span className={classes.badge} color="textSecondary" gutterBottom>
                     {item.discountPercentage}%
                   </span>
-                  <CardMedia
+                  {/* <CardMedia
                     className={classes.media}
                     image={item.image}
                     title={item.name}
                     onClick={() => history.push("/product/" + item.id)}
-                  />
-                  <Typography variant="h6" onClick={() => history.push("/product/" + item.id)}>
+                  /> */}
+                <div className={classes.thumb_cover}>
+                  <img src={item.image} className={classes.media} title={item.name}onClick={() => history.push("/product/" + item.id)}/>
+                </div>
+                  <Typography variant="h6" gutterBottom noWrap="true" onClick={() => history.push("/product/" + item.id)}>
                     {item.name}
                   </Typography>
 
@@ -146,10 +233,11 @@ export default function HotProducts({ title, products }) {
                 </CardContent>
 
               </Card>
-            </Grid>
+              </div>
           )
         })}
-      </Grid>
+        </Slider>
+        
     </>
   );
 }
