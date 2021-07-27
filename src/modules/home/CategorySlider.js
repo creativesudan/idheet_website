@@ -47,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2, 1),
+  },
+  activePaper: {
+    padding: theme.spacing(2, 1),
+    border: "1px solid #000"
   }
 }))
 
@@ -81,13 +85,13 @@ function SamplePrevArrow(props) {
   );
 }
 
-export default function CategorySlider({ title, categories, onClick }) {
+export default function CategorySlider({ title, categories, onClick, selectedId }) {
   const history = useHistory();
 
   const classes = useStyles();
   var settings = {
     dots: false,
-    infinite: true,
+    infinite: false,
     speed: 500,
     slidesToShow: 8,
     slidesToScroll: 4,
@@ -120,6 +124,7 @@ export default function CategorySlider({ title, categories, onClick }) {
       }
     ]
   };
+
   return (
     <>
 
@@ -131,9 +136,9 @@ export default function CategorySlider({ title, categories, onClick }) {
       />}
       <Slider {...settings} style={{ margin: -5 }}>
         {categories?.map(item => (
-          <div className={classes.categoryBox}>
+          <div className={classes.categoryBox} >
             <div style={{ padding: 10 }}>
-              <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => onClick(item)}>
+              <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }} onClick={() => onClick(item)}>
                 <img src={item.icon} />
                 <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
               </Paper>

@@ -12,6 +12,7 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import { getCartItem } from '../../redux/lib/cart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItems, removeItem, updateItem } from '../../redux/actions/cart';
+import { useHistory } from 'react-router-dom';
 
 
 
@@ -88,6 +89,7 @@ export default function HotProducts({ title, products }) {
   const cartItems = useSelector(state => state.cart.items);
   const cartLoading = useSelector(state => state.cart.cartLoading);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // useEffect(() => {
   //   if (!cartItems || cartItems.length == 0) fetchCartItems();
@@ -111,8 +113,8 @@ export default function HotProducts({ title, products }) {
         {products && products.map(item => {
           const cartItem = getCartItem(cartItems, item);
           return (
-            <Grid item md={3} sm={6} xs={12}>
-              <Card className={classes.root}>
+            <Grid item md={3} sm={6} xs={12} >
+              <Card className={classes.root} >
                 <CardContent classes={{ root: classes.card }}>
                   <span className={classes.badge} color="textSecondary" gutterBottom>
                     {item.discountPercentage}%
@@ -121,8 +123,9 @@ export default function HotProducts({ title, products }) {
                     className={classes.media}
                     image={item.image}
                     title={item.name}
+                    onClick={() => history.push("/product/" + item.id)}
                   />
-                  <Typography variant="h6">
+                  <Typography variant="h6" onClick={() => history.push("/product/" + item.id)}>
                     {item.name}
                   </Typography>
 

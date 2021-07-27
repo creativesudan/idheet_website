@@ -217,7 +217,7 @@ export default function Products({ products, title }) {
 
   return (
     <>
-      <Filter drawerState={open} onClose={() => setOpen(false)} />
+      <Filter drawerState={open} onClose={() => setOpen(false)} filter={filter} />
       <HeadingBar
         variant="h4"
         title={title}

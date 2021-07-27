@@ -59,7 +59,7 @@ export default function BrandProductListing() {
       <Container>
         <div className={classes.sectionGap}>
           {/* <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" /> */}
-          <Filter drawerState={open} />
+          {/* <Filter drawerState={open} />
 
           <HeadingBar
             variant="h4"
@@ -76,8 +76,8 @@ export default function BrandProductListing() {
                 </Button>
               </>
             }
-          />
-          <Products products={products} />
+          /> */}
+          <Products products={products} title={brand?.brand_name} />
         </div>
       </Container>
     </>

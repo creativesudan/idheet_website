@@ -6,6 +6,8 @@ import FacebookIcon from '@material-ui/icons/Facebook';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import YouTubeIcon from '@material-ui/icons/YouTube';
+import { useSelector } from 'react-redux';
+import slugify from 'react-slugify';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +56,8 @@ export function FooterLinks(props) {
 
 export default function Footer() {
   const classes = useStyles();
+  const cmsList = useSelector(state => state.app.cmsList);
+  const settings = useSelector(state => state.app.settings);
 
   return (
     <>
@@ -110,7 +114,7 @@ export default function Footer() {
               justify="space-between"
               alignItems="flex-start">
 
-              <Grid item>
+              {/* <Grid item>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Products</Typography>
                 </Box>
@@ -142,31 +146,31 @@ export default function Footer() {
                 <FooterLinks label="Status on Process" link="#" />
                 <FooterLinks label="Status Canceled" link="#" />
                 <FooterLinks label="Review" link="#" />
-              </Grid>
+              </Grid> */}
 
               <Grid item>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">My Account</Typography>
                 </Box>
-                <FooterLinks label="My account" link="#" />
-                <FooterLinks label="Promos" link="#" />
+                <FooterLinks label="My account" link="/my-account" />
+                <FooterLinks label="Promos" link="/promo" />
                 <FooterLinks label="My address" link="#" />
-                <FooterLinks label="Terms & conditions" link="#" />
+                {/* <FooterLinks label="Terms & conditions" link="#" />
                 <FooterLinks label="Help & support" link="#" />
                 <FooterLinks label="Help ticket" link="#" />
-                <FooterLinks label="Logout" link="#" />
+                <FooterLinks label="Logout" link="#" /> */}
               </Grid>
 
               <Grid item>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Extra Pages</Typography>
                 </Box>
-                <FooterLinks label="Promo Details" link="#" />
-                <FooterLinks label="Conditions" link="#" />
+                {cmsList?.map(cms => <FooterLinks label={cms?.title} link={"/" + slugify(cms.title)} />)}
+                {/* <FooterLinks label="Conditions" link="#" />
                 <FooterLinks label="Help Support" link="#" />
                 <FooterLinks label="Refund Payment" link="#" />
                 <FooterLinks label="FAQ" link="#" />
-                <FooterLinks label="Sign In" link="login" />
+                <FooterLinks label="Sign In" link="login" /> */}
               </Grid>
 
             </Grid>
@@ -178,7 +182,7 @@ export default function Footer() {
             <Grid container justify="space-between" direction="row" alignItems="center">
               <Grid >
                 <Box component="span" display="inline">
-                  <Typography variant="caption">© 2021 Kisan Haat</Typography>
+                  <Typography variant="caption">© 2021 {settings?.app_name}</Typography>
                 </Box>
                 <Box component="span" display="inline" mx={2}>
                   <Link href="#" variant="caption" color="textSecondary">Privacy</Link>

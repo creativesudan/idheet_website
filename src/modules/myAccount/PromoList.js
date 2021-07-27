@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 20
   },
   list: {
-    background: '#28a745',
+    background: '#70c584',
     padding: '16px',
     borderRadius: 4,
     margin: '20px 0'

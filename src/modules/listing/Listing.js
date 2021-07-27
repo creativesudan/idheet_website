@@ -71,7 +71,7 @@ export default function ProductListing() {
       </div>
       <Container>
         <div className={classes.sectionGap}>
-          <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" />
+          <CategorySlider categories={subcategories} onClick={(category) => setSelectedCategory(category.id)} title="Sub Categories" selectedId={selectedCategory} />
           {/* <Filter drawerState={open} /> */}
 
           {/* <HeadingBar

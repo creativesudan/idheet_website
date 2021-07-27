@@ -71,7 +71,7 @@ const promiseMiddleware = store => next => action => {
                 console.log('ERROR', error);
                 if (!action.lazyLoad) store.dispatch({ type: ASYNC_END, promise: action.payload });
 
-                if (error.response?.status == 401) {
+                if (error.response?.status == 401 || error.response?.status == 302) {
                     console.log("Unauthorized Access. Logging Out.");
                     store.dispatch(logout());
                 } else {

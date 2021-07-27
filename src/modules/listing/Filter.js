@@ -98,20 +98,24 @@ export default function Filter(props) {
 
         <FormLabel component="legend" color="default" className={classes.subHeading}>Sort By</FormLabel>
         <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Top Rated" control={<Radio color="primary" />} label="Top Rated" />
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Nearest Me" control={<Radio color="primary" />} label="Nearest Me" />
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="High to Low" control={<Radio color="primary" />} label="Cost High to Low" />
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Top Rated" control={<Radio color="primary" />} label="Price Low to High" />
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Nearest Me" control={<Radio color="primary" />} label="Price High to Low" />
+          {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="High to Low" control={<Radio color="primary" />} label="Cost High to Low" />
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Low to High" control={<Radio color="primary" />} label="Cost Low to High" />
-          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Most Popular" control={<Radio color="primary" />} label="Most Popular" />
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="Most Popular" control={<Radio color="primary" />} label="Most Popular" /> */}
         </RadioGroup>
 
-        <FormLabel component="legend" className={classes.subHeading}>Filter</FormLabel>
-        <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Open Now" />
-        <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Credit Cards" />
-        <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Alcohol Served" />
+        <FormLabel component="legend" className={classes.subHeading}>Filter By Brand</FormLabel>
+        {props.filter?.brands?.map(brand => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label={brand.brand} />)}
+        {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Credit Cards" />
+        <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label="Alcohol Served" /> */}
 
-        <FormLabel component="legend" className={classes.subHeading}>ADDITIONAL FILTERS</FormLabel>
-        <div className={classes.slider}>
+        <FormLabel component="legend" className={classes.subHeading}>Filter by Price</FormLabel>
+        {props.filter?.priceBrackets?.map((bracket, index) => <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="start" control={<Checkbox color="primary" />} label={index == 0 ? `Less than Rs. ${bracket.maxPrice} (${bracket.count})` :
+          index == props.filter?.priceBrackets?.length - 1 ? `More than Rs. ${bracket.minPrice} (${bracket.count})` :
+            `Rs. ${bracket.minPrice} to Rs ${bracket.maxPrice} (${bracket.count})`
+        } />)}
+        {/* <div className={classes.slider}>
           <Slider
             value={ranger}
             onChange={handleSlider}
@@ -135,7 +139,7 @@ export default function Filter(props) {
               </Grid>
             </Grid>
           </div>
-        </div>
+        </div> */}
 
       </Drawer>
 

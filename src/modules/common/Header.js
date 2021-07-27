@@ -1,7 +1,9 @@
 import React from 'react';
 import { fade, makeStyles } from '@material-ui/core/styles';
-import {IconButton,Container,AppBar,Toolbar,Link,Button,Typography,Avatar,
-  InputBase,Badge,MenuItem,Menu,} from '@material-ui/core';
+import {
+  IconButton, Container, AppBar, Toolbar, Link, Button, Typography, Avatar,
+  InputBase, Badge, MenuItem, Menu,
+} from '@material-ui/core';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -12,13 +14,17 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import slugify from 'react-slugify';
+import { logout } from '../../redux/actions/auth';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
-    background:'#fff',
-    '& header':{
-      background:'#fff'
+    background: '#fff',
+    '& header': {
+      background: '#fff'
     }
   },
   menuButton: {
@@ -30,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
       display: 'block',
     },
   },
-  locationPicker:{
-    display:'flex',
+  locationPicker: {
+    display: 'flex',
     flexDirection: 'row',
-    alignItems:'center',
+    alignItems: 'center',
     marginLeft: theme.spacing(2),
     minWidth: 160,
   },
@@ -62,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputRoot: {
     color: 'inherit',
-    width:'100%'
+    width: '100%'
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -86,30 +92,36 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
-  Toobar:{
-      background: '#28a745'
+  Toobar: {
+    background: '#70c584'
   },
-  menu:{
-    margin:0, padding:0,marginLeft:theme.spacing(-2),flex:1,
-    '& li':{
-      display:'inline-block',
-      margin:theme.spacing(1, 2),
-      color:'#fff'
+  menu: {
+    margin: 0, padding: 0, marginLeft: theme.spacing(-2), flex: 1,
+    '& li': {
+      display: 'inline-block',
+      margin: theme.spacing(1, 2),
+      color: '#fff'
     },
   },
-  menuLink:{
-    color:'#fff', fontSize:16
+  menuLink: {
+    color: '#fff', fontSize: 16
   },
-  menuContainer:{
-    display:'flex'
+  menuContainer: {
+    display: 'flex'
   },
-  locationAvatar:{
-    background:'#ddd'
+  locationAvatar: {
+    background: '#ddd'
   }
 }));
 
 export default function Header() {
+  const settings = useSelector(state => state.app.settings);
+  const cart = useSelector(state => state.cart);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const cmsList = useSelector(state => state.app.cmsList);
+  const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -144,8 +156,11 @@ export default function Header() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {isAuthenticated && <><MenuItem onClick={() => history.push("/my-account")}>My Account</MenuItem>
+        <MenuItem onClick={() => dispatch(logout())}>Logout</MenuItem>
+      </>}
+
+      {!isAuthenticated && <MenuItem onClick={() => history.push("/login")}>Login / Register</MenuItem>}
     </Menu>
   );
 
@@ -193,9 +208,9 @@ export default function Header() {
   return (
     <div className={classes.grow}>
       <AppBar position="static" color="default">
-          <Container>
-        <Toolbar disableGutters={true}>
-          {/* <IconButton
+        <Container>
+          <Toolbar disableGutters={true}>
+            {/* <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
@@ -203,79 +218,79 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton> */}
-          <img src="https://www.zoovi.in/kisanhaat/img/logo.png" style={{height:38}}/>
-          <div className={classes.locationPicker}>
-            
-          <Avatar classes={{colorDefault:classes.locationAvatar}}>
-            <RoomIcon color="action"/>
-          </Avatar>
-          <span style={{marginLeft:10,marginRight:10}}>New delhi</span> <ExpandMoreIcon/>
-          </div>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </div>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-          
+            <img src={settings?.app_logo} style={{ height: 38 }} />
+            <div className={classes.locationPicker}>
 
-            
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
-        </Toolbar>
+              <Avatar classes={{ colorDefault: classes.locationAvatar }}>
+                <RoomIcon color="action" />
+              </Avatar>
+              <span style={{ marginLeft: 10, marginRight: 10 }}>New delhi</span> <ExpandMoreIcon />
+            </div>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </div>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+
+
+
+              <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => history.push("/cart")}>
+                <Badge badgeContent={cart?.totalCount} color="secondary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+            <div className={classes.sectionMobile}>
+              <IconButton
+                aria-label="show more"
+                aria-controls={mobileMenuId}
+                aria-haspopup="true"
+                onClick={handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
+              </IconButton>
+            </div>
+          </Toolbar>
         </Container>
         <Toolbar disableGutters={true} variant={"dense"}
-            classes={{ root:classes.Toobar }}
+          classes={{ root: classes.Toobar }}
         >
-            <Container classes={{root:classes.menuContainer}}>
-              <ul className={classes.menu}>
-                <li><Link classes={{ button:classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-                <li><Link classes={{ button:classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-                <li><Link classes={{ button:classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-                <li><Link classes={{ button:classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-                <li><Link classes={{ button:classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
-              </ul>
-              <Button color="primary" variant="contained" disableElevation>Trending</Button>
-              <Button color="secondary"variant="contained" disableElevation>
-                 <LocalOfferIcon fontSize="small"/>&nbsp;Promos</Button>
-            </Container>
+          <Container classes={{ root: classes.menuContainer }}>
+            <ul className={classes.menu}>
+              {cmsList?.map(cms => <li><Link onClick={() => history.push("/" + slugify(cms.title))} classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">{cms.title}</Link></li>)}
+              {/* <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
+              <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
+              <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li>
+              <li><Link classes={{ button: classes.menuLink }} component="button" variant="body2" color="textSecondary">Home</Link></li> */}
+            </ul>
+            {/* <Button color="primary" variant="contained" disableElevation onClick={() => history.push("/trending")}>Trending</Button> */}
+            <Button color="secondary" variant="contained" disableElevation onClick={() => history.push("/promo")}>
+              <LocalOfferIcon fontSize="small" />&nbsp;Promos</Button>
+          </Container>
         </Toolbar >
       </AppBar>
-      
+
       {renderMobileMenu}
       {renderMenu}
     </div>

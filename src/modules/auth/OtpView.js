@@ -60,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
 export default function OtpView() {
   const classes = useStyles();
   const mobile = useSelector(state => state.auth.mobile);
+  const settings = useSelector(state => state.app.settings);
   const dispatch = useDispatch();
   const [otp, changeOtp] = useState("");
   const history = useHistory();
@@ -94,7 +95,7 @@ export default function OtpView() {
               Verify Your Mobile
             </Typography>
             <Typography component="p" variant="p">
-              Kisan Haat sent an OTP to your Mobile
+              {settings?.app_name} sent an OTP to your Mobile
             </Typography>
             <form className={classes.form} noValidate>
               <TextField
