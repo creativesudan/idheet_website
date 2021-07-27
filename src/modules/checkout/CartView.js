@@ -168,6 +168,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-block',
     fontWeight: 600,
   },
+  dailog_width: {
+    minWidth: 400
+  },
+  addressField: {
+    margin: '15px 0'
+  }
 }));
 
 
