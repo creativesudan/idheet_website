@@ -635,13 +635,7 @@ export function AddressList() {
           </Button>
         </DialogActions>
       </Dialog>
-      <Button
-        variant="outlined"
-        color="primary"
-        onClick={AddOpen}
-      >
-        Add
-      </Button>
+
       <Grid container spacing={3}>
         {addresses?.map(address => (<Grid item lg={6}>
           <div className={classes.addressStyle}>
@@ -678,6 +672,15 @@ export function AddressList() {
         </Grid>))}
 
       </Grid>
+      <div className={classes.button}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={AddOpen}
+        >
+          Add New
+        </Button>
+      </div>
     </>
   )
 }
