@@ -3,15 +3,15 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import PropTypes from 'prop-types';
 import { Stepper, Step, StepLabel, StepContent, Button, Grid, Paper, Typography, Divider, AppBar, Tabs, Tab, Box, TextField } from '@material-ui/core';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import Checkbox from '@material-ui/core/Checkbox';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import IconButton from '@material-ui/core/IconButton';
-import SkipPreviousIcon from '@material-ui/icons/SkipPrevious';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
-import SkipNextIcon from '@material-ui/icons/SkipNext';
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -21,11 +21,15 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 import { HeadingBar, QtyController } from '../component/index'
 import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useDispatch, useSelector } from 'react-redux';
 import { addCouponToCart, order, removeItem, updateItem } from '../../redux/actions/cart';
 import { fetchDeliverySlots, selectDeliveryAddress, selectDeliverySlot, setPaymentType } from '../../redux/actions/app';
 import { useHistory } from 'react-router-dom';
 import { clearOrderPlaced } from '../../redux/actions/order';
+import { deleteAddress, saveAddress, updateAddAddressField, updateAddress, updateAddressField, updateEditAddressField, verifyPincode } from '../../redux/actions/address';
+import lazyLoad from '../../redux/actions/lazyLoad';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -275,39 +279,400 @@ export function AddressList() {
   const addresses = useSelector(state => state.address.addresses);
   const deliveryAddress = useSelector(state => state.app.address);
   const dispatch = useDispatch();
-  return (
-    <Grid container spacing={3}>
-      {addresses?.map(address => (<Grid item lg={6}>
-        <div className={classes.addressStyle}>
-          <div className={classes.addressType}>
-            <div className={classes.content}>
-              <Typography><b>{address.type?.type}</b></Typography>
-              {address.default_address && <span className={classes.badge} color="textSecondary" gutterBottom>
-                Default
-              </span>}
-              <Typography variant="caption">
-                {address.address1}, {address.address2}, {address.city}, {address.state} {address.pincode}
-              </Typography>
-              <div className={classes.editBtn}>
-                <Button variant="outlined" color="primary">
-                  Edit
-                </Button>
-              </div>
-            </div>
-            <Button
-              variant="contained"
-              disableElevation
-              color={address.address_id === deliveryAddress?.address_id ? "primary" : "inherit"}
-              fullWidth
-              onClick={() => dispatch(selectDeliveryAddress(address))}
-            >
-              Deliver Here
-            </Button>
-          </div>
-        </div>
-      </Grid>))}
+  const theme = useTheme();
 
-    </Grid>
+
+
+  const newAddress = {
+    type: { type: "Home", id: 1 }
+  }
+  const [editAccount, setEditAccount] = useState(false);
+  const [addAccount, setAddAccount] = useState(false);
+  const addAddress = useSelector(state => state.address.addAddress || {});
+  const editAddress = useSelector(state => state.address.editAddress || {});
+
+
+
+  const handleClickOpen = (address) => {
+    setEditAccount(true);
+    dispatch(updateAddressField("editAddress", address))
+  };
+
+  const handleClose = () => {
+    setEditAccount(false);
+  };
+
+  const AddOpen = () => {
+    setAddAccount(true);
+    dispatch(updateAddressField("addAddress", newAddress));
+  };
+
+  const AddClose = () => {
+    setAddAccount(false)
+  };
+
+
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  const [formats, setFormats] = React.useState(editAddress?.type?.id);
+
+  const handleFormat = (event, newFormats) => {
+    // setFormats(newFormats);
+    dispatch(updateEditAddressField("type", { "id": newFormats }))
+
+  };
+
+  const handleAddType = (event, newFormats) => {
+    // setFormats(newFormats);
+    dispatch(updateAddAddressField("type", { "id": newFormats }))
+
+  };
+
+  return (
+    <>
+      <Dialog
+        open={editAccount}
+        fullScreen={fullScreen}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title"><b>Edit Address</b></DialogTitle>
+        <DialogContent>
+          <div className={classes.dailog_width}>
+            <ToggleButtonGroup value={editAddress?.type?.id} size="small" onChange={handleFormat} exclusive aria-label="text formatting">
+              <ToggleButton value={1} aria-label={1}>
+                <b>Home</b>
+              </ToggleButton>
+              <ToggleButton value={0} aria-label={0}>
+                <b>office</b>
+              </ToggleButton>
+              <ToggleButton value={2} aria-label={2}>
+                <b>Other</b>
+              </ToggleButton>
+            </ToggleButtonGroup>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Address Line 1"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.address1 || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("address1", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Address Line 2"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.address2 || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("address2", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="pincode"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.pincode || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("pincode", e.target.value))
+                }}
+                onBlur={() => dispatch(lazyLoad(verifyPincode(editAddress.pincode)))}
+              />
+              {editAddress.error && <p>{editAddress.error}</p>}
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter City"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.city || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("city", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter State"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.state || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("state", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter Phone"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={editAddress.phone || ""}
+                onChange={(e) => {
+                  dispatch(updateEditAddressField("phone", e.target.value))
+                }}
+              />
+            </div>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={editAddress.default_address || false}
+                  name="checkedB"
+                  color="primary"
+                  onClick={() => dispatch(updateEditAddressField("default_address", !editAddress.default_address))}
+                />
+              }
+              label="Default Address"
+            />
+
+
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={() => dispatch(updateAddress(editAddress)).then(() => setEditAccount(false))} color="primary" autoFocus
+            disabled={
+
+              (editAddress.address1 ? editAddress.address1.length < 2 : true) ||
+
+              (editAddress.city ? editAddress.city.length < 2 : true) ||
+              (editAddress.state ? editAddress.state.length < 2 : true) ||
+              (editAddress.pincode ? editAddress.pincode.length !== 6 : true) ||
+              (editAddress.phone ? editAddress.phone.length !== 10 : true) ||
+              !editAddress.pincode_verified
+
+            }
+          >
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
+
+
+
+
+
+
+
+
+      <Dialog
+        open={addAccount}
+        fullScreen={fullScreen}
+        onClose={AddClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title"><b>Add Address</b></DialogTitle>
+        <DialogContent>
+          <div className={classes.dailog_width}>
+            <ToggleButtonGroup value={addAddress?.type?.id} size="small" onChange={handleAddType} exclusive aria-label="text formatting">
+              <ToggleButton value={1} aria-label="bold">
+                <b>Home</b>
+              </ToggleButton>
+              <ToggleButton value={0} aria-label="italic">
+                <b>office</b>
+              </ToggleButton>
+              <ToggleButton value={2} aria-label="underlined">
+                <b>Other</b>
+              </ToggleButton>
+            </ToggleButtonGroup>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Address Line 1"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.address1 || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("address1", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Address Line 2"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.address2 || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("address2", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="pincode"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.pincode || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("pincode", e.target.value))
+                }}
+                onBlur={() => dispatch(lazyLoad(verifyPincode(addAddress.pincode)))}
+              />
+              {addAddress.error && <p>{addAddress.error}</p>}
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter City"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.city || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("city", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter State"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.state || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("state", e.target.value))
+                }}
+              />
+            </div>
+
+            <div className={classes.addressField}>
+              <TextField
+                id="outlined-basic"
+                label="Enter Phone"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={addAddress.phone || ""}
+                onChange={(e) => {
+                  dispatch(updateAddAddressField("phone", e.target.value))
+                }}
+              />
+            </div>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={addAddress.default_address || false}
+                  name="checkedB"
+                  color="primary"
+                  onChange={(e) => {
+                    dispatch(updateAddAddressField("default_address", !addAddress.default_address))
+                  }}
+                />
+              }
+              label="Default Address"
+            />
+
+
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={AddClose} color="primary">
+            Close
+          </Button>
+          <Button onClick={() => dispatch(saveAddress(addAddress)).then(() => setAddAccount(false))} color="primary" autoFocus
+            disabled={
+
+              (addAddress.address1 ? addAddress.address1.length < 2 : true) ||
+
+              (addAddress.city ? addAddress.city.length < 2 : true) ||
+              (addAddress.state ? addAddress.state.length < 2 : true) ||
+              (addAddress.pincode ? addAddress.pincode.length !== 6 : true) ||
+              (addAddress.phone ? addAddress.phone.length != 10 : true) ||
+              !addAddress.pincode_verified
+            }
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={AddOpen}
+      >
+        Add
+      </Button>
+      <Grid container spacing={3}>
+        {addresses?.map(address => (<Grid item lg={6}>
+          <div className={classes.addressStyle}>
+            <div className={classes.addressType}>
+              <div className={classes.content}>
+                <Typography><b>{address.type?.type}</b></Typography>
+                {address.default_address && <span className={classes.badge} color="textSecondary" gutterBottom>
+                  Default
+                </span>}
+                <Typography variant="caption">
+                  {address.address1}, {address.address2}, {address.city}, {address.state} {address.pincode}
+                </Typography>
+                <div className={classes.editBtn}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => handleClickOpen(address)}
+                  >
+                    Edit
+                  </Button>
+                </div>
+              </div>
+              <Button
+                variant="contained"
+                disableElevation
+                color={address.address_id === deliveryAddress?.address_id ? "primary" : "inherit"}
+                fullWidth
+                onClick={() => dispatch(selectDeliveryAddress(address))}
+              >
+                Deliver Here
+              </Button>
+            </div>
+          </div>
+        </Grid>))}
+
+      </Grid>
+    </>
   )
 }
 
@@ -442,6 +807,8 @@ export default function CartView() {
   const couponCode = cart.appliedCoupon ? cart.appliedCoupon.coupon_code : "";
   const orderSuccess = useSelector(state => state.order.orderSuccess);
 
+
+
   const [couponState, setCouponState] = useState(null);
 
   useEffect(() => {
@@ -555,8 +922,10 @@ export default function CartView() {
     }
   }
 
+
   return (
     <>
+
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item lg={8}>
