@@ -61,6 +61,7 @@ export default function PromoDetailView() {
     }
   }, [list, promo_id]);
 
+ 
   return (
     <>
       <div className={classes.BreadcrumbsContainer}>
@@ -97,7 +98,7 @@ export default function PromoDetailView() {
 
                       <Grid item>
                         <Typography color="primary" variant="h5">
-                          <b>{promo?.title}</b>
+                          <b id='clipboard'>{promo?.title}</b>
                         </Typography>
                         <Typography variant="caption" color="textSecondary">Available until {promo?.end_date}</Typography>
                       </Grid>
@@ -107,7 +108,7 @@ export default function PromoDetailView() {
                     </Grid>
                     <br />
                     <Typography variant="h6">
-                      <b>Terms $ Conditions</b>
+                      <b>Terms & Conditions</b>
                     </Typography>
 
                     <Typography variant="caption">

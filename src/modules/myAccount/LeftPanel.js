@@ -19,18 +19,27 @@ const useStyles = makeStyles((theme) => ({
   profileAvtar: {
     textAlign: 'center',
     padding: '20px 0'
+  },
+  avatar_color_01:{
+    backgroundColor: '#ff6000'
+  },
+  avatar_color_02:{
+    backgroundColor: '#92c46d'
+  },
+  avatar_color_03:{
+    backgroundColor: '#007bff'
+  },
+  avatar_color_04:{
+    backgroundColor: '#ffc107'
+  },
+  avatar_color_05:{
+    backgroundColor: '#85a5cc'
+  },
+  avatar_color_06:{
+    backgroundColor: '#3f4eaf'
   }
 }))
 
-
-const menuList = [
-  { label: 'My Account', icon: '', avatarColor: '', link: "/my-account" },
-  { label: 'Promos / Offers', icon: '', avatarColor: '', link: "/promo" },
-  { label: 'Orders', icon: '', avatarColor: '', link: "/orders" },
-  { label: 'My Address', icon: '', avatarColor: '', link: "/address" },
-  { label: 'Enquiries', icon: '', avatarColor: '', link: "" },
-  { label: 'Logout', icon: '', avatarColor: '', link: "" }
-]
 
 
 export default function LeftPanel({ user }) {
@@ -39,6 +48,15 @@ export default function LeftPanel({ user }) {
   const history = useHistory();
 
 
+  const menuList = [
+    { label: 'My Account', icon: '', avatarColor: '', link: "/my-account", bgcolor:classes.avatar_color_01 },
+    { label: 'Promos / Offers', icon: '', avatarColor: '', link: "/promo", bgcolor:classes.avatar_color_02 },
+    { label: 'Orders', icon: '', avatarColor: '', link: "/orders", bgcolor:classes.avatar_color_03 },
+    { label: 'My Address', icon: '', avatarColor: '', link: "/address", bgcolor:classes.avatar_color_04 },
+    { label: 'Enquiries', icon: '', avatarColor: '', link: "", bgcolor:classes.avatar_color_05 },
+    { label: 'Logout', icon: '', avatarColor: '', link: "", bgcolor:classes.avatar_color_06 }
+  ]
+  
 
   return (
     <>
@@ -50,14 +68,16 @@ export default function LeftPanel({ user }) {
         </div>}
 
 
-        <List dense className={classes.root}>
-          {menuList.map((value) => {
+        <List className={classes.root}>
+          {menuList.map((value, index) => {
             const labelId = `checkbox-list-secondary-label-${value}`;
             return (
               <>
+              <Divider />
                 <ListItem key={value} button onClick={() => history.push(value.link)}>
                   <ListItemAvatar>
                     <Avatar
+                      className={value.bgcolor}
                       alt={value.label[0]}
                       src={`/static/images/avatar/${value + 1}.jpg`}
                     />
@@ -67,7 +87,6 @@ export default function LeftPanel({ user }) {
                     <ChevronRightIcon />
                   </ListItemSecondaryAction>
                 </ListItem>
-                <Divider />
               </>
             );
           })}

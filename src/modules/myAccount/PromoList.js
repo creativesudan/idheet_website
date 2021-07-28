@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     padding: 20
   },
   list: {
-    background: '#70c584',
+    background:  theme.palette.primary.main,
     padding: '16px',
     borderRadius: 4,
     margin: '20px 0'
@@ -103,7 +103,7 @@ export default function PromoListView() {
                             <Typography variant="h5" className={classes.textWhite}>{item.title}</Typography>
                             <Typography variant="caption" className={classes.textWhite}>{item.description}</Typography>
                           </div>
-                          <Button variant="contained" color="secondary"
+                          <Button variant="contained" color="default"
                             onClick={() => history.push("/promo/" + item.coupon_id)}
                           >Check Now</Button>
                         </Grid>

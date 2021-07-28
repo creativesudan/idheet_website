@@ -28,8 +28,8 @@ import { useHistory } from 'react-router-dom';
 // ]
 
 const useStyles = makeStyles((theme) => ({
-  cardDiv: {
-    // padding:10
+  cardSpace: {
+    padding:8
   },
   sliderArrow: {
     width: 30, height: 30, borderRadius: 100, background: "#fff",
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 0, flex: 1
   },
   media: {
+    display:'inline-block',
     flex: 1,
     height: 170,
     maxWidth: '100%',
@@ -61,7 +62,11 @@ const useStyles = makeStyles((theme) => ({
     objectPosition: 'center'
   },
   thumb_cover: {
-    textAlign: 'center'
+    marginBottom:15,
+    textAlign: 'center',
+    '& img':{
+      display:'inline-block'
+    }
   },
   priceBar: {
     display: 'flex',
@@ -193,11 +198,12 @@ export default function HotProducts({ title, products }) {
       />
 
 
-      <Slider {...settings} style={{ margin: -10, }}>
+      <Slider {...settings} style={{ margin: -8, }}>
         {products && products.map(item => {
           const cartItem = getCartItem(cartItems, item);
           return (
             <div className={classes.cardDiv}>
+              <div className={classes.cardSpace}>
               <Card className={classes.root} >
                 <CardContent classes={{ root: classes.card }}>
                   <span className={classes.badge} color="textSecondary" gutterBottom>
@@ -233,6 +239,7 @@ export default function HotProducts({ title, products }) {
                 </CardContent>
 
               </Card>
+              </div>
             </div>
           )
         })}

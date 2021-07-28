@@ -138,10 +138,10 @@ export default function CategorySlider() {
           onClick={() => history.push("/brands")}
         >See more</Button>}
       />
-      <Slider {...settings} style={{ margin: -5, }}>
+      <Slider {...settings} style={{ margin: -8, }}>
         {brands?.map(item => (
           <div className={classes.categoryBox}>
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 8 }}>
               <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/brands/" + item.brand_id)}>
                 <img src={item.image} />
                 <Typography variant="caption" display="block" >{item.brand_name}</Typography>

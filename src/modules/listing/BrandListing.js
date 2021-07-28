@@ -43,9 +43,12 @@ const useStyles = makeStyles((theme) => ({
     // margin: theme.spacing(1, 0),
     // padding: theme.spacing(0, 1),
     '& img': {
-      height: 60,
+      height: 70,
       display: 'inline-block',
-      marginBottom: 20
+      maxWidth: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center',
+      marginBottom: 10
     }
   },
   paper: {
@@ -83,7 +86,7 @@ export default function BrandListing() {
 
           <Grid container spacing={2}>
             {brands?.map((item) => (
-              <Grid item lg={2}>
+              <Grid item lg={2} md={3} sm={4} xs={6}>
 
                 <div className={classes.categoryBox}>
                   <Paper elevation={1} classes={{ root: classes.paper }}

@@ -85,11 +85,11 @@ export default function CategoryListing() {
             const subs = getSubs(parent);
             return subs.length > 0 ? <>
               <div className={classes.sectionGap}>
-                <Typography variant="h6" display="block" gutterBottom>{parent.name}</Typography>
+              <HeadingBar title={parent.name}/>
                 <Grid container spacing={2}>
                   {subs?.map(sub => {
 
-                    return <Grid item lg={2}>
+                    return <Grid item lg={2} md={3} sm={4} xs={6}>
 
                       <div className={classes.categoryBox}>
                         <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/category/" + sub.id)}>

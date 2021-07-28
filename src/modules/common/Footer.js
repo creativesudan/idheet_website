@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: 0,
 
   },
-  socialMedia: {
-    textAlign: 'right'
-  },
   appIcon: {
     height: 30
   },
@@ -42,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       fontSize: 16
     }
+  },
+  socialList:{
+    margin:'10px 0'
   }
 
 }));
@@ -63,49 +63,7 @@ export default function Footer() {
     <>
       <div className={classes.root}>
 
-        <div className={classes.topBar}>
-          <Container>
-            <Grid container spacing={3} container justify="space-between" direction="row" alignItems="center">
-              <Grid item xs={4}>
-
-              </Grid>
-              <Grid item xs={4}>
-                <form className={classes.subscriber} noValidate autoComplete="off">
-                  <TextField id="outlined-basic" label="Email" variant="outlined" size="small" classes={{ root: classes.subcribeField }} />
-                  <Button variant="contained" color="primary" disableElevation classes={{ root: classes.subscriberBtn }}>
-                    Subscrbie
-                  </Button>
-                </form>
-              </Grid>
-              <Grid item xs={4}>
-                <div className={classes.socialMedia}>
-                  <Box component="div" display="inline" m={1} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <FacebookIcon />
-                    </Fab>
-                  </Box>
-                  <Box component="div" display="inline" m={1} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <TwitterIcon />
-                    </Fab>
-                  </Box>
-                  <Box component="div" display="inline" m={1} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <InstagramIcon />
-                    </Fab>
-                  </Box>
-                  <Box component="div" display="inline" m={1} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <YouTubeIcon />
-                    </Fab>
-                  </Box>
-                </div>
-              </Grid>
-            </Grid>
-          </Container>
-
-        </div>
-        <Divider />
+    
 
         <Box py={4}>
           <Container>
@@ -148,7 +106,7 @@ export default function Footer() {
                 <FooterLinks label="Review" link="#" />
               </Grid> */}
 
-              <Grid item>
+              <Grid item item md={2}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">My Account</Typography>
                 </Box>
@@ -162,7 +120,7 @@ export default function Footer() {
               </Grid>
 
               
-              <Grid item md={8}>
+              <Grid item md={6}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Category</Typography>
                 </Box>
@@ -201,6 +159,49 @@ export default function Footer() {
                       <FooterLinks label="Category 1" link="/my-account" />
                   </Grid>
                 </Grid>
+              </Grid>
+
+              <Grid item md={2}>
+                <Box component="span" display="block" py={1}>
+                  <Typography variant="h6">Social Media</Typography>
+                </Box>
+
+                
+                <div className={classes.socialMedia}>
+                  <Box component="div" display="block" >
+                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                      <FacebookIcon />
+                    </Fab>
+                    <Box component="div" display="inline-block" m={1} >
+                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Facebook</Link>
+                    </Box>
+                  </Box>
+                  <Box component="div" display="block" className={classes.socialList} >
+                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                      <TwitterIcon />
+                    </Fab>
+                    <Box component="div" display="inline-block" m={1} >
+                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Twitter</Link>
+                    </Box>
+                  </Box>
+                  <Box component="div" display="block" className={classes.socialList} >
+                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                      <InstagramIcon />
+                    </Fab>
+                    <Box component="div" display="inline-block" m={1} >
+                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Instagram</Link>
+                    </Box>
+                  </Box>
+                  <Box component="div" display="block" className={classes.socialList}>
+                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                      <YouTubeIcon />
+                    </Fab>
+                    <Box component="div" display="inline-block" m={1} >
+                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Youtube</Link>
+                    </Box>
+                  </Box>
+                </div>
+                
               </Grid>
 
               <Grid item>

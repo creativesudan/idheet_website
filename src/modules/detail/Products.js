@@ -34,8 +34,19 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   media: {
+    display:'inline-block',
     flex: 1,
-    height: 170
+    height: 170,
+    maxWidth: '100%',
+    objectFit: 'cover',
+    objectPosition: 'center'
+  },
+  thumb_cover: {
+    marginBottom:15,
+    textAlign: 'center',
+    '& img':{
+      display:'inline-block'
+    }
   },
   priceBar: {
     display: 'flex',
@@ -83,13 +94,13 @@ export default function ProductSuggestion({ products }) {
                   <span className={classes.badge} color="textSecondary" gutterBottom>
                     {item.discountPercentage}%
                   </span>
-                  <CardMedia
-                    className={classes.media}
-                    image={item.image}
-                    title={item.name}
-                    onClick={() => history.push("/product/" + item.id)}
-                  />
-                  <Typography variant="h6">
+                  
+                  <div className={classes.thumb_cover}>
+                  <img src={item.image} className={classes.media} title={item.name}  onClick={() => history.push("/product/" + item.id)}/>
+                  </div>
+
+                 
+                  <Typography  noWrap="true" variant="h6">
                     {item.name}
                   </Typography>
 

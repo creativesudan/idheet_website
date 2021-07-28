@@ -102,23 +102,23 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 3,
+          slidesToShow: 4,
           slidesToScroll: 3,
           infinite: true,
         }
       },
       {
-        breakpoint: 600,
+        breakpoint: 767,
         settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          initialSlide: 1
         }
       },
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 2,
           slidesToScroll: 1
         }
       }
@@ -134,10 +134,10 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
           onClick={() => history.push("/category")}
         >See more</Button>}
       />}
-      <Slider {...settings} style={{ margin: -5 }}>
+      <Slider {...settings} style={{ margin: -8 }}>
         {categories?.map(item => (
           <div className={classes.categoryBox} >
-            <div style={{ padding: 10 }}>
+            <div style={{ padding: 8 }}>
               <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }} onClick={() => onClick(item)}>
                 <img src={item.icon} />
                 <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>

@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
     objectPosition: 'center'
   },
   thumb_cover: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginBottom:15,
   },
   textContent: {
     marginTop: 20, marginBottom: 10
@@ -125,7 +126,7 @@ export default function RecommendedProducts({ title, products }) {
                   <Slider {...settings} style={{ margin: -5 - 5 }}>
                     {item.images.map((item) => (
                       <div className={classes.categoryBox}>
-                        <div style={{ padding: 10 }}>
+                        <div style={{ padding: 8 }}>
                           <Paper elevation={0} classes={{ root: classes.paper }}>
 
                             <div className={classes.thumb_cover}>

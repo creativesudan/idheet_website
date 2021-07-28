@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   Toobar: {
-    background: '#70c584'
+    background: theme.palette.primary.main
   },
   menu: {
     margin: 0, padding: 0, marginLeft: theme.spacing(-2), flex: 1,
@@ -245,7 +245,7 @@ export default function Header() {
 
 
 
-              <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => history.push("/cart")}>
+              <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => cart?.totalCount > 0 && history.push("/cart")}>
                 <Badge badgeContent={cart?.totalCount} color="secondary">
                   <ShoppingCartIcon />
                 </Badge>

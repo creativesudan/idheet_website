@@ -16,18 +16,16 @@ import { removeItem, updateItem } from '../../redux/actions/cart';
 import { useHistory } from 'react-router-dom';
 
 
-const sliderImage = [
-  { id: 1, name: 'Vegetables', icon: 'https://www.zoovi.in/kisanhaat/img/recommend/r1.jpg' },
-  { id: 2, name: 'Fruits', icon: 'https://www.zoovi.in/kisanhaat/img/recommend/r2.jpg' },
-  { id: 3, name: 'Meat', icon: 'https://www.zoovi.in/kisanhaat/img/recommend/r3.jpg' },
-]
 
 const useStyles = makeStyles((theme) => ({
   categoryBox: {
     textAlign: 'center',
     '& img': {
       width: '100%',
-      display: 'block',
+      display: 'inline-block',
+      maxHeight:500,
+      objectFit:'cover',
+      objectPosition:'center'
     }
   },
   largeBtn: {
@@ -57,15 +55,15 @@ const useStyles = makeStyles((theme) => ({
   toggleBtn: {
     borderRadius: theme.spacing(4),
     padding: theme.spacing(0.7, 2),
-    borderColor: '#ff6000',
-    color: '#ff6000',
+    borderColor: theme.palette.primary.main,
+    color: theme.palette.primary.main,
     '&$selectedBtn': {
-      background: '#ff6000 !important',
+      background: `${theme.palette.primary.main}!important`,
       color: '#fff'
     }
   },
   selectedBtn: {
-    background: '#ff6000',
+    background: theme.palette.primary.main,
   }
 }))
 
