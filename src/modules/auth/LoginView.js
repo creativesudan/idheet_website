@@ -1,7 +1,8 @@
 import React from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Paper, Grid } from '@material-ui/core';
+import { Link } from "react-router-dom";
+import { Container, Breadcrumbs, Typography, Paper, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import CheckIcon from '@material-ui/icons/Check';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
@@ -72,9 +73,9 @@ export default function LoginView() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
-            </Link>
+          <Link color="primary" to="/">
+            <Typography color="primary">Home</Typography>
+          </Link>
             <Typography color="textPrimary">Email</Typography>
           </Breadcrumbs>
         </Container>

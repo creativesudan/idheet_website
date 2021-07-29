@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import { Typography, Button, Card, CardContent, CardMedia, Grid, Box } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
@@ -285,13 +286,17 @@ export default function Products({ products, title }) {
                     {item.discountPercentage}%
                   </span>
                   
-                  <div className={classes.thumb_cover}>
-                  <img src={item.image} className={classes.media} title={item.name}  onClick={() => history.push("/product/" + item.id)}/>
-                  </div>
+                  <Link to={"/product/" + item.id}>
+                    <div className={classes.thumb_cover}>
+                      <img src={item.image} className={classes.media} title={item.name}/>
+                    </div>
+                  </Link>
 
-                  <Typography variant="h6" noWrap="true" onClick={() => history.push("/product/" + item.id)}>
-                    {item.name}
-                  </Typography>
+                  <Link to={"/product/" + item.id}>
+                    <Typography variant="h6" noWrap="true">
+                      {item.name}
+                    </Typography>
+                  </Link>
 
                   <Grid container container justify="space-between" direction="row" alignItems="center">
 

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -142,10 +143,12 @@ export default function CategorySlider() {
         {brands?.map(item => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 8 }}>
-              <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/brands/" + item.brand_id)}>
+              <Link to={"/brands/" + item.brand_id}>
+              <Paper elevation={1} classes={{ root: classes.paper }}>
                 <img src={item.image} />
-                <Typography variant="caption" display="block" >{item.brand_name}</Typography>
+                <Typography color="textPrimary" variant="caption" display="block" >{item.brand_name}</Typography>
               </Paper>
+              </Link>
             </div>
           </div>
         ))}

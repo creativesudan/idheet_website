@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Grid, Paper, Button } from '@material-ui/core';
+import { Link } from "react-router-dom";
+import { Container, Breadcrumbs, Typography, Grid, Paper, Button } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
 import { useSelector } from 'react-redux';
@@ -69,8 +70,8 @@ export default function CategoryListing() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
             <Typography color="textPrimary">Listing</Typography>
           </Breadcrumbs>
@@ -92,10 +93,12 @@ export default function CategoryListing() {
                     return <Grid item lg={2} md={3} sm={4} xs={6}>
 
                       <div className={classes.categoryBox}>
-                        <Paper elevation={1} classes={{ root: classes.paper }} onClick={() => history.push("/category/" + sub.id)}>
-                          <img src={sub.icon} />
-                          <Typography variant="h6" display="block" gutterBottom>{sub.name}</Typography>
-                        </Paper>
+                        <Link to={"/category/" + sub.id}>
+                          <Paper elevation={1} classes={{ root: classes.paper }}>
+                            <img src={sub.icon} />
+                            <Typography variant="h6" display="block" gutterBottom>{sub.name}</Typography>
+                          </Paper>
+                        </Link>
                       </div>
 
                     </Grid>

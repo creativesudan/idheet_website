@@ -1,5 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -121,8 +122,9 @@ export default function RecommendedProducts({ title, products }) {
           return (
             <Grid item md={3} xs={12}>
               <Card>
-                <CardContent classes={{ root: classes.cardRoot }} onClick={() => history.push("/product/" + item.id)}>
+                <CardContent classes={{ root: classes.cardRoot }}>
 
+                <Link to={"/product/" + item.id}>
                   <Slider {...settings} style={{ margin: -5 - 5 }}>
                     {item.images.map((item) => (
                       <div className={classes.categoryBox}>
@@ -138,15 +140,18 @@ export default function RecommendedProducts({ title, products }) {
                       </div>
                     ))}
                   </Slider>
+                  </Link>
 
+                  <Link to={"/product/" + item.id}>
                   <div className={classes.textContent}>
-                    <Typography variant="h6" color="primary" onClick={() => history.push("/product/" + item.id)}>
+                    <Typography variant="h6" color="primary">
                       {item.name}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
                       Orange Great Quality item from Jamaica.
                     </Typography>
                   </div>
+                  </Link>
 
 
                   <Grid container

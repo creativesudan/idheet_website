@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -209,18 +210,17 @@ export default function HotProducts({ title, products }) {
                   <span className={classes.badge} color="textSecondary" gutterBottom>
                     {item.discountPercentage}%
                   </span>
-                  {/* <CardMedia
-                    className={classes.media}
-                    image={item.image}
-                    title={item.name}
-                    onClick={() => history.push("/product/" + item.id)}
-                  /> */}
+                  <Link to={"/product/" + item.id}>
                   <div className={classes.thumb_cover}>
-                    <img src={item.image} className={classes.media} title={item.name} onClick={() => history.push("/product/" + item.id)} />
+                    <img src={item.image} className={classes.media} title={item.name}/>
                   </div>
-                  <Typography variant="h6" gutterBottom noWrap="true" onClick={() => history.push("/product/" + item.id)}>
+                  </Link>
+                  
+              <Link to={"/product/" + item.id}>
+                  <Typography variant="h6" gutterBottom noWrap="true" color={'textPrimary'}>
                     {item.name}
                   </Typography>
+                  </Link>
 
                   <Grid container container justify="space-between" direction="row" alignItems="center">
 

@@ -1,6 +1,7 @@
 import React from 'react';
+import { Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import { Container,Breadcrumbs,Link,Typography} from '@material-ui/core';
+import { Container,Breadcrumbs,Typography} from '@material-ui/core';
 import { CartView} from './index'
 
 const useStyles = makeStyles((theme) => ({
@@ -20,11 +21,11 @@ export default function CheckoutProcess() {
     <div className={classes.BreadcrumbsContainer}>
       <Container>
         <Breadcrumbs aria-label="breadcrumb">
-          <Link color="primary" href="/">
-            Home
+          <Link color="primary" to="/">
+            <Typography color="primary">Home</Typography>
           </Link>
-          <Link color="primary" href="/">
-            Listing
+          <Link color="primary" to="/">
+            <Typography color="primary">Listing</Typography>
           </Link>
           <Typography color="textPrimary">Cart</Typography>
         </Breadcrumbs>

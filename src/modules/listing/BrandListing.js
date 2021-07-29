@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Grid, Paper, Button } from '@material-ui/core';
+import { Link } from "react-router-dom";
+import { Container, Breadcrumbs, Typography, Grid, Paper, Button } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
 import { useDispatch, useSelector } from 'react-redux';
@@ -74,8 +75,8 @@ export default function BrandListing() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+            <Typography color="primary">Home</Typography>
             </Link>
             <Typography color="textPrimary">All Brands</Typography>
           </Breadcrumbs>
@@ -89,12 +90,12 @@ export default function BrandListing() {
               <Grid item lg={2} md={3} sm={4} xs={6}>
 
                 <div className={classes.categoryBox}>
-                  <Paper elevation={1} classes={{ root: classes.paper }}
-                    onClick={() => history.push("/brands/" + item.brand_id)}
-                  >
+                  <Link to={"/brands/" + item.brand_id}>
+                  <Paper elevation={1} classes={{ root: classes.paper }}>
                     <img src={item.image} />
                     <Typography variant="h6" display="block" gutterBottom>{item.brand_name}</Typography>
                   </Paper>
+                  </Link>
                 </div>
 
               </Grid>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -138,10 +139,12 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
         {categories?.map(item => (
           <div className={classes.categoryBox} >
             <div style={{ padding: 8 }}>
-              <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }} onClick={() => onClick(item)}>
-                <img src={item.icon} />
-                <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
-              </Paper>
+              <Link to={"/category/" + item.id}>
+                <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }}>
+                  <img src={item.icon} />
+                  <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
+                </Paper>
+              </Link>
             </div>
           </div>
         ))}

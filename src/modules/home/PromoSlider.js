@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   paper: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+    cursor:'pointer'
   }
 }))
 
