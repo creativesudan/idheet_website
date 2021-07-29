@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Paper, Grid, Divider, Button } from '@material-ui/core';
+import { Container, Breadcrumbs, Typography, Paper, Grid, Divider, Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import CheckIcon from '@material-ui/icons/Check';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
@@ -25,7 +25,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
-import { useHistory, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { cancelCompleteOrder, cancelOrderItem, fetchOrderById } from '../../redux/actions/order';
 import { ORDER_STATUS } from './OrderListing';
 
@@ -129,13 +129,13 @@ export default function OrderDetail() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
-            <Link color="primary" href="/">
-              My Orders
+            <Link color="primary" to="/orders">
+              <Typography color="primary">My Orders</Typography>
             </Link>
-            <Typography color="textPrimary">Order Detail</Typography>
+            <Typography color="textPrimary">{order?.order_no}</Typography>
           </Breadcrumbs>
         </Container>
       </div>

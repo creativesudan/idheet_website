@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Breadcrumbs, Link, Typography, Paper, Grid, Divider, TextField } from '@material-ui/core';
+import { Button, Container, Breadcrumbs, Typography, Paper, Grid, Divider, TextField } from '@material-ui/core';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
@@ -16,6 +16,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import LeftPanel from './LeftPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, updateUser } from '../../redux/actions/auth';
+import { fetchEnquiryList } from '../../redux/actions/app';
+import { Link, useHistory } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,30 +31,30 @@ const useStyles = makeStyles((theme) => ({
   frame: {
     padding: 20
   },
-  list:{
-    border:'1px solid #ccc',
-    padding:'16px',
-    borderRadius:4,
-    margin:'20px 0',
-    position:'relative'
+  list: {
+    border: '1px solid #ccc',
+    padding: '16px',
+    borderRadius: 4,
+    margin: '20px 0',
+    position: 'relative'
   },
-  listDetails:{
-    marginBottom:15
+  listDetails: {
+    marginBottom: 15
   },
-  Avatar:{
-    display:'inline-block',
-    '& img':{
-      objectFit:'cover',
-      objectPositon:'center',
-      width:100,
-      height:100,
-      borderRadius:4
+  Avatar: {
+    display: 'inline-block',
+    '& img': {
+      objectFit: 'cover',
+      objectPositon: 'center',
+      width: 100,
+      height: 100,
+      borderRadius: 4
     }
   },
-  date:{
-    position:'absolute',
-    right:16,
-    top:18,
+  date: {
+    position: 'absolute',
+    right: 16,
+    top: 18,
   }
 }))
 
@@ -61,6 +63,13 @@ const useStyles = makeStyles((theme) => ({
 export default function EnquiryListView() {
   const classes = useStyles();
   const user = useSelector(state => state.auth.user);
+  const enquiryList = useSelector(state => state.app.enquiryList);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchEnquiryList());
+  }, []);
 
 
 
@@ -69,13 +78,10 @@ export default function EnquiryListView() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
-            <Link color="primary" href="/">
-              My Orders
-            </Link>
-            <Typography color="textPrimary">Order Detail</Typography>
+            <Typography color="textPrimary">Enquiries</Typography>
           </Breadcrumbs>
         </Container>
       </div>
@@ -88,28 +94,32 @@ export default function EnquiryListView() {
             <Grid item lg={8}>
               <Paper>
                 <div className={classes.frame}>
-                  <Typography variant="h4"><b>Enquiries</b></Typography>
-                  
-                  <div className={classes.list}>
+                  <Typography variant="h4" gutterBottom><b>Enquiries</b></Typography>
+
+                  {enquiryList?.length > 0 ? enquiryList?.map(item => <div className={classes.list}>
                     <Grid container spacing={2}>
-                        <Grid item>
-                          <span className={classes.Avatar}>
-                            <img src="https://media.self.com/photos/5f189b76c58e27c99fbef9e3/1:1/w_768,c_limit/blackberry-vanilla-french-toast.jpg"/>
-                          </span>
-                        </Grid>
-                        <Grid item>
-                          <div className={classes.listDetails}>
-                          <Typography variant="h5" className={classes.textWhite}>Product Name</Typography>
-                          <Typography variant="caption" className={classes.textWhite}>QTY: <b>5</b></Typography>
-                          
-                          <Typography variant="caption" className={classes.date}>26-07-2021</Typography>
-                          </div>
-                          <Button variant="contained" color="secondary">View details</Button>
-                        </Grid>
-                        
+                      <Grid item>
+                        <span className={classes.Avatar}>
+                          <img src={item.product?.images[0]?.image} />
+                        </span>
+                      </Grid>
+                      <Grid item>
+                        <div className={classes.listDetails}>
+                          <Typography variant="h5" className={classes.textWhite}>{item.product?.name}</Typography>
+                          <Typography variant="caption" className={classes.textWhite}>QTY: <b>{item.qty}</b></Typography>
+
+                          {/* <Typography variant="caption" className={classes.date}>26-07-2021</Typography> */}
+                        </div>
+                        <Button variant="contained" color="secondary" onClick={() => history.push("/enquiry/" + item.id)}>View details</Button>
+                      </Grid>
+
                     </Grid>
-                  </div>
-                  
+                  </div>)
+
+                    :
+                    <Typography variant="subtitle2" color="textSecondary">No Enquiry Found</Typography>
+                  }
+
 
                 </div>
               </Paper>

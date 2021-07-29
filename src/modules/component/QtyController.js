@@ -4,7 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateItem } from '../../redux/actions/cart';
+import { getCartItemById, getVariantCartItem } from '../../redux/lib/cart';
 
 
 
@@ -40,14 +42,21 @@ const useStyles = makeStyles((theme) => ({
 export default function QtyController(props) {
   const classes = useStyles();
   // const [qty, setQty] = useState(props.qty);
-  const { qty } = props;
+  // const { qty } = props;
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const history = useHistory();
-  let updatedCartItem = { ...props.cartItem };
+  // let updatedCartItem = { ...props.cartItem };
+  const cartItems = useSelector(state => state.cart.items);
+  const cartLoading = useSelector(state => state.cart.cartLoading);
+  const [cartItem, setCartItem] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // setQty(props.qty);
-  }, [props.qty]);
+    // console.log(props.product, props.variant);
+    if (props.product && props.variant) setCartItem(getVariantCartItem(cartItems, props.product, props.variant));
+    if (props.product_id && props.displayWeight) setCartItem(getCartItemById(cartItems, props.product_id, props.displayWeight));
+  }, [cartItems, props.product, props.variant])
+
 
   const handleQtyInc = () => {
     // setQty(newQty);
@@ -55,26 +64,29 @@ export default function QtyController(props) {
     if (!isAuthenticated) {
       history.push("/login");
     }
-    else if (props.disabled) {
+    else if (cartLoading) {
       return;
     }
     else {
+      // updatedCartItem.qty = 1;
+      let updatedCartItem = { ...cartItem };
       updatedCartItem.qty = 1;
-      props.handleQtyInc(updatedCartItem);
+      dispatch(updateItem(cartItems, updatedCartItem));
     }
   }
 
   const handleQtyDec = () => {
     // setQty(newQty);
-    if (props.disabled) {
+    if (cartLoading) {
       return;
     }
-    props.handleQtyDec(updatedCartItem);
+    let updatedCartItem = { ...cartItem };
+    dispatch(removeItem(updatedCartItem));
   }
 
   return (
     <div className={classes.qtyController}>
-      {qty > 0 &&
+      {cartItem?.qty > 0 &&
         <>
           <Fab
             size="small"
@@ -86,7 +98,7 @@ export default function QtyController(props) {
           >
             <RemoveIcon />
           </Fab>
-          <span className={classes.qty}>{qty}</span>
+          <span className={classes.qty}>{cartItem?.qty}</span>
         </>
       }
       <Fab

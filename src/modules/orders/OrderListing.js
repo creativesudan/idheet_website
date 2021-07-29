@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Paper, Grid } from '@material-ui/core';
+import { Container, Breadcrumbs, Typography, Paper, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import CheckIcon from '@material-ui/icons/Check';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
@@ -17,6 +17,7 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchOrders } from '../../redux/actions/order';
+import { Link } from 'react-router-dom';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -121,7 +122,7 @@ export const CompleteOrders = ({ orders }) => {
   return (
     <>
       {orders.map((items) => (
-        <Link href={"/orders/" + items.id}>
+        <Link to={"/orders/" + items.id}>
           <Paper className={classes.List}>
             <div className={classes.bar}>
               <div className={classes.header}>
@@ -138,7 +139,7 @@ export const CompleteOrders = ({ orders }) => {
 
               <div className={classes.table}>
                 <div className={classes.flex2}>
-                  <Typography variant='subtitle2' color="textSecondary">Transaction. ID</Typography>
+                  <Typography variant='subtitle2' color="textSecondary">Order ID</Typography>
                   <Typography variant='subtitle2' ><b>{items.order_no}</b></Typography>
                 </div>
                 <div className={classes.flex2}>
@@ -168,7 +169,7 @@ export const OpenOrders = ({ orders }) => {
   return (
     <>
       {orders.map((items) => (
-        <Link href={"/orders/" + items.id}>
+        <Link to={"/orders/" + items.id}>
           <Paper className={classes.List}>
 
             <div className={classes.bar}>
@@ -186,11 +187,11 @@ export const OpenOrders = ({ orders }) => {
 
               <div className={classes.table}>
                 <div className={classes.flex2}>
-                  <Typography variant='subtitle2' color="textSecondary">Transaction. ID</Typography>
+                  <Typography variant='subtitle2' color="textSecondary">Order ID</Typography>
                   <Typography variant='subtitle2' ><b>{items.order_no}</b></Typography>
                 </div>
                 <div className={classes.flex2}>
-                  <Typography variant='subtitle2' color="textSecondary">Delivered to</Typography>
+                  <Typography variant='subtitle2' color="textSecondary">Deliver to</Typography>
                   <Typography variant='subtitle2' ><b>{items.address1}, {items.address2 && items.address2}, {items.city}</b></Typography>
                 </div>
                 <div>
@@ -219,7 +220,7 @@ export const CancelledOrders = ({ orders }) => {
   return (
     <>
       {orders.map((items) => (
-        <Link href={"/orders/" + items.id}>
+        <Link to={"/orders/" + items.id}>
           <Paper className={classes.List}>
             <div className={classes.bar}>
               <div className={classes.header}>
@@ -236,11 +237,11 @@ export const CancelledOrders = ({ orders }) => {
 
               <div className={classes.table}>
                 <div className={classes.flex2}>
-                  <Typography variant='subtitle2' color="textSecondary">Transaction. ID</Typography>
+                  <Typography variant='subtitle2' color="textSecondary">Order ID</Typography>
                   <Typography variant='subtitle2' ><b>{items.order_no}</b></Typography>
                 </div>
                 <div className={classes.flex2}>
-                  <Typography variant='subtitle2' color="textSecondary">Delivered to</Typography>
+                  <Typography variant='subtitle2' color="textSecondary">Deliver to</Typography>
                   <Typography variant='subtitle2' ><b>{items.address1}, {items.address2 && items.address2}, {items.city}</b></Typography>
                 </div>
                 <div>
@@ -273,13 +274,10 @@ export default function OrderListing() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
-            <Link color="primary" href="/">
-              My Orders
-            </Link>
-            <Typography color="textPrimary">Cart</Typography>
+            <Typography color="textPrimary">My Orders</Typography>
           </Breadcrumbs>
         </Container>
       </div>

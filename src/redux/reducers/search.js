@@ -25,7 +25,8 @@ export default function (state = initial_state, action) {
             if (action.error) {
                 return {
                     ...state,
-                    products: []
+                    products: [],
+                    error: "No Results"
                 }
             }
             return {

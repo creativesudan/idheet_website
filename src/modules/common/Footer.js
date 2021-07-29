@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 16
     }
   },
-  socialList:{
-    margin:'10px 0'
+  socialList: {
+    margin: '10px 0'
   }
 
 }));
@@ -58,12 +58,14 @@ export default function Footer() {
   const classes = useStyles();
   const cmsList = useSelector(state => state.app.cmsList);
   const settings = useSelector(state => state.app.settings);
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const categories = useSelector(state => state.home.categories?.filter(category => !category.parent));
 
   return (
     <>
       <div className={classes.root}>
 
-    
+
 
         <Box py={4}>
           <Container>
@@ -106,9 +108,9 @@ export default function Footer() {
                 <FooterLinks label="Review" link="#" />
               </Grid> */}
 
-              <Grid item item md={2}>
+              {isAuthenticated ? <Grid item item md={2}>
                 <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">My Account</Typography>
+                  <Typography variant="h6">Quick Links</Typography>
                 </Box>
                 <FooterLinks label="My account" link="/my-account" />
                 <FooterLinks label="Promos" link="/promo" />
@@ -118,46 +120,31 @@ export default function Footer() {
                 <FooterLinks label="Help ticket" link="#" />
                 <FooterLinks label="Logout" link="#" /> */}
               </Grid>
+                :
+                <Grid item item md={2}>
+                  <Box component="span" display="block" py={1}>
+                    <Typography variant="h6">Quick Links</Typography>
+                  </Box>
+                  <FooterLinks label="Login" link="/login" />
+                  <FooterLinks label="Promos" link="/promo" />
+                  {/* <FooterLinks label="My address" link="#" /> */}
+                  {/* <FooterLinks label="Terms & conditions" link="#" />
+            <FooterLinks label="Help & support" link="#" />
+            <FooterLinks label="Help ticket" link="#" />
+            <FooterLinks label="Logout" link="#" /> */}
+                </Grid>
+              }
 
-              
+
               <Grid item md={6}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Category</Typography>
                 </Box>
                 <Grid container>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
-                  <Grid item md={3}>
-                      <FooterLinks label="Category 1" link="/my-account" />
-                  </Grid>
+                  {categories?.map(category => <Grid item md={3}>
+                    <FooterLinks label={category.name} link={"/category/" + category.id} />
+                  </Grid>)}
+
                 </Grid>
               </Grid>
 
@@ -166,14 +153,14 @@ export default function Footer() {
                   <Typography variant="h6">Social Media</Typography>
                 </Box>
 
-                
+
                 <div className={classes.socialMedia}>
                   <Box component="div" display="block" >
                     <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
                       <FacebookIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Facebook</Link>
+                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Facebook</Link>
                     </Box>
                   </Box>
                   <Box component="div" display="block" className={classes.socialList} >
@@ -181,7 +168,7 @@ export default function Footer() {
                       <TwitterIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Twitter</Link>
+                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Twitter</Link>
                     </Box>
                   </Box>
                   <Box component="div" display="block" className={classes.socialList} >
@@ -189,7 +176,7 @@ export default function Footer() {
                       <InstagramIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Instagram</Link>
+                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Instagram</Link>
                     </Box>
                   </Box>
                   <Box component="div" display="block" className={classes.socialList}>
@@ -197,11 +184,11 @@ export default function Footer() {
                       <YouTubeIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                    &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Youtube</Link>
+                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Youtube</Link>
                     </Box>
                   </Box>
                 </div>
-                
+
               </Grid>
 
               <Grid item>

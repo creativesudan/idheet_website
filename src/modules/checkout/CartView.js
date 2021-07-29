@@ -29,6 +29,7 @@ import { useHistory } from 'react-router-dom';
 import { clearOrderPlaced } from '../../redux/actions/order';
 import { deleteAddress, saveAddress, updateAddAddressField, updateAddress, updateAddressField, updateEditAddressField, verifyPincode } from '../../redux/actions/address';
 import lazyLoad from '../../redux/actions/lazyLoad';
+import Snackbar from '../component/Snackbar';
 
 
 
@@ -100,22 +101,22 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   actionsContainer: {
-    textAlign:'right',
-    marginRight:-8,
+    textAlign: 'right',
+    marginRight: -8,
     marginTop: theme.spacing(2),
     // margin: theme.spacing(2),
   },
   resetContainer: {
     padding: theme.spacing(3),
   },
-  deliveryMsg:{
-    padding:'15px',
-    border:`1px solid ${theme.palette.primary.main}`,
-    borderRadius:4,
-    margin:'15px 0',
-    backgroundColor:'#f7f7f7',
-    textAlign:'center'
-  },  
+  deliveryMsg: {
+    padding: '15px',
+    border: `1px solid ${theme.palette.primary.main}`,
+    borderRadius: 4,
+    margin: '15px 0',
+    backgroundColor: '#f7f7f7',
+    textAlign: 'center'
+  },
   cardroot: {
     display: 'flex',
   },
@@ -278,7 +279,7 @@ export function CartItems() {
                 <div style={{ flex: 1 }}>
                   <Typography variant='h6'><b>₹{items.discountedPrice}/{items.displayWeight}</b></Typography>
                 </div>
-                <QtyController qty={items.qty} cartItem={items} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cart?.cartLoading} />
+                <QtyController product_id={items.product_id} displayWeight={items.displayWeight} />
               </div>
             </div>
           </div>
@@ -356,18 +357,18 @@ export function AddressList() {
         <DialogTitle id="alert-dialog-title"><b>Edit Address</b></DialogTitle>
         <DialogContent>
           <div className={classes.dailog_width}>
-            <div style={{marginBottom:30}}> 
-            <ToggleButtonGroup value={editAddress?.type?.id} size="small" onChange={handleFormat} exclusive aria-label="text formatting">
-              <ToggleButton value={1} aria-label={1}>
-                <b>Home</b>
-              </ToggleButton>
-              <ToggleButton value={0} aria-label={0}>
-                <b>Office</b>
-              </ToggleButton>
-              <ToggleButton value={2} aria-label={2}>
-                <b>Other</b>
-              </ToggleButton>
-            </ToggleButtonGroup>
+            <div style={{ marginBottom: 30 }}>
+              <ToggleButtonGroup value={editAddress?.type?.id} size="small" onChange={handleFormat} exclusive aria-label="text formatting">
+                <ToggleButton value={1} aria-label={1}>
+                  <b>Home</b>
+                </ToggleButton>
+                <ToggleButton value={0} aria-label={0}>
+                  <b>Office</b>
+                </ToggleButton>
+                <ToggleButton value={2} aria-label={2}>
+                  <b>Other</b>
+                </ToggleButton>
+              </ToggleButtonGroup>
             </div>
 
             <div className={classes.addressField}>
@@ -689,6 +690,7 @@ export function AddressList() {
           variant="outlined"
           color="primary"
           onClick={AddOpen}
+          fullWidth={true}
         >
           Add New
         </Button>
@@ -731,18 +733,18 @@ export function TimeSlot() {
 
       <div className={classes.deliveryMsg}>
         <Typography variant="subtitle2">
-        {settings?.delivery_msg}
+          {settings?.delivery_msg}
         </Typography>
       </div>
 
-        <RadioGroup aria-label="gender" name="gender1" value={selectedSlot?.id || null} onChange={timeSelect}>
-          {deliverySlots && deliverySlots.map((item) => (
-            <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value={item.id} control={<Radio color="primary" />} label={item.from_time + " - " + item.to_time} />
-          ))}
-          {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="4PM - 6AM" control={<Radio color="primary" />} label="Nearest Me" />
+      <RadioGroup aria-label="gender" name="gender1" value={selectedSlot?.id || null} onChange={timeSelect}>
+        {deliverySlots && deliverySlots.map((item) => (
+          <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value={item.id} control={<Radio color="primary" />} label={item.from_time + " - " + item.to_time} />
+        ))}
+        {/* <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="4PM - 6AM" control={<Radio color="primary" />} label="Nearest Me" />
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="6PM - 9PM" control={<Radio color="primary" />} label="Cost High to Low" />
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="0AM - 1PM" control={<Radio color="primary" />} label="Cost Low to High" /> */}
-        </RadioGroup>
+      </RadioGroup>
 
     </div>
   )
@@ -755,10 +757,10 @@ export function PaymentType() {
   return (
     <div>
 
-      
-<RadioGroup aria-label="gender" name="gender1">
-  <FormControlLabel onClick={() => dispatch(setPaymentType("ONLINE"))} classes={{ label: classes.small }} className={classes.filterItem} value="4PM - 6AM" control={<Radio color="primary" />} label="Online" />
-  <FormControlLabel onClick={() => dispatch(setPaymentType("COD"))} classes={{ label: classes.small }} className={classes.filterItem} value="6PM - 9PM" control={<Radio color="primary" />} label="COD" /></RadioGroup>
+
+      <RadioGroup aria-label="gender" name="gender1" value={paymentType}>
+        <FormControlLabel onClick={() => dispatch(setPaymentType("ONLINE"))} classes={{ label: classes.small }} className={classes.filterItem} value="ONLINE" control={<Radio color="primary" />} label="Online" />
+        <FormControlLabel onClick={() => dispatch(setPaymentType("COD"))} classes={{ label: classes.small }} className={classes.filterItem} value="COD" control={<Radio color="primary" />} label="COD" /></RadioGroup>
 
       {/* <Button
         color={(paymentType == "ONLINE") ? "primary" : ""}
@@ -810,6 +812,8 @@ export default function CartView() {
   const selectedSlot = useSelector(state => state.app.selectedDeliverySlot);
   const couponCode = cart.appliedCoupon ? cart.appliedCoupon.coupon_code : "";
   const orderSuccess = useSelector(state => state.order.orderSuccess);
+
+  const [snackbar, setSnackbar] = React.useState({ open: false });
 
 
 
@@ -863,17 +867,23 @@ export default function CartView() {
 
   const handleNext = () => {
     if (!cart.orderAllowed) {
-      alert("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
+      // alert("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
+      setSnackbar({ open: true, message: "Subtotal should be more than " + (settings ? settings.min_order_value : "") });
       return;
     }
     let error = false;
     if (activeStep == 1 && !deliveryAddress) {
       error = true;
-      alert("Select Delivery Address");
+      // alert("Select Delivery Address");
+      setSnackbar({ open: true, message: "Select Delivery Address" });
+
+
     }
     if (activeStep == 2 && !selectedSlot) {
       error = true;
-      alert("Select Delivery Slot");
+      // alert("Select Delivery Slot");
+      setSnackbar({ open: true, message: "Select Delivery Slot" });
+
     }
     if (activeStep == 3) {
       handlePayment();
@@ -929,7 +939,7 @@ export default function CartView() {
 
   return (
     <>
-
+      <Snackbar message={snackbar.message} open={snackbar.open} onClose={() => setSnackbar({ open: false })} />
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item lg={8}>

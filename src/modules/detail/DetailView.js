@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     '& img': {
       width: '100%',
       display: 'inline-block',
-      maxHeight:500,
-      objectFit:'cover',
-      objectPosition:'center'
+      maxHeight: 500,
+      objectFit: 'cover',
+      objectPosition: 'center'
     }
   },
   largeBtn: {
@@ -174,15 +174,16 @@ export default function DetailView({ product }) {
         <Grid item sm={6}>
           <Paper className={classes.paper}>
             <Typography variant='h4' className={classes.bigName}><b>{product.name}</b></Typography>
-            <Typography variant='caption'>Selling Price : <b>₹{product.discountedPrice}</b></Typography>
+            <Typography variant='caption'>Selling Price : <b>₹{product.discountedPrice}</b> &nbsp; <del>₹{product.price}</del></Typography>
+
             <span className={classes.badge} color="textSecondary" gutterBottom>
               {product.discountPercentage}% OFF
             </span>
 
             <Grid className={classes.reviews} container spacing={1} direction="row">
-              <Grid item>
+              {/* <Grid item>
                 <Rating rate={4.8} />
-              </Grid>
+              </Grid> */}
               <Grid item>
                 {/* <Typography variant='caption'>(245) Reviews</Typography> */}
               </Grid>
@@ -193,10 +194,10 @@ export default function DetailView({ product }) {
                 <Box><Typography variant='h6'><b>Delivery</b></Typography></Box>
                 <Box><Typography variant='subtitle1' color="textSecondary">Free</Typography></Box>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Box><Typography variant='h6' align="right"><b>Available in:</b></Typography></Box>
                 <Box><Typography variant='subtitle1' align="right" color="textSecondary">1 kg, 2 kg, 5 kg</Typography></Box>
-              </Grid>
+              </Grid> */}
             </Grid>
 
 
@@ -226,7 +227,7 @@ export default function DetailView({ product }) {
                 </ToggleButtonGroup>
               </Grid>
               <Grid item>
-                <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
+                <QtyController product={product} variant={selectedVariant} />
               </Grid>
             </Grid>
 
@@ -243,7 +244,7 @@ export default function DetailView({ product }) {
 
             </Box>
 
-            <Box mt={2} mb={0.5}><Typography variant='h6'><b>Product Details</b></Typography></Box>
+            {product.description?.length > 0 && <Box mt={2} mb={0.5}><Typography variant='h6'><b>Product Details</b></Typography></Box>}
             <Typography variant='subtitle1' color="textSecondary">
               {product.description}
             </Typography>

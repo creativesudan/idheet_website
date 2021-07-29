@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
-import { Typography, Button, Card, CardContent, CardMedia, Grid, Box } from '@material-ui/core';
+import { Typography, Button, Card, CardContent, CardMedia, Grid, Box, MenuItem, FormControl, Select } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import { Filter } from './index'
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   media: {
-    display:'inline-block',
+    display: 'inline-block',
     flex: 1,
     height: 170,
     maxWidth: '100%',
@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
     objectPosition: 'center'
   },
   thumb_cover: {
-    marginBottom:15,
+    marginBottom: 15,
     textAlign: 'center',
-    '& img':{
-      display:'inline-block'
+    '& img': {
+      display: 'inline-block'
     }
   },
   priceBar: {
@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme) => ({
   card: {
     paddingBottom: `${theme.spacing(2)}px !important`,
   },
+  fullWidth: {
+    width: "100%",
+    marginBottom: 10
+  }
 
 }));
 
@@ -244,6 +248,16 @@ export default function Products({ products, title }) {
     dispatch(updateItem(cartItems, cartItem));
   }
 
+  const [selectedVariant, setSelectedVariant] = useState({});
+
+  useEffect(() => {
+    let result = {};
+    products.map(p => {
+      result[p.id] = p.defaultVariant;
+    });
+    setSelectedVariant(result);
+  }, [products]);
+
   return (
     <>
       <Filter
@@ -283,32 +297,53 @@ export default function Products({ products, title }) {
               <Card className={classes.root}>
                 <CardContent classes={{ root: classes.card }}>
                   <span className={classes.badge} color="textSecondary" gutterBottom>
-                    {item.discountPercentage}%
+                    {selectedVariant[item.id]?.discountPercentage}%
                   </span>
-                  
+
                   <Link to={"/product/" + item.id}>
                     <div className={classes.thumb_cover}>
-                      <img src={item.image} className={classes.media} title={item.name}/>
+                      <img src={item.image} className={classes.media} title={item.name} />
                     </div>
                   </Link>
 
                   <Link to={"/product/" + item.id}>
-                    <Typography variant="h6" noWrap="true">
+                    <Typography variant="h6" noWrap="true" color="textPrimary">
                       {item.name}
                     </Typography>
                   </Link>
+
+                  <FormControl className={classes.fullWidth}>
+                    {/* <InputLabel id="demo-customized-select-label">Age</InputLabel> */}
+                    <Select
+                      labelId="demo-customized-select-label"
+                      id="demo-customized-select"
+                      value={selectedVariant[item.id]?.id.toString() || ""}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setSelectedVariant({ ...selectedVariant, [item.id]: item.variants?.find(v => v.id == parseInt(e.target.value)) });
+                        // cartItem = getVariantCartItem(cartItems, item, e.target.value);
+
+                      }}
+                    // input={ }
+                    >
+                      {item.variants?.map(variant => <MenuItem value={variant.id.toString()}>{variant.displayWeight}</MenuItem>)}
+                      {/* <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem> */}
+                    </Select>
+                  </FormControl>
 
                   <Grid container container justify="space-between" direction="row" alignItems="center">
 
                     <Grid item>
                       <Typography variant="h6" color="primary">
-                        ₹{item.discountedPrice}/{item.displayWeight}
+                        ₹{selectedVariant[item.id]?.discountedPrice}/{selectedVariant[item.id]?.displayWeight}
                       </Typography>
                     </Grid>
 
 
                     <Grid item>
-                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
+                      {/* <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} /> */}
+                      <QtyController product={item} variant={selectedVariant[item.id]} />
                     </Grid>
                   </Grid>
 

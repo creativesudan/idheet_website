@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Container, Breadcrumbs, Link, Typography, Paper, Grid, Divider, TextField } from '@material-ui/core';
+import { Button, Container, Breadcrumbs, Typography, Paper, Grid, Divider, TextField } from '@material-ui/core';
 
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Avatar from '@material-ui/core/Avatar';
@@ -16,6 +16,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import LeftPanel from './LeftPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser, updateUser } from '../../redux/actions/auth';
+import { Link, useParams } from 'react-router-dom';
+import { fetchEnquiryList } from '../../redux/actions/app';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,33 +31,33 @@ const useStyles = makeStyles((theme) => ({
   frame: {
     padding: 20
   },
-  list:{
-    border:'1px solid #ccc',
-    padding:'16px',
-    borderRadius:4,
-    margin:'20px 0',
-    position:'relative'
+  list: {
+    border: '1px solid #ccc',
+    padding: '16px',
+    borderRadius: 4,
+    margin: '20px 0',
+    position: 'relative'
   },
-  listDetails:{
-    marginBottom:15
+  listDetails: {
+    marginBottom: 15
   },
-  Avatar:{
-    display:'inline-block',
-    '& img':{
-      objectFit:'cover',
-      objectPositon:'center',
-      width:100,
-      height:100,
-      borderRadius:4
+  Avatar: {
+    display: 'inline-block',
+    '& img': {
+      objectFit: 'cover',
+      objectPositon: 'center',
+      width: 100,
+      height: 100,
+      borderRadius: 4
     }
   },
-  date:{
-    position:'absolute',
-    right:16,
-    top:18,
+  date: {
+    position: 'absolute',
+    right: 16,
+    top: 18,
   },
-  spacing:{
-    margin:'15px 0'
+  spacing: {
+    margin: '15px 0'
   }
 }))
 
@@ -64,6 +66,19 @@ const useStyles = makeStyles((theme) => ({
 export default function EnquiryDetailView() {
   const classes = useStyles();
   const user = useSelector(state => state.auth.user);
+  const { enquiry_id } = useParams();
+  const dispatch = useDispatch();
+  const enquiryList = useSelector(state => state.app.enquiryList);
+
+  const [enquiry, setEnquiry] = useState(null);
+
+  useEffect(() => {
+    setEnquiry(enquiryList?.find(e => e.id == enquiry_id));
+  }, [enquiry_id, enquiryList]);
+
+  useEffect(() => {
+    dispatch(fetchEnquiryList());
+  }, []);
 
 
 
@@ -72,13 +87,13 @@ export default function EnquiryDetailView() {
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
-            <Link color="primary" href="/">
-              My Orders
+            <Link color="primary" to="/enquiry">
+              <Typography color="primary">Enquiries</Typography>
             </Link>
-            <Typography color="textPrimary">Order Detail</Typography>
+            <Typography color="textPrimary">Enquiry Details</Typography>
           </Breadcrumbs>
         </Container>
       </div>
@@ -90,31 +105,31 @@ export default function EnquiryDetailView() {
             </Grid>
             <Grid item lg={8}>
               <Paper>
-                <div className={classes.frame}>                  
+                <div className={classes.frame}>
                   <div className={classes.spacing}>
                     <Grid container justify="space-between">
                       <Grid item>
-                        <Typography variant="h5"><b>Product Name</b></Typography>
-                        <Typography variant="subtitle2"><b>Quantity Required:</b> <span>52</span></Typography>
+                        <Typography variant="h5"><b>{enquiry?.product?.name}</b></Typography>
+                        <Typography variant="subtitle2"><b>Quantity Required:</b> <span>{enquiry?.qty}</span></Typography>
                       </Grid>
                       <Grid item>
-                        <Typography variant="caption">27-07-2021</Typography>
+                        {/* <Typography variant="caption">27-07-2021</Typography> */}
                       </Grid>
                     </Grid>
                   </div>
 
-                  <hr style={{border:'1px solid #ddd'}}/>
-               
+                  <hr style={{ border: '1px solid #ddd' }} />
+
                   <div className={classes.spacing}>
-                        <Typography variant="subtitle2"><b>Your Name:</b> <span>Vinay</span></Typography>
-                        <Typography variant="caption">7838414681</Typography>
+                    <Typography variant="subtitle2"><b>Your Name:</b> <span>{enquiry?.name}</span></Typography>
+                    <Typography variant="caption">{enquiry?.mobile}</Typography>
                   </div>
 
                   <div className={classes.spacing}>
-                  <Typography variant="subtitle2"><b>Message:</b></Typography>
-                  <Typography variant="body2" color="textSecondary">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</Typography>
+                    <Typography variant="subtitle2"><b>Message:</b></Typography>
+                    <Typography variant="body2" color="textSecondary">{enquiry?.message}</Typography>
                   </div>
-                  
+
 
                 </div>
               </Paper>

@@ -17,6 +17,22 @@ export const getNewCartItem = (product) => {
     return cartItem;
 }
 
+export const getNewVariantCartItem = (product, variant) => {
+    let cartItem = {}
+    if (product && variant) {
+        cartItem = {
+            qty: 0,
+            weight: variant.weight,
+            unit: variant.unit,
+            price: variant.price,
+            discount_price: variant.discount_price,
+            product_id: product.id,
+            displayWeight: variant.weight + " " + variant.unit
+        };
+    }
+    return cartItem;
+}
+
 export const getDefaultCartItem = (product) => {
     let cartItem = {}
     if (product && product.selectedVariant) {
@@ -43,6 +59,26 @@ export const getCartItem = (cartItems, product) => {
     const items = cartItems.find(item => item.product_id == product.id) || initialCartItem;
     // console.log("getting cart item : ", items);
     return items;
+}
+
+export const getVariantCartItem = (cartItems, product, variant) => {
+    // const product = getProductById(id);
+    if (!product) return {}
+
+    let initialCartItem = getNewVariantCartItem(product, variant);
+
+    if (!cartItems) return initialCartItem;
+    const items = cartItems.find(item => (item.product_id == product.id && item.displayWeight == variant?.displayWeight)) || initialCartItem;
+    // console.log("getting cart item : ", items);
+    return items;
+}
+
+export const getCartItemById = (cartItems, product_id, displayWeight) => {
+    // const product = getProductById(id);
+
+    const item = cartItems.find(item => (item.product_id == product_id && item.displayWeight == displayWeight));
+
+    return item;
 }
 
 export const getProductCount = (cartItems, product) => {

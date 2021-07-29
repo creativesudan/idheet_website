@@ -73,7 +73,7 @@ export default function CategoryListing() {
             <Link color="primary" to="/">
               <Typography color="primary">Home</Typography>
             </Link>
-            <Typography color="textPrimary">Listing</Typography>
+            <Typography color="textPrimary">Categories</Typography>
           </Breadcrumbs>
         </Container>
       </div>
@@ -86,7 +86,7 @@ export default function CategoryListing() {
             const subs = getSubs(parent);
             return subs.length > 0 ? <>
               <div className={classes.sectionGap}>
-              <HeadingBar title={parent.name}/>
+                <HeadingBar title={parent.name} />
                 <Grid container spacing={2}>
                   {subs?.map(sub => {
 

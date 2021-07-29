@@ -96,9 +96,9 @@ function App() {
           <Route path="/register">
             <RegisterView />
           </Route>
-          <Route path="/enquiry">
-            <EnquiryListView />
-          </Route>
+          <PrivateRoute path="/enquiry/:enquiry_id" component={EnquiryDetailView} />
+          <PrivateRoute path="/enquiry" component={EnquiryListView} />
+
           <PrivateRoute path="/address" component={AddressListView} />
 
           <Route path="/enquiry-detail">

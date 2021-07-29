@@ -20,22 +20,22 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     padding: '20px 0'
   },
-  avatar_color_01:{
+  avatar_color_01: {
     backgroundColor: '#ff6000'
   },
-  avatar_color_02:{
+  avatar_color_02: {
     backgroundColor: '#92c46d'
   },
-  avatar_color_03:{
+  avatar_color_03: {
     backgroundColor: '#007bff'
   },
-  avatar_color_04:{
+  avatar_color_04: {
     backgroundColor: '#ffc107'
   },
-  avatar_color_05:{
+  avatar_color_05: {
     backgroundColor: '#85a5cc'
   },
-  avatar_color_06:{
+  avatar_color_06: {
     backgroundColor: '#3f4eaf'
   }
 }))
@@ -49,14 +49,14 @@ export default function LeftPanel({ user }) {
 
 
   const menuList = [
-    { label: 'My Account', icon: '', avatarColor: '', link: "/my-account", bgcolor:classes.avatar_color_01 },
-    { label: 'Promos / Offers', icon: '', avatarColor: '', link: "/promo", bgcolor:classes.avatar_color_02 },
-    { label: 'Orders', icon: '', avatarColor: '', link: "/orders", bgcolor:classes.avatar_color_03 },
-    { label: 'My Address', icon: '', avatarColor: '', link: "/address", bgcolor:classes.avatar_color_04 },
-    { label: 'Enquiries', icon: '', avatarColor: '', link: "", bgcolor:classes.avatar_color_05 },
-    { label: 'Logout', icon: '', avatarColor: '', link: "", bgcolor:classes.avatar_color_06 }
+    { label: 'My Account', icon: '', avatarColor: '', link: "/my-account", bgcolor: classes.avatar_color_01 },
+    { label: 'Promos / Offers', icon: '', avatarColor: '', link: "/promo", bgcolor: classes.avatar_color_02 },
+    { label: 'Orders', icon: '', avatarColor: '', link: "/orders", bgcolor: classes.avatar_color_03 },
+    { label: 'My Address', icon: '', avatarColor: '', link: "/address", bgcolor: classes.avatar_color_04 },
+    { label: 'Enquiries', icon: '', avatarColor: '', link: "/enquiry", bgcolor: classes.avatar_color_05 },
+
   ]
-  
+
 
   return (
     <>
@@ -73,7 +73,7 @@ export default function LeftPanel({ user }) {
             const labelId = `checkbox-list-secondary-label-${value}`;
             return (
               <>
-              <Divider />
+                <Divider />
                 <ListItem key={value} button onClick={() => history.push(value.link)}>
                   <ListItemAvatar>
                     <Avatar

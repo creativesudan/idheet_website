@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Container, IconButton, Paper, Typography, Button, Card, CardContent, CardMedia, Grid, Fab } from '@material-ui/core';
+import { Container, IconButton, Paper, Typography, Button, Card, CardContent, CardMedia, Grid, Fab, FormControl, MenuItem, Select } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { HeadingBar, QtyController } from '../component/index'
@@ -45,10 +45,14 @@ const useStyles = makeStyles((theme) => ({
   },
   thumb_cover: {
     textAlign: 'center',
-    marginBottom:15,
+    marginBottom: 15,
   },
   textContent: {
     marginTop: 20, marginBottom: 10
+  },
+  fullWidth: {
+    width: "100%",
+    marginBottom: 10
   }
 }))
 
@@ -107,6 +111,17 @@ export default function RecommendedProducts({ title, products }) {
     slidesToScroll: 1,
     initialSlide: 0,
   };
+
+  const [selectedVariant, setSelectedVariant] = useState({});
+
+  useEffect(() => {
+    let result = {};
+    products.map(p => {
+      result[p.id] = p.defaultVariant;
+    });
+    setSelectedVariant(result);
+  }, [products]);
+
   return (
     <>
       <HeadingBar
@@ -124,34 +139,54 @@ export default function RecommendedProducts({ title, products }) {
               <Card>
                 <CardContent classes={{ root: classes.cardRoot }}>
 
-                <Link to={"/product/" + item.id}>
-                  <Slider {...settings} style={{ margin: -5 - 5 }}>
-                    {item.images.map((item) => (
-                      <div className={classes.categoryBox}>
-                        <div style={{ padding: 8 }}>
-                          <Paper elevation={0} classes={{ root: classes.paper }}>
+                  <Link to={"/product/" + item.id}>
+                    <Slider {...settings} style={{ margin: -5 - 5 }}>
+                      {item.images.map((item) => (
+                        <div className={classes.categoryBox}>
+                          <div style={{ padding: 8 }}>
+                            <Paper elevation={0} classes={{ root: classes.paper }}>
 
-                            <div className={classes.thumb_cover}>
-                              <img src={item.image} className={classes.media} title={item.name} />
-                            </div>
+                              <div className={classes.thumb_cover}>
+                                <img src={item.image} className={classes.media} title={item.name} />
+                              </div>
 
-                          </Paper>
+                            </Paper>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </Slider>
+                      ))}
+                    </Slider>
                   </Link>
 
                   <Link to={"/product/" + item.id}>
-                  <div className={classes.textContent}>
-                    <Typography variant="h6" color="primary">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Orange Great Quality item from Jamaica.
-                    </Typography>
-                  </div>
+                    <div className={classes.textContent}>
+                      <Typography variant="h6" color="primary">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {item.tagline}
+                      </Typography>
+                    </div>
                   </Link>
+
+                  <FormControl className={classes.fullWidth}>
+                    {/* <InputLabel id="demo-customized-select-label">Age</InputLabel> */}
+                    <Select
+                      labelId="demo-customized-select-label"
+                      id="demo-customized-select"
+                      value={selectedVariant[item.id]?.id.toString() || ""}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setSelectedVariant({ ...selectedVariant, [item.id]: item.variants?.find(v => v.id == parseInt(e.target.value)) });
+                        // cartItem = getVariantCartItem(cartItems, item, e.target.value);
+
+                      }}
+                    // input={ }
+                    >
+                      {item.variants?.map(variant => <MenuItem value={variant.id.toString()}>{variant.displayWeight}</MenuItem>)}
+                      {/* <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem> */}
+                    </Select>
+                  </FormControl>
 
 
                   <Grid container
@@ -162,12 +197,12 @@ export default function RecommendedProducts({ title, products }) {
 
                     <Grid item>
                       <Typography variant="h6" color="initial">
-                        ₹{item.price}/{item.perunit}
+                        ₹{selectedVariant[item.id]?.discountedPrice}/{selectedVariant[item.id]?.displayWeight}
                       </Typography>
                     </Grid>
 
                     <Grid item>
-                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
+                      <QtyController product={item} variant={selectedVariant[item.id]} />
                     </Grid>
 
                   </Grid>

@@ -165,7 +165,7 @@ export default function (state = initialCart, action) {
             }
             return state;
         case LOGOUT:
-            return initialCart;
+            return { coupons: state.coupons };
         default:
             return state;
     }

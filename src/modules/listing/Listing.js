@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Breadcrumbs, Link, Typography, Box, Button } from '@material-ui/core';
+import { Container, Breadcrumbs, Typography, Box, Button } from '@material-ui/core';
 import { HeadingBar } from '../component/index'
 import { Products } from './index'
 import { Filter } from './index'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { fetchCategories, fetchProducts } from '../../redux/actions/home';
 
 import { CategorySlider } from '../home/index'
@@ -57,15 +57,22 @@ export default function ProductListing() {
     if (subcategories && subcategories.length > 0) setSelectedCategory(subcategories[0]?.id);
   }, [subcategories]);
 
+  const getCategoryNameById = (id) => {
+    return categories?.find(cat => cat.id == id);
+  }
+
   return (
     <>
       <div className={classes.BreadcrumbsContainer}>
         <Container>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link color="primary" href="/">
-              Home
+            <Link color="primary" to="/">
+              <Typography color="primary">Home</Typography>
             </Link>
-            <Typography color="textPrimary">Listing</Typography>
+            <Link color="primary" to="/category">
+              <Typography color="primary">Categories</Typography>
+            </Link>
+            <Typography color="textPrimary">{getCategoryNameById(selectedCategory)?.name}</Typography>
           </Breadcrumbs>
         </Container>
       </div>
