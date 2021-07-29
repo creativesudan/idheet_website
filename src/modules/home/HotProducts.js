@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
+import Snackbar from '@material-ui/core/Snackbar';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,6 +15,10 @@ import { getCartItem } from '../../redux/lib/cart';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCartItems, removeItem, updateItem } from '../../redux/actions/cart';
 import { useHistory } from 'react-router-dom';
+
+import ProductVariant from '../common/ProductVariant'
+
+import CloseIcon from '@material-ui/icons/Close';
 
 
 
@@ -142,6 +147,23 @@ export default function HotProducts({ title, products }) {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [state, setState] = React.useState({
+    open: true,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+
+  
+  const { vertical, horizontal, open } = state;
+
+  const handleClick = (newState) => () => {
+    setState({ open: true, ...newState });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false });
+  };
+
   // useEffect(() => {
   //   if (!cartItems || cartItems.length == 0) fetchCartItems();
   // }, [cartItems]);
@@ -193,6 +215,26 @@ export default function HotProducts({ title, products }) {
 
   return (
     <>
+  <ProductVariant/>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={open}
+        onClose={handleClose}
+        message="Fresh Tinda Added into the cart"
+        autoHideDuration={6000}
+        key={vertical + horizontal}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+
       <HeadingBar
         title={title}
         button={products.length > 4 && <Button color="primary" variant="outlined" size="small">See More</Button>}

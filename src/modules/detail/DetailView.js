@@ -173,8 +173,8 @@ export default function DetailView({ product }) {
         </Grid>
         <Grid item sm={6}>
           <Paper className={classes.paper}>
-            <Typography variant='h2' className={classes.bigName}>{product.name}</Typography>
-            <Typography variant='p'>Selling Price : <b>₹{product.discountedPrice}</b></Typography>
+            <Typography variant='h4' className={classes.bigName}><b>{product.name}</b></Typography>
+            <Typography variant='caption'>Selling Price : <b>₹{product.discountedPrice}</b></Typography>
             <span className={classes.badge} color="textSecondary" gutterBottom>
               {product.discountPercentage}% OFF
             </span>

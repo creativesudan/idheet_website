@@ -100,7 +100,7 @@ export default function ProductSuggestion({ products }) {
                   </div>
 
                  
-                  <Typography  noWrap="true" variant="h6">
+                  <Typography gutterBottom  noWrap="true" variant="h6">
                     {item.name}
                   </Typography>
 

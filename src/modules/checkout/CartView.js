@@ -100,12 +100,22 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   actionsContainer: {
-    marginBottom: theme.spacing(2),
+    textAlign:'right',
+    marginRight:-8,
+    marginTop: theme.spacing(2),
+    // margin: theme.spacing(2),
   },
   resetContainer: {
     padding: theme.spacing(3),
   },
-
+  deliveryMsg:{
+    padding:'15px',
+    border:`1px solid ${theme.palette.primary.main}`,
+    borderRadius:4,
+    margin:'15px 0',
+    backgroundColor:'#f7f7f7',
+    textAlign:'center'
+  },  
   cardroot: {
     display: 'flex',
   },
@@ -346,17 +356,19 @@ export function AddressList() {
         <DialogTitle id="alert-dialog-title"><b>Edit Address</b></DialogTitle>
         <DialogContent>
           <div className={classes.dailog_width}>
+            <div style={{marginBottom:30}}> 
             <ToggleButtonGroup value={editAddress?.type?.id} size="small" onChange={handleFormat} exclusive aria-label="text formatting">
               <ToggleButton value={1} aria-label={1}>
                 <b>Home</b>
               </ToggleButton>
               <ToggleButton value={0} aria-label={0}>
-                <b>office</b>
+                <b>Office</b>
               </ToggleButton>
               <ToggleButton value={2} aria-label={2}>
                 <b>Other</b>
               </ToggleButton>
             </ToggleButtonGroup>
+            </div>
 
             <div className={classes.addressField}>
               <TextField
@@ -716,26 +728,12 @@ export function TimeSlot() {
 
   return (
     <div>
-      <div className={classes.center}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-            // variant="scrollable"
-            scrollButtons="auto"
-            aria-label="simple tabs example"
-          // aria-label="scrollable auto tabs example"
-          >
-            <Tab label={<div><b>{settings?.delivery_msg}</b><span className={classes.dateLabel}></span></div>} {...a11yProps(0)} />
-            {/* <Tab label={<div><b>TUE</b><span className={classes.dateLabel}>8 Sep</span></div>}  {...a11yProps(1)} />
-            <Tab label={<div><b>WED</b><span className={classes.dateLabel}>9 Sep</span></div>}  {...a11yProps(2)} />
-            <Tab label={<div><b>THU</b><span className={classes.dateLabel}>10 Sep</span></div>}  {...a11yProps(3)} /> */}
-          </Tabs>
-        </AppBar>
+
+      <div className={classes.deliveryMsg}>
+        <Typography variant="subtitle2">
+        {settings?.delivery_msg}
+        </Typography>
       </div>
-      <TabPanel value={value} index={0}>
 
         <RadioGroup aria-label="gender" name="gender1" value={selectedSlot?.id || null} onChange={timeSelect}>
           {deliverySlots && deliverySlots.map((item) => (
@@ -746,16 +744,6 @@ export function TimeSlot() {
           <FormControlLabel classes={{ label: classes.small }} className={classes.filterItem} value="0AM - 1PM" control={<Radio color="primary" />} label="Cost Low to High" /> */}
         </RadioGroup>
 
-      </TabPanel>
-      {/* <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel> */}
     </div>
   )
 }
@@ -763,9 +751,16 @@ export function TimeSlot() {
 export function PaymentType() {
   const paymentType = useSelector(state => state.app.paymentType);
   const dispatch = useDispatch();
+  const classes = useStyles();
   return (
     <div>
-      <Button
+
+      
+<RadioGroup aria-label="gender" name="gender1">
+  <FormControlLabel onClick={() => dispatch(setPaymentType("ONLINE"))} classes={{ label: classes.small }} className={classes.filterItem} value="4PM - 6AM" control={<Radio color="primary" />} label="Online" />
+  <FormControlLabel onClick={() => dispatch(setPaymentType("COD"))} classes={{ label: classes.small }} className={classes.filterItem} value="6PM - 9PM" control={<Radio color="primary" />} label="COD" /></RadioGroup>
+
+      {/* <Button
         color={(paymentType == "ONLINE") ? "primary" : ""}
         variant={(paymentType == "ONLINE") ? "contained" : ""}
         onClick={() => dispatch(setPaymentType("ONLINE"))}
@@ -778,7 +773,7 @@ export function PaymentType() {
         onClick={() => dispatch(setPaymentType("COD"))}
       >
         COD
-      </Button>
+      </Button> */}
     </div>
   )
 }
@@ -992,35 +987,35 @@ export default function CartView() {
           <Grid item lg={4}>
             <Paper>
               <div className={classes.cartOverview}>
-                <Typography><b>Bill Details</b> <br /></Typography>
+                <Typography variant={'h5'} gutterBottom><b>Bill Details</b> <br /></Typography>
 
 
 
 
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
-                    <Typography color="textSecondary"><span style={{ color: '#000' }}>Price</span> ({cart?.totalCount} item(s))</Typography>
+                    <Typography variant="subtitle2" color="textSecondary"><span style={{ color: '#000' }}>Price</span> ({cart?.totalCount} item(s))</Typography>
 
                   </div>
                   <Typography><b>₹{cart?.subTotal}</b></Typography>
                 </div>
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
-                    <Typography color="textSecondary"><span style={{ color: '#000' }}>Selling Price Total</span> ({cart?.totalCount} item(s))</Typography>
+                    <Typography variant="subtitle2" color="textSecondary"><span style={{ color: '#000' }}>Selling Price Total</span> ({cart?.totalCount} item(s))</Typography>
 
                   </div>
                   <Typography><b>₹{cart?.priceTotal}</b></Typography>
                 </div>
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
-                    <Typography>Discount Total</Typography>
+                    <Typography variant="subtitle2">Discount Total</Typography>
 
                   </div>
                   <Typography><b>₹{cart?.totalDiscount}</b></Typography>
                 </div>
                 <div className={classes.cartDetailRow}>
                   <div className={classes.content}>
-                    <Typography color="textSecondary"><span style={{ color: '#000' }}>Taxes</span></Typography>
+                    <Typography variant="subtitle2" color="textSecondary"><span style={{ color: '#000' }}>Taxes</span></Typography>
 
                   </div>
                   <Typography><b>₹{cart?.totalTax}</b></Typography>

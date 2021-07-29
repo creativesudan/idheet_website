@@ -18,6 +18,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import slugify from 'react-slugify';
 import { logout } from '../../redux/actions/auth';
+import Search from './Search';
+
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+
+
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -42,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginLeft: theme.spacing(2),
     minWidth: 160,
+    cursor:'pointer'
   },
   search: {
     position: 'relative',
@@ -111,7 +131,18 @@ const useStyles = makeStyles((theme) => ({
   },
   locationAvatar: {
     background: '#ddd'
-  }
+  },
+  locationGroup:{
+    width:340,
+    maxWidth:'100%',
+  },
+  searchresult:{
+    position:'absolute',
+    top:'100%',
+    left:0,
+    width:'100%',
+    zIndex:'99'
+  },
 }));
 
 export default function Header() {
@@ -124,6 +155,17 @@ export default function Header() {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -144,6 +186,14 @@ export default function Header() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const [value, setValue] = React.useState('female');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -206,6 +256,37 @@ export default function Header() {
   );
 
   return (
+<>
+
+    <Dialog onClose={handleClose}  aria-labelledby="responsive-dialog-title"
+        fullScreen={fullScreen} aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
+        <Typography variant={'h5'} color={'textPrimary'}>Select Location</Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          
+          <div className={classes.locationGroup}>
+            <FormControl component="fieldset">
+              <RadioGroup aria-label="Delhi" name="gender1" value={value} onChange={handleChange}>
+                <FormControlLabel value="Noida" control={<Radio />} label="Noida" />
+                <FormControlLabel value="Gurgaon" control={<Radio />} label="Gurgaon" />
+                <FormControlLabel value="Saket" control={<Radio />} label="Saket" />
+              </RadioGroup>
+            </FormControl>
+          </div>
+
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose} color="default">
+            Cancel
+          </Button>
+          <Button autoFocus onClick={handleClose} color="primary">
+            Select
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+    
     <div className={classes.grow}>
       <AppBar position="static" color="default">
         <Container>
@@ -220,7 +301,7 @@ export default function Header() {
           </IconButton> */}
             <Link href="/"><img src={settings?.app_logo} style={{ height: 38 }} /></Link>
 
-            <div className={classes.locationPicker}>
+            <div className={classes.locationPicker}  onClick={handleClickOpen}>
 
               <Avatar classes={{ colorDefault: classes.locationAvatar }}>
                 <RoomIcon color="action" />
@@ -239,6 +320,9 @@ export default function Header() {
                 }}
                 inputProps={{ 'aria-label': 'search' }}
               />
+              {/* <div className={classes.searchresult}>
+                <Search/>
+              </div> */}
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
@@ -302,5 +386,6 @@ export default function Header() {
       {renderMobileMenu}
       {renderMenu}
     </div>
+    </>
   );
 }
