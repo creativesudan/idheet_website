@@ -1,3 +1,4 @@
+import Snackbar from "../../modules/component/Snackbar";
 import {
     CART_PRODUCT_ADDED,
     CART_PRODUCT_REMOVED,
@@ -103,6 +104,7 @@ export default function (state = initialCart, action) {
             //     ...state,
             //     items: newItems
             // }
+
             return {
                 ...state,
                 cartLoading: false

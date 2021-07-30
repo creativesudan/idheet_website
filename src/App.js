@@ -15,18 +15,28 @@ import EnquiryListView from './modules/myAccount/EnquiryList';
 import EnquiryDetailView from './modules/myAccount/EnquiryDetails';
 import AddressListView from './modules/myAccount/AddressList';
 import PromoDetailView from './modules/myAccount/PromoDetails';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PrivateRoute from './modules/common/PrivateRoute';
 import BrandProductListing from './modules/listing/BrandProductListing';
 import ScrollToTop from './modules/common/ScrollToTop';
+import Snackbar from './modules/component/Snackbar';
+import { Backdrop, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-
-
+const useStyles = makeStyles((theme) => ({
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+}));
 
 
 
 function App() {
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const siteLoading = useSelector(state => state.app.siteLoading);
+  const inProgress = useSelector(state => state.app.inProgress);
   useEffect(() => {
     dispatch({ type: "APP_LOADING" });
   }, []);
@@ -51,8 +61,12 @@ function App() {
 
   return (
     <>
+      <Backdrop className={classes.backdrop} open={siteLoading || inProgress > 0}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Router>
         <ScrollToTop />
+        <Snackbar ref={(ref) => Snackbar.setRef(ref)} />
         <Header />
         <Switch>
           <Route path="/listing">

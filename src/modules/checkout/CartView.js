@@ -868,21 +868,24 @@ export default function CartView() {
   const handleNext = () => {
     if (!cart.orderAllowed) {
       // alert("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
-      setSnackbar({ open: true, message: "Subtotal should be more than " + (settings ? settings.min_order_value : "") });
+      // setSnackbar({ open: true, message: "Subtotal should be more than " + (settings ? settings.min_order_value : "") });
+      Snackbar.show("Subtotal should be more than " + (settings ? settings.min_order_value : ""));
       return;
     }
     let error = false;
     if (activeStep == 1 && !deliveryAddress) {
       error = true;
       // alert("Select Delivery Address");
-      setSnackbar({ open: true, message: "Select Delivery Address" });
+      // setSnackbar({ open: true, message: "Select Delivery Address" });
+      Snackbar.show("Select Delivery Address");
 
 
     }
     if (activeStep == 2 && !selectedSlot) {
       error = true;
       // alert("Select Delivery Slot");
-      setSnackbar({ open: true, message: "Select Delivery Slot" });
+      // setSnackbar({ open: true, message: "Select Delivery Slot" });
+      Snackbar.show("Select Delivery Slot");
 
     }
     if (activeStep == 3) {
@@ -939,7 +942,7 @@ export default function CartView() {
 
   return (
     <>
-      <Snackbar message={snackbar.message} open={snackbar.open} onClose={() => setSnackbar({ open: false })} />
+      {/* <Snackbar message={snackbar.message} open={snackbar.open} onClose={() => setSnackbar({ open: false })} /> */}
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item lg={8}>

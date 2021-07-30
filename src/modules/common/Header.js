@@ -285,7 +285,7 @@ export default function Header() {
 
           <div className={classes.locationGroup}>
             <FormControl component="fieldset">
-              <RadioGroup aria-label="Delhi" name="gender1" value={value} onChange={handleChange}>
+              <RadioGroup aria-label="Delhi" name="gender1" value={value.toString()} onChange={handleChange}>
                 {areas?.map(area => <FormControlLabel value={area.area_id.toString()} control={<Radio />} label={area.area} />)}
 
               </RadioGroup>

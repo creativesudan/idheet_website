@@ -23,6 +23,7 @@ import { getCartItem } from '../../redux/lib/cart';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateItem } from '../../redux/actions/cart';
 import { useHistory } from 'react-router-dom';
+import { sendEnquiry } from '../../redux/actions/app';
 
 
 
@@ -86,13 +87,17 @@ const useStyles = makeStyles((theme) => ({
 export default function DetailView({ product }) {
   const classes = useStyles();
   const theme = useTheme();
+  const [enquire, setEnquire] = React.useState(null);
+
   useEffect(() => {
     setSelectedVariant(product.defaultVariant);
+    setEnquire({ product_id: product.id, qty: 0 });
   }, [product]);
 
   const cartItems = useSelector(state => state.cart.items);
   const cartLoading = useSelector(state => state.cart.cartLoading);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
+  const user = useSelector(state => state.auth.user);
   const cartItem = getCartItem(cartItems, product);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -145,6 +150,8 @@ export default function DetailView({ product }) {
   }
 
   const [enquiry, setEnquiry] = React.useState(false);
+
+
   const EnquiryClose = () => {
     setEnquiry(false);
   }
@@ -154,85 +161,93 @@ export default function DetailView({ product }) {
   return (
     <>
 
-    <Dialog
-      open={enquiry}
-      fullScreen={fullScreen}
-      onClose={EnquiryClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title"><b>Enquiry Now</b></DialogTitle>
-      <DialogContent>
-        <div className={classes.dailog_width}>
+      <Dialog
+        open={enquiry}
+        fullScreen={fullScreen}
+        onClose={EnquiryClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title"><b>Enquiry Now</b></DialogTitle>
+        <DialogContent>
+          <div className={classes.dailog_width}>
 
-          <div className={classes.formField}>
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={""}
-            />
+            <div className={classes.formField}>
+              <TextField
+                id="outlined-basic"
+                label="Name"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={user?.name}
+                disabled
+              />
+            </div>
+
+            <div className={classes.formField}>
+              <TextField
+                id="outlined-basic"
+                label="Number"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={user?.mobile}
+                disabled
+              />
+            </div>
+
+            <div className={classes.formField}>
+              <TextField
+                id="outlined-basic"
+                label="Email"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={user?.email}
+                disabled
+              />
+            </div>
+
+            <div className={classes.formField}>
+              <TextField
+                id="outlined-basic"
+                label="Quantity"
+                variant="outlined"
+                size="Quantity"
+                fullWidth
+                value={enquire?.qty}
+                onChange={(e) => setEnquire({ ...enquire, qty: e.target.value })}
+              />
+            </div>
+
+            <div className={classes.formField}>
+              <TextField
+                id="outlined-basic"
+                label="Message"
+                variant="outlined"
+                size="small"
+                fullWidth
+                value={enquire?.message}
+                onChange={(e) => setEnquire({ ...enquire, message: e.target.value })}
+              />
+            </div>
+
+
+
           </div>
-
-          <div className={classes.formField}>
-            <TextField
-              id="outlined-basic"
-              label="Number"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={""}
-            />
-          </div>
-
-          <div className={classes.formField}>
-            <TextField
-              id="outlined-basic"
-              label="Email"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={""}
-            />
-          </div>
-          
-          <div className={classes.formField}>
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              size="Quantity"
-              fullWidth
-              value={""}
-            />
-          </div>
-
-          <div className={classes.formField}>
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              size="small"
-              fullWidth
-              value={""}
-            />
-          </div>
-
-
-
-        </div>
-      </DialogContent>
-      <DialogActions>
-        <Button color="default" onClick={()=> setEnquiry(false)}>
-          Close
-        </Button>
-        <Button color="primary" autoFocus onClick={()=> setEnquiry(false)}>
-          Send Enquiry
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button color="default" onClick={() => setEnquiry(false)}>
+            Close
+          </Button>
+          <Button color="primary" autoFocus onClick={() => {
+            dispatch(sendEnquiry(enquire)).then(() =>
+              setEnquiry(false));
+          }}>
+            Send Enquiry
+          </Button>
+        </DialogActions>
+      </Dialog>
 
 
 
@@ -278,10 +293,10 @@ export default function DetailView({ product }) {
         <Grid item md={6}>
           <Paper className={classes.paper}>
             <Typography variant='h4' className={classes.bigName}><b>{product.name}</b></Typography>
-            <Typography variant='caption'>Selling Price : <b>₹{product.discountedPrice}</b> &nbsp; <del>₹{product.price}</del></Typography>
+            <Typography variant='caption'>Selling Price : <b>₹{selectedVariant?.discountedPrice}</b> &nbsp; <del>₹{selectedVariant?.price}</del></Typography>
 
             <span className={classes.badge} color="textSecondary" gutterBottom>
-              {product.discountPercentage}% OFF
+              {selectedVariant?.discountPercentage}% OFF
             </span>
 
             <Grid className={classes.reviews} container spacing={1} direction="row">
@@ -299,7 +314,7 @@ export default function DetailView({ product }) {
                 <Box><Typography variant='subtitle1' color="textSecondary">Free</Typography></Box>
               </Grid>
               <Grid item>
-                <Button color="primary" variant="outlined" onClick={()=> setEnquiry(true)}>Enquiry Now</Button>
+                <Button color="primary" variant="outlined" onClick={() => setEnquiry(true)}>Enquiry Now</Button>
               </Grid>
             </Grid>
 

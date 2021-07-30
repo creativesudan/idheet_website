@@ -39,6 +39,7 @@ import agent from "../agent";
 // import Toast from 'react-native-toast-message';
 import { fetchOrders } from './actions/order';
 import { fetchCategories } from './actions/home';
+import Snackbar from '../modules/component/Snackbar';
 
 const promiseMiddleware = store => next => action => {
     // console.log(action)
@@ -135,6 +136,7 @@ const loginMiddleware = store => next => action => {
     }
     else if (action.type === LOGIN) {
         if (!action.error) {
+            Snackbar.show("You have successfully logged in!");
             try {
                 // console.log("Setting Token after logging in.");
                 localStorage.setItem('token', action.payload.token);
@@ -147,12 +149,14 @@ const loginMiddleware = store => next => action => {
                 // store.dispatch(lazyLoad(fetchAppSettings()));
             } catch (e) {
                 console.error(e);
+                Snackbar.show("There was some error logging you in!");
             }
         }
 
     } else if (action.type === LOGOUT) {
         try {
             localStorage.removeItem('token');
+            Snackbar.show("You have successfully logged out!")
         } catch (e) {
             console.error(e);
         }
@@ -183,10 +187,11 @@ const cartMiddleware = store => next => action => {
         action.type == CART_CLEARED || action.type == CART_PRODUCT_REMOVED ||
         action.type == CART_PRODUCT_ADDED || action.type == CART_PRODUCT_UPDATED)) {
 
-        //console.log(store.getState().cart);
-
-
+        if (action.type == CART_PRODUCT_ADDED || action.type == CART_PRODUCT_UPDATED || action.type == CART_PRODUCT_REMOVED) {
+            Snackbar.show("Product updated in cart");
+        }
         store.dispatch(fetchCartItems()).then(() => next(action));
+
 
 
 
@@ -281,6 +286,11 @@ const enquiryMiddleware = store => next => action => {
 };
 
 const orderMiddleware = store => next => action => {
+    if (action.type == ORDER_SUCCESS && !action.error) Snackbar.show("Your order has been placed successfully!");
+    if (action.type == ORDER_SUCCESS && action.error) Snackbar.show("There was some error placing your order.");
+    if (action.type == ORDER_CANCELLED && !action.error) Snackbar.show("Your order / partial order has been cancelled.");
+    if (action.type == ORDER_CANCELLED && action.error) Snackbar.show("There was some error cancelling your order / partial order.");
+
     if ((action.type == ORDER_CANCELLED || action.type == ORDER_SUCCESS) && !action.error) {
         store.dispatch(fetchOrders());
     }

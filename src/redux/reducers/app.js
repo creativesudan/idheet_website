@@ -1,3 +1,4 @@
+import Snackbar from "../../modules/component/Snackbar";
 import {
     APP_LOADED,
     APP_LOADING,
@@ -107,18 +108,8 @@ export default function (state = { siteLoading: true, paymentType: "COD" }, acti
             }
 
         case SEND_ENQUIRY:
-            if (action.error) {
-                // Toast.show({
-                //     type: 'error',
-                //     text1: 'Enquiry Error',
-                //     text2: action.payload.message
-                // });
-            } else {
-                // Toast.show({
-                //     type: 'success',
-                //     text1: action.payload.message
-                // });
-            }
+            Snackbar.show(action.payload.message);
+            return state;
 
         case ENQUIRY_LIST_LOADED:
             if (action.error) {
