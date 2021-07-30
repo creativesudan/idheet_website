@@ -32,6 +32,7 @@ export default function ProductListing() {
   const dispatch = useDispatch();
   const products = useSelector(state => state.home.products || []);
   const categories = useSelector(state => state.home.categories || []);
+  const productsLoading = useSelector(state => state.home.productsLoading);
   const category = categories?.find(item => item.id == category_id) || {};
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(category_id);
@@ -97,7 +98,7 @@ export default function ProductListing() {
               </>
             }
           /> */}
-          <Products products={products} title={category.name} />
+          {!productsLoading && <Products products={products} title={category.name} />}
         </div>
       </Container>
     </>

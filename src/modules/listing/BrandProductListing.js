@@ -32,6 +32,7 @@ export default function BrandProductListing() {
   const dispatch = useDispatch();
   const products = useSelector(state => state.home.brandProducts || []);
   const brand = useSelector(state => state.home.brands?.find(brand => brand.brand_id == brand_id));
+  const productsLoading = useSelector(state => state.home.brandProductsLoading);
 
 
 
@@ -80,7 +81,7 @@ export default function BrandProductListing() {
               </>
             }
           /> */}
-          <Products products={products} title={brand?.brand_name} />
+          {!productsLoading && <Products products={products} title={brand?.brand_name} />}
         </div>
       </Container>
     </>

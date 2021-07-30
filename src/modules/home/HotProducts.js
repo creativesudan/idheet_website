@@ -146,39 +146,6 @@ function SamplePrevArrow(props) {
 
 export default function HotProducts({ title, products }) {
   const classes = useStyles();
-  const cartItems = useSelector(state => state.cart.items);
-  const cartLoading = useSelector(state => state.cart.cartLoading);
-  const dispatch = useDispatch();
-  const history = useHistory();
-
-  const [state, setState] = React.useState({
-    open: true,
-    vertical: 'top',
-    horizontal: 'center',
-  });
-
-
-  const { vertical, horizontal, open } = state;
-
-  const handleClick = (newState) => () => {
-    setState({ open: true, ...newState });
-  };
-
-  const handleClose = () => {
-    setState({ ...state, open: false });
-  };
-
-  // useEffect(() => {
-  //   if (!cartItems || cartItems.length == 0) fetchCartItems();
-  // }, [cartItems]);
-
-  const handleQtyDec = (cartItem) => {
-    dispatch(removeItem(cartItem));
-  }
-
-  const handleQtyInc = (cartItem) => {
-    dispatch(updateItem(cartItems, cartItem));
-  }
 
   const [selectedVariant, setSelectedVariant] = useState({});
 
@@ -248,7 +215,6 @@ export default function HotProducts({ title, products }) {
 
       <Slider {...settings} style={{ margin: -8, }}>
         {products && products.map(item => {
-          let cartItem = getVariantCartItem(cartItems, item, selectedVariant[item.id]);
 
           return (
             <div className={classes.cardDiv}>
