@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Typography, Button, Card, CardContent, CardMedia, Grid, Box } from '@material-ui/core';
+import { Typography, Button, Card, CardContent, CardMedia, Grid, Box, FormControl, Select, MenuItem } from '@material-ui/core';
 import { HeadingBar, QtyController } from '../component/index'
 import FilterListIcon from '@material-ui/icons/FilterList';
 import SortIcon from '@material-ui/icons/Sort';
 import { Filter } from './index'
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCartItem } from '../../redux/lib/cart';
 import { removeItem, updateItem } from '../../redux/actions/cart';
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600
   },
   media: {
-    display:'inline-block',
+    display: 'inline-block',
     flex: 1,
     height: 170,
     maxWidth: '100%',
@@ -42,10 +42,10 @@ const useStyles = makeStyles((theme) => ({
     objectPosition: 'center'
   },
   thumb_cover: {
-    marginBottom:15,
+    marginBottom: 15,
     textAlign: 'center',
-    '& img':{
-      display:'inline-block'
+    '& img': {
+      display: 'inline-block'
     }
   },
   priceBar: {
@@ -55,6 +55,10 @@ const useStyles = makeStyles((theme) => ({
   card: {
     paddingBottom: `${theme.spacing(2)}px !important`,
   },
+  fullWidth: {
+    width: "100%",
+    marginBottom: 10
+  }
 
 }));
 
@@ -62,19 +66,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ProductSuggestion({ products }) {
   const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const cartItems = useSelector(state => state.cart.items);
-  const cartLoading = useSelector(state => state.cart.cartLoading);
 
-  const handleQtyDec = (cartItem) => {
-    dispatch(removeItem(cartItem));
-  }
 
-  const handleQtyInc = (cartItem) => {
-    dispatch(updateItem(cartItems, cartItem));
-  }
+  const [selectedVariant, setSelectedVariant] = useState({});
 
+  useEffect(() => {
+    let result = {};
+    products?.map(p => {
+      result[p.id] = p.defaultVariant;
+    });
+    setSelectedVariant(result);
+  }, [products]);
 
   return (
     <>
@@ -86,7 +88,7 @@ export default function ProductSuggestion({ products }) {
       <Grid container spacing={2}>
 
         {products && products.map(item => {
-          const cartItem = getCartItem(cartItems, item);
+
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>
@@ -94,15 +96,36 @@ export default function ProductSuggestion({ products }) {
                   <span className={classes.badge} color="textSecondary" gutterBottom>
                     {item.discountPercentage}%
                   </span>
-                  
-                  <div className={classes.thumb_cover}>
-                  <img src={item.image} className={classes.media} title={item.name}  onClick={() => history.push("/product/" + item.id)}/>
-                  </div>
+                  <Link to={"/product/" + item.id}>
+                    <div className={classes.thumb_cover}>
+                      <img src={item.image} className={classes.media} title={item.name} />
+                    </div>
+                  </Link>
 
-                 
-                  <Typography gutterBottom  noWrap="true" variant="h6">
-                    {item.name}
-                  </Typography>
+                  <Link to={"/product/" + item.id}>
+                    <Typography gutterBottom noWrap="true" variant="h6">
+                      {item.name}
+                    </Typography>
+                  </Link>
+                  <FormControl className={classes.fullWidth}>
+                    {/* <InputLabel id="demo-customized-select-label">Age</InputLabel> */}
+                    <Select
+                      labelId="demo-customized-select-label"
+                      id="demo-customized-select"
+                      value={selectedVariant[item.id]?.id.toString() || ""}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                        setSelectedVariant({ ...selectedVariant, [item.id]: item.variants?.find(v => v.id == parseInt(e.target.value)) });
+                        // cartItem = getVariantCartItem(cartItems, item, e.target.value);
+
+                      }}
+                    // input={ }
+                    >
+                      {item.variants?.map(variant => <MenuItem value={variant.id.toString()}>{variant.displayWeight}</MenuItem>)}
+                      {/* <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem> */}
+                    </Select>
+                  </FormControl>
 
                   <Grid container container justify="space-between" direction="row" alignItems="center">
 
@@ -114,7 +137,7 @@ export default function ProductSuggestion({ products }) {
 
 
                     <Grid item>
-                      <QtyController qty={cartItem.qty} cartItem={cartItem} handleQtyDec={handleQtyDec} handleQtyInc={handleQtyInc} disabled={cartLoading} />
+                      <QtyController product={item} variant={selectedVariant[item.id]} />
                     </Grid>
                   </Grid>
 

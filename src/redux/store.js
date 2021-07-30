@@ -57,7 +57,7 @@ const promiseMiddleware = store => next => action => {
                     //     text1: 'API Error',
                     //     text2: action.payload.toString()
                     // });
-                    Snackbar.show(action.payload);
+
                 } else {
                     action.payload = res.data || res;
                 }
@@ -300,6 +300,11 @@ const orderMiddleware = store => next => action => {
     next(action);
 };
 
+const apiErrorMiddleware = store => next => action => {
+
+    next(action);
+}
+
 function isPromise(v) {
     return v && typeof v.then === 'function';
 }
@@ -311,7 +316,8 @@ const store = createStore(
         cartMiddleware,
         deliveryAddressMiddleware,
         enquiryMiddleware,
-        orderMiddleware)
+        orderMiddleware,
+        apiErrorMiddleware)
 );
 
 

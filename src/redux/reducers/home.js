@@ -1,3 +1,4 @@
+import Snackbar from "../../modules/component/Snackbar";
 import {
     CATEGORY_LOADED,
     PRODUCTS_LOADED,
@@ -64,6 +65,11 @@ export default function (state = {}, action) {
             }
 
         case SINGLE_PRODUCT_LOADED:
+
+            if (action.error) {
+                Snackbar.show(action.payload);
+                return { ...state, activeProduct: {} }
+            }
 
             return {
                 ...state,

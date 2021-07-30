@@ -194,12 +194,6 @@ export default function Products({ products, title }) {
   const [sort, setSort] = useState(SORT_DEFAULT);
   const [localProducts, setLocalProducts] = useState(products);
   const [open, setOpen] = React.useState(false);
-  const history = useHistory();
-  const cartItems = useSelector(state => state.cart.items);
-  const cartLoading = useSelector(state => state.cart.cartLoading);
-  const dispatch = useDispatch();
-
-
 
   useEffect(() => {
     setLocalProducts(applyFilterAndSort(products, filter, sort));
@@ -240,13 +234,6 @@ export default function Products({ products, title }) {
     return false;
   }
 
-  const handleQtyDec = (cartItem) => {
-    dispatch(removeItem(cartItem));
-  }
-
-  const handleQtyInc = (cartItem) => {
-    dispatch(updateItem(cartItems, cartItem));
-  }
 
   const [selectedVariant, setSelectedVariant] = useState({});
 
@@ -291,7 +278,6 @@ export default function Products({ products, title }) {
       <Grid container spacing={2}>
 
         {localProducts?.map(item => {
-          const cartItem = getCartItem(cartItems, item);
           return (
             <Grid item md={3} sm={6} xs={12}>
               <Card className={classes.root}>

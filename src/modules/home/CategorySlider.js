@@ -139,8 +139,8 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
         {categories?.map(item => (
           <div className={classes.categoryBox} >
             <div style={{ padding: 8 }}>
-              <Link to={"/category/" + item.id}>
-                <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }}>
+              <Link>
+                <Paper elevation={1} classes={{ root: item.id == selectedId ? classes.activePaper : classes.paper }} onClick={() => onClick(item)}>
                   <img src={item.icon} />
                   <Typography variant="caption" display="block" gutterBottom>{item.name}</Typography>
                 </Paper>
