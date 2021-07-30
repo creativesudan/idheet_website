@@ -57,6 +57,7 @@ const promiseMiddleware = store => next => action => {
                     //     text1: 'API Error',
                     //     text2: action.payload.toString()
                     // });
+                    Snackbar.show(action.payload);
                 } else {
                     action.payload = res.data || res;
                 }
@@ -69,6 +70,7 @@ const promiseMiddleware = store => next => action => {
                 //     text1: 'API Error',
                 //     text2: error.response.body.message || error.response.body.toString()
                 // });
+                // Snackbar.show("There was some error logging you in!");
                 console.error('ERROR', error);
                 if (!action.lazyLoad) store.dispatch({ type: ASYNC_END, promise: action.payload });
 
