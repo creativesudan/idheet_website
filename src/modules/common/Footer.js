@@ -179,14 +179,14 @@ export default function Footer() {
                       &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Instagram</Link>
                     </Box>
                   </Box>
-                  <Box component="div" display="block" className={classes.socialList}>
+                  {/* <Box component="div" display="block" className={classes.socialList}>
                     <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
                       <YouTubeIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
                       &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Youtube</Link>
                     </Box>
-                  </Box>
+                  </Box> */}
                 </div>
 
               </Grid>

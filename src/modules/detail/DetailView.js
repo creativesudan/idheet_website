@@ -8,6 +8,15 @@ import "slick-carousel/slick/slick-theme.css";
 import AddIcon from '@material-ui/icons/Add';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { useTheme } from '@material-ui/core/styles';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import SearchIcon from '@material-ui/icons/Search';
 import { getCartItem } from '../../redux/lib/cart';
@@ -64,12 +73,19 @@ const useStyles = makeStyles((theme) => ({
   },
   selectedBtn: {
     background: theme.palette.primary.main,
+  },
+  dailog_width: {
+    minWidth: 400
+  },
+  formField: {
+    margin: '15px 0'
   }
 }))
 
 
 export default function DetailView({ product }) {
   const classes = useStyles();
+  const theme = useTheme();
   useEffect(() => {
     setSelectedVariant(product.defaultVariant);
   }, [product]);
@@ -128,9 +144,97 @@ export default function DetailView({ product }) {
     dispatch(updateItem(cartItems, cartItem));
   }
 
+  const [enquiry, setEnquiry] = React.useState(false);
+  const EnquiryClose = () => {
+    setEnquiry(false);
+  }
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
 
   return (
     <>
+
+    <Dialog
+      open={enquiry}
+      fullScreen={fullScreen}
+      onClose={EnquiryClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title"><b>Enquiry Now</b></DialogTitle>
+      <DialogContent>
+        <div className={classes.dailog_width}>
+
+          <div className={classes.formField}>
+            <TextField
+              id="outlined-basic"
+              label="Name"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={""}
+            />
+          </div>
+
+          <div className={classes.formField}>
+            <TextField
+              id="outlined-basic"
+              label="Number"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={""}
+            />
+          </div>
+
+          <div className={classes.formField}>
+            <TextField
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={""}
+            />
+          </div>
+          
+          <div className={classes.formField}>
+            <TextField
+              id="outlined-basic"
+              label="Name"
+              variant="outlined"
+              size="Quantity"
+              fullWidth
+              value={""}
+            />
+          </div>
+
+          <div className={classes.formField}>
+            <TextField
+              id="outlined-basic"
+              label="Name"
+              variant="outlined"
+              size="small"
+              fullWidth
+              value={""}
+            />
+          </div>
+
+
+
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button color="default" onClick={()=> setEnquiry(false)}>
+          Close
+        </Button>
+        <Button color="primary" autoFocus onClick={()=> setEnquiry(false)}>
+          Send Enquiry
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+
 
       <Grid container spacing={2}>
         <Grid item sm={6}>
@@ -171,7 +275,7 @@ export default function DetailView({ product }) {
           </Box>
 
         </Grid>
-        <Grid item sm={6}>
+        <Grid item md={6}>
           <Paper className={classes.paper}>
             <Typography variant='h4' className={classes.bigName}><b>{product.name}</b></Typography>
             <Typography variant='caption'>Selling Price : <b>₹{product.discountedPrice}</b> &nbsp; <del>₹{product.price}</del></Typography>
@@ -194,10 +298,9 @@ export default function DetailView({ product }) {
                 <Box><Typography variant='h6'><b>Delivery</b></Typography></Box>
                 <Box><Typography variant='subtitle1' color="textSecondary">Free</Typography></Box>
               </Grid>
-              {/* <Grid item>
-                <Box><Typography variant='h6' align="right"><b>Available in:</b></Typography></Box>
-                <Box><Typography variant='subtitle1' align="right" color="textSecondary">1 kg, 2 kg, 5 kg</Typography></Box>
-              </Grid> */}
+              <Grid item>
+                <Button color="primary" variant="outlined" onClick={()=> setEnquiry(true)}>Enquiry Now</Button>
+              </Grid>
             </Grid>
 
 
