@@ -88,10 +88,10 @@ export default function EnquiryListView() {
       <Container>
         <div className={classes.sectionGap}>
           <Grid container spacing={3}>
-            <Grid item lg={4}>
+            <Grid item md={4} sm={12} xs={12}>
               <LeftPanel user={user} />
             </Grid>
-            <Grid item lg={8}>
+            <Grid item md={8} sm={12} xs={12}>
               <Paper>
                 <div className={classes.frame}>
                   <Typography variant="h4" gutterBottom><b>Enquiries</b></Typography>

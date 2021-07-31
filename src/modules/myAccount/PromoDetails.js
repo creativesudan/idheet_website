@@ -80,10 +80,10 @@ export default function PromoDetailView() {
       <Container>
         <div className={classes.sectionGap}>
           <Grid container spacing={3}>
-            <Grid item lg={4}>
+            <Grid item md={4}  sm={12} xs={12}>
               <LeftPanel user={user} />
             </Grid>
-            <Grid item lg={8}>
+            <Grid item md={8}  sm={12} xs={12}>
               <Paper>
                 <div className={classes.detailView}>
                   <div className={classes.frame}>
@@ -92,13 +92,19 @@ export default function PromoDetailView() {
                       <img src={promo?.image} />
                     </span>
                     <br />
-                    <br />
+
+        
+                    <Typography color="primary" variant="h5" gutterBottom>
+                      <b id='clipboard'>{promo?.title}</b>
+                    </Typography>
+
+                    <Divider style={{marginBottom:20}}/>
 
                     <Grid container justify="space-between" alignItems="center">
 
                       <Grid item>
-                        <Typography color="primary" variant="h5">
-                          <b id='clipboard'>{promo?.title}</b>
+                        <Typography color="textPrimary" variant="h6">
+                          <b id='clipboard'>Code: {promo?.coupon_code}</b>
                         </Typography>
                         <Typography variant="caption" color="textSecondary">Available until {promo?.end_date}</Typography>
                       </Grid>

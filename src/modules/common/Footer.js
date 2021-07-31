@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
   },
   appIcon: {
-    height: 30
+    height: 30,
   },
   socialIcon: {
     boxShadow: 'none',
@@ -40,8 +40,14 @@ const useStyles = makeStyles((theme) => ({
       fontSize: 16
     }
   },
+  socialMedia:{
+    margin:'0 -5px'
+  },
   socialList: {
-    margin: '10px 0'
+    margin: '10px 5px'
+  },
+  AppiconGroup:{
+    margin:'30px -5px 0 -5px'
   }
 
 }));
@@ -74,142 +80,95 @@ export default function Footer() {
               justify="space-between"
               alignItems="flex-start">
 
-              {/* <Grid item>
-                <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">Products</Typography>
-                </Box>
-                <FooterLinks label="Listing" link="/listing" />
-                <FooterLinks label="Details" link="/detail" />
-                <FooterLinks label="Trending" link="/trending" />
-                <FooterLinks label="Recommended" link="#" />
-                <FooterLinks label="Most Popular" link="#" />
-              </Grid>
-
-              <Grid item>
-                <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">Checkout Process</Typography>
-                </Box>
-                <FooterLinks label="Cart" link="/cart" />
-                <FooterLinks label="Order Address" link="#" />
-                <FooterLinks label="Delivery Time" link="#" />
-                <FooterLinks label="Order Payment" link="#" />
-                <FooterLinks label="Checkout" link="#" />
-                <FooterLinks label="Successful" link="#" />
-              </Grid>
-
-              <Grid item>
-                <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">My Order</Typography>
-                </Box>
-                <FooterLinks label="My Order" link="#" />
-                <FooterLinks label="Status Complete" link="#" />
-                <FooterLinks label="Status on Process" link="#" />
-                <FooterLinks label="Status Canceled" link="#" />
-                <FooterLinks label="Review" link="#" />
-              </Grid> */}
-
-              {isAuthenticated ? <Grid item item md={2}>
+            < Grid item item md={2} lg={2} sm={12} sm={2}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Quick Links</Typography>
                 </Box>
+              {isAuthenticated ?<>
                 <FooterLinks label="My account" link="/my-account" />
                 <FooterLinks label="Promos" link="/promo" />
                 <FooterLinks label="My address" link="#" />
-                {/* <FooterLinks label="Terms & conditions" link="#" />
-                <FooterLinks label="Help & support" link="#" />
-                <FooterLinks label="Help ticket" link="#" />
-                <FooterLinks label="Logout" link="#" /> */}
-              </Grid>
+              </>
                 :
-                <Grid item item md={2}>
-                  <Box component="span" display="block" py={1}>
-                    <Typography variant="h6">Quick Links</Typography>
-                  </Box>
+                <>
                   <FooterLinks label="Login" link="/login" />
                   <FooterLinks label="Promos" link="/promo" />
-                  {/* <FooterLinks label="My address" link="#" /> */}
-                  {/* <FooterLinks label="Terms & conditions" link="#" />
-            <FooterLinks label="Help & support" link="#" />
-            <FooterLinks label="Help ticket" link="#" />
-            <FooterLinks label="Logout" link="#" /> */}
-                </Grid>
+                </>
               }
+              </Grid>
 
 
-              <Grid item md={6}>
+              <Grid item md={5} lg={6} sm={7}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Category</Typography>
                 </Box>
                 <Grid container>
-                  {categories?.map(category => <Grid item md={3}>
+                  {categories?.map(category => <Grid item lg={3} md={4} sm={3} xs={6}>
                     <FooterLinks label={category.name} link={"/category/" + category.id} />
                   </Grid>)}
 
                 </Grid>
               </Grid>
 
-              <Grid item md={2}>
+              <Grid item lg={2} md={2} sm={3} xs={12}>
+                <Box component="span" display="block" py={1}>
+                  <Typography variant="h6">Information</Typography>
+                </Box>
+                {cmsList?.map(cms => <FooterLinks label={cms?.title} link={"/" + slugify(cms.title)} />)}
+              </Grid>
+
+              <Grid item lg={2} md={3} xs={12}>
                 <Box component="span" display="block" py={1}>
                   <Typography variant="h6">Social Media</Typography>
                 </Box>
 
 
                 <div className={classes.socialMedia}>
-                  <Box component="div" display="block" >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <FacebookIcon />
-                    </Fab>
-                    <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={settings?.facebook_url} variant="caption" color="textSecondary">Facebook</Link>
+                  <Box component="div" display="inline" className={classes.socialList}>
+                    <Link href={settings?.facebook} variant="caption" color="textSecondary">
+                      <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                        <FacebookIcon />
+                      </Fab>
+                    </Link>
+                  </Box>
+                  
+                  <Box component="div" display="inline" className={classes.socialList}>
+                    <Link href={settings?.twitter} variant="caption" color="textSecondary">
+                      <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                        <TwitterIcon />
+                      </Fab>
+                    </Link>
+                  </Box>
+                  
+                  <Box component="div" display="inline" className={classes.socialList}>
+                    <Link href={settings?.instagram} variant="caption" color="textSecondary">
+                      <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                        <InstagramIcon />
+                      </Fab>
+                    </Link>
+                  </Box>
+
+                  <Box component="div" display="inline" className={classes.socialList}>
+                    <Link href={settings?.youtube} variant="caption" color="textSecondary">
+                      <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                        <YouTubeIcon />
+                      </Fab>
+                    </Link>
+                  </Box>
+
+                  <Box component="div" display="block" className={classes.AppiconGroup}>
+                    <Box component="span" display="inline" mx={1}>
+                      <Link href={settings?.appstore}><img src="https://www.zoovi.in/kisanhaat/img/appstore.png" className={classes.appIcon} /></Link>
+                    </Box>
+                    <Box component="span" display="inline" mx={1}>
+                      <Link href={settings?.playstore}><img src="https://www.zoovi.in/kisanhaat/img/playmarket.png" className={classes.appIcon} /></Link>
                     </Box>
                   </Box>
-                  <Box component="div" display="block" className={classes.socialList} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <TwitterIcon />
-                    </Fab>
-                    <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={settings?.twitter_url} variant="caption" color="textSecondary">Twitter</Link>
-                    </Box>
-                  </Box>
-                  <Box component="div" display="block" className={classes.socialList} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <InstagramIcon />
-                    </Fab>
-                    <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={settings?.instagram_url} variant="caption" color="textSecondary">Instagram</Link>
-                    </Box>
-                  </Box>
-                  <Box component="div" display="block" className={classes.socialList} >
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <InstagramIcon />
-                    </Fab>
-                    <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={settings?.youtube_url} variant="caption" color="textSecondary">Youtube</Link>
-                    </Box>
-                  </Box>
-                  {/* <Box component="div" display="block" className={classes.socialList}>
-                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
-                      <YouTubeIcon />
-                    </Fab>
-                    <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Youtube</Link>
-                    </Box>
-                  </Box> */}
+                  
                 </div>
 
               </Grid>
 
-              <Grid item>
-                <Box component="span" display="block" py={1}>
-                  <Typography variant="h6">Information</Typography>
-                </Box>
-                {cmsList?.map(cms => <FooterLinks label={cms?.title} link={"/" + slugify(cms.title)} />)}
-                {/* <FooterLinks label="Conditions" link="#" />
-                <FooterLinks label="Help Support" link="#" />
-                <FooterLinks label="Refund Payment" link="#" />
-                <FooterLinks label="FAQ" link="#" />
-                <FooterLinks label="Sign In" link="login" /> */}
-              </Grid>
 
             </Grid>
           </Container>
@@ -217,29 +176,9 @@ export default function Footer() {
         <Divider />
         <Box py={4}>
           <Container>
-            <Grid container justify="space-between" direction="row" alignItems="center">
-              <Grid >
-                <Box component="span" display="inline">
-                  <Typography variant="caption">© 2021 {settings?.app_name}</Typography>
-                </Box>
-                {/* <Box component="span" display="inline" mx={2}>
-                  <Link href="#" variant="caption" color="textSecondary">Privacy</Link>
-                </Box>
-                <Box component="span" display="inline">
-                  <Link href="#" variant="caption" color="textSecondary">Terms & Conditions</Link>
-                </Box> */}
-              </Grid>
-
-              <Grid >
-
-                <Box component="span" display="inline" mx={2}>
-                  <Link href={settings?.appstore_url}><img src="https://www.zoovi.in/kisanhaat/img/appstore.png" className={classes.appIcon} /></Link>
-                </Box>
-                <Box component="span" display="inline">
-                  <Link href={settings?.playstore_url}><img src="https://www.zoovi.in/kisanhaat/img/playmarket.png" className={classes.appIcon} /></Link>
-                </Box>
-              </Grid>
-            </Grid>
+            <center>
+            <Typography variant="caption">© 2021 {settings?.app_name}</Typography>
+            </center>
           </Container>
         </Box>
 

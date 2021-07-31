@@ -10,6 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import RoomIcon from '@material-ui/icons/Room';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -131,7 +132,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex'
   },
   locationAvatar: {
-    background: '#ddd'
+    background: '#e6e6e6',
+    width: theme.spacing(4),
+    height: theme.spacing(4),
+    '& svg': {
+      width:'0.8em',
+      height:'0.8em',
+    }
   },
   locationGroup: {
     width: 340,
@@ -266,7 +273,7 @@ export default function Header() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <ExitToAppIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -320,7 +327,7 @@ export default function Header() {
 
               <div className={classes.locationPicker} onClick={handleClickOpen}>
 
-                <Avatar classes={{ colorDefault: classes.locationAvatar }}>
+                <Avatar sizes={12} classes={{ colorDefault: classes.locationAvatar }}>
                   <RoomIcon color="action" />
                 </Avatar>
                 <Typography noWrap="true"> <span style={{ marginLeft: 10, marginRight: 10, fontSize: 12 }}>{selected_area?.area || "Select"}</span></Typography> <ExpandMoreIcon />
@@ -365,7 +372,7 @@ export default function Header() {
                   onClick={handleProfileMenuOpen}
                   color="inherit"
                 >
-                  <AccountCircle />
+                  <ExitToAppIcon />
                 </IconButton>
               </div>
               <div className={classes.sectionMobile}>

@@ -279,7 +279,7 @@ export default function Products({ products, title }) {
 
         {localProducts?.map(item => {
           return (
-            <Grid item md={3} sm={6} xs={12}>
+            <Grid item md={4} lg={3} sm={4} xs={12}>
               <Card className={classes.root}>
                 <CardContent classes={{ root: classes.card }}>
                   <span className={classes.badge} color="textSecondary" gutterBottom>

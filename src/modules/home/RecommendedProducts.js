@@ -135,12 +135,12 @@ export default function RecommendedProducts({ title, products }) {
         {products.map(item => {
           const cartItem = getCartItem(cartItems, item);
           return (
-            <Grid item md={3} xs={12}>
+            <Grid item md={3} sm={6} xs={12}>
               <Card>
                 <CardContent classes={{ root: classes.cardRoot }}>
 
                   <Link to={"/product/" + item.id}>
-                    <Slider {...settings} style={{ margin: -5 - 5 }}>
+                    <Slider {...settings} style={{ margin: 0 }}>
                       {item.images.map((item) => (
                         <div className={classes.categoryBox}>
                           <div style={{ padding: 8 }}>
@@ -159,11 +159,11 @@ export default function RecommendedProducts({ title, products }) {
 
                   <Link to={"/product/" + item.id}>
                     <div className={classes.textContent}>
-                      <Typography variant="h6" color="primary">
+                      <Typography variant="h6" color="textPrimary" noWrap="true">
                         {item.name}
                       </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {item.tagline}
+                      <Typography variant="body2" color="textSecondary" noWrap="true">
+                        <img src={'../../../../../discount.png'}  style={{height:18, marginBottom:2, display:'inline-block', verticalAlign:'middle'}}/> {item.tagline}
                       </Typography>
                     </div>
                   </Link>
@@ -196,7 +196,7 @@ export default function RecommendedProducts({ title, products }) {
                   >
 
                     <Grid item>
-                      <Typography variant="h6" color="initial">
+                      <Typography variant="h6"  color="primary">
                         ₹{selectedVariant[item.id]?.discountedPrice}/{selectedVariant[item.id]?.displayWeight}
                       </Typography>
                     </Grid>

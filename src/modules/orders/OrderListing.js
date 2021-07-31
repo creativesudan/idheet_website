@@ -289,7 +289,7 @@ export default function OrderListing() {
 
           <div className={classes.root}>
             <Grid container spacing={2}>
-              <Grid item md={3}>
+              <Grid item md={3} sm={3} xs={12}>
                 <Paper>
                   <Tabs
                     orientation="vertical"
@@ -305,7 +305,7 @@ export default function OrderListing() {
                   </Tabs>
                 </Paper>
               </Grid>
-              <Grid item md={9}>
+              <Grid item md={9} sm={9} xs={12}>
                 <TabPanel value={value} index={0}>
                   <OpenOrders orders={orders.filter(order => order.order_status == ORDER_STATUS.pending || order.order_status == ORDER_STATUS.ongoing)} />
                 </TabPanel>

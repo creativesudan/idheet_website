@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   paper: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(2),
   },
   reviews: {
     marginTop: theme.spacing(0.8)
@@ -252,7 +252,7 @@ export default function DetailView({ product }) {
 
 
       <Grid container spacing={2}>
-        <Grid item sm={6}>
+        <Grid item md={6} sm={12} xs={12}>
           <Slider {...settings}>
             {product.images && product.images.map((item) => (
               <div className={classes.categoryBox}>
@@ -263,7 +263,7 @@ export default function DetailView({ product }) {
 
           <Box mt={2}>
             <Grid container spacing={2}>
-              <Grid item sm={6}>
+              <Grid item xs={6}>
                 <Button classes={{ root: classes.largeBtn }} color="secondary" variant="contained" disableElevation fullWidth size="large"
                   onClick={() => {
                     if (!isAuthenticated) {
@@ -276,7 +276,7 @@ export default function DetailView({ product }) {
                 >
                   <AddIcon /> Add to Cart</Button>
               </Grid>
-              <Grid item sm={6}>
+              <Grid item xs={6}>
                 <Button classes={{ root: classes.largeBtn }} color="primary" variant="contained" disableElevation fullWidth size="large"
                   onClick={() => {
                     const tempCartItem = { ...cartItem, qty: 1 };
@@ -290,7 +290,7 @@ export default function DetailView({ product }) {
           </Box>
 
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={12} md={6}>
           <Paper className={classes.paper}>
             <Typography variant='h4' className={classes.bigName}><b>{product.name}</b></Typography>
             <Typography variant='caption'>Selling Price : <b>₹{selectedVariant?.discountedPrice}</b> &nbsp; <del>₹{selectedVariant?.price}</del></Typography>

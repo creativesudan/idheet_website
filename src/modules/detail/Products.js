@@ -103,7 +103,7 @@ export default function ProductSuggestion({ products }) {
                   </Link>
 
                   <Link to={"/product/" + item.id}>
-                    <Typography gutterBottom noWrap="true" variant="h6">
+                    <Typography gutterBottom color={'textPrimary'} noWrap="true" variant="h6">
                       {item.name}
                     </Typography>
                   </Link>

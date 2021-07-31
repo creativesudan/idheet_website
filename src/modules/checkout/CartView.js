@@ -650,7 +650,7 @@ export function AddressList() {
       </Dialog>
 
       <Grid container spacing={3}>
-        {addresses?.map(address => (<Grid item lg={6}>
+        {addresses?.map(address => (<Grid item sm={6} xs={12} md={6} lg={6}>
           <div className={classes.addressStyle}>
             <div className={classes.addressType}>
               <div className={classes.content}>
@@ -951,7 +951,8 @@ export default function CartView() {
       {/* <Snackbar message={snackbar.message} open={snackbar.open} onClose={() => setSnackbar({ open: false })} /> */}
       <div className={classes.root}>
         <Grid container spacing={3}>
-          <Grid item lg={8}>
+          <Grid item md={8} xs={12} lg={8}>
+            <Paper>
 
             <Stepper activeStep={activeStep} orientation="vertical">
               {steps.map((label, index) => (
@@ -989,6 +990,7 @@ export default function CartView() {
                 </Step>
               ))}
             </Stepper>
+            </Paper>
             {activeStep === steps.length && (
               <Paper square elevation={0} className={classes.resetContainer}>
                 <Typography>All steps completed - you&apos;re finished</Typography>
@@ -1003,7 +1005,7 @@ export default function CartView() {
 
           </Grid>
 
-          <Grid item lg={4}>
+          <Grid item md={4} xs={12} lg={4}>
             <Paper>
               <div className={classes.cartOverview}>
                 <Typography variant={'h5'} gutterBottom><b>Bill Details</b> <br /></Typography>
