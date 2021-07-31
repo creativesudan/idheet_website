@@ -158,7 +158,8 @@ const loginMiddleware = store => next => action => {
     } else if (action.type === LOGOUT) {
         try {
             localStorage.removeItem('token');
-            Snackbar.show("You have successfully logged out!")
+            agent.setToken(null);
+            Snackbar.show("You have successfully logged out!");
         } catch (e) {
             console.error(e);
         }
@@ -301,7 +302,9 @@ const orderMiddleware = store => next => action => {
 };
 
 const apiErrorMiddleware = store => next => action => {
-
+    if (action.error) {
+        if (action.type == LOGIN) Snackbar.show("Login Error : " + action.payload);
+    }
     next(action);
 }
 

@@ -823,6 +823,12 @@ export default function CartView() {
     if (couponCode) setCouponState(couponCode);
   }, [couponCode]);
 
+  useEffect(() => {
+    if (cart.items?.length == 0) history.push("/");
+  }, [cart.items]);
+
+
+
   const paymentGateway = () => {
 
     const tempKey = settings ? settings.payment_gateway_key_id : "";

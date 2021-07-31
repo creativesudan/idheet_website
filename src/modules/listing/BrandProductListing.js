@@ -56,7 +56,7 @@ export default function BrandProductListing() {
             <Link color="primary" to="/brands">
               <Typography color="primary">Brands</Typography>
             </Link>
-            <Typography color="textPrimary">{brand.brand_name}</Typography>
+            <Typography color="textPrimary">{brand?.brand_name}</Typography>
           </Breadcrumbs>
         </Container>
       </div>

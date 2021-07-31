@@ -98,8 +98,8 @@ const toTwoDecimals = (number) => {
     return Math.round(number * 100) / 100;
 }
 export const evaluateCart = (cart, categories, settings) => {
-    let mrpTotal = cart.items.reduce((total, obj) => parseFloat(obj.price) * parseInt(obj.qty) + total, 0);
-    let priceTotal = cart.items.reduce((total, obj) => parseFloat(obj.total) + total, 0);
+    let mrpTotal = cart.items?.reduce((total, obj) => parseFloat(obj.price) * parseInt(obj.qty) + total, 0);
+    let priceTotal = cart.items?.reduce((total, obj) => parseFloat(obj.total) + total, 0);
     let totalTax = 0;
     if (categories) {
         let tax_slabs = {};

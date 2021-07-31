@@ -50,7 +50,8 @@ export default function (state = initialState, action) {
                     ...state,
                     isAuthenticated: true,
                     inProgress: false,
-                    user: action.payload.user
+                    user: action.payload.user,
+                    error: null
                 }
             }
         case UPDATE_AUTH_FIELD:

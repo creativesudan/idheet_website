@@ -51,9 +51,9 @@ const Auth = {
     login: (mobile) =>
         requests.post(`/otp?mobile=${mobile}`, {}),
     verify: (mobile, otp, deviceToken) =>
-        requests.post(`/login?mobile=${mobile}&otp=${otp}&device_token=dummy`, {}),
+        requests.post(`/login?mobile=${mobile}&otp=${otp}`, {}),
     register: (mobile) =>
-        requests.post(`/register?mobile=${mobile}&device_token=dummy`, {}),
+        requests.post(`/register?mobile=${mobile}`, {}),
 };
 
 

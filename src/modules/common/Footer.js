@@ -160,7 +160,7 @@ export default function Footer() {
                       <FacebookIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Facebook</Link>
+                      &nbsp;&nbsp;<Link href={settings?.facebook_url} variant="caption" color="textSecondary">Facebook</Link>
                     </Box>
                   </Box>
                   <Box component="div" display="block" className={classes.socialList} >
@@ -168,7 +168,7 @@ export default function Footer() {
                       <TwitterIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Twitter</Link>
+                      &nbsp;&nbsp;<Link href={settings?.twitter_url} variant="caption" color="textSecondary">Twitter</Link>
                     </Box>
                   </Box>
                   <Box component="div" display="block" className={classes.socialList} >
@@ -176,7 +176,15 @@ export default function Footer() {
                       <InstagramIcon />
                     </Fab>
                     <Box component="div" display="inline-block" m={1} >
-                      &nbsp;&nbsp;<Link href={''} variant="caption" color="textSecondary">Instagram</Link>
+                      &nbsp;&nbsp;<Link href={settings?.instagram_url} variant="caption" color="textSecondary">Instagram</Link>
+                    </Box>
+                  </Box>
+                  <Box component="div" display="block" className={classes.socialList} >
+                    <Fab color="inherit" aria-label="add" size="small" classes={{ root: classes.socialIcon }}>
+                      <InstagramIcon />
+                    </Fab>
+                    <Box component="div" display="inline-block" m={1} >
+                      &nbsp;&nbsp;<Link href={settings?.youtube_url} variant="caption" color="textSecondary">Youtube</Link>
                     </Box>
                   </Box>
                   {/* <Box component="div" display="block" className={classes.socialList}>
@@ -225,10 +233,10 @@ export default function Footer() {
               <Grid >
 
                 <Box component="span" display="inline" mx={2}>
-                  <Link href="#"><img src="https://www.zoovi.in/kisanhaat/img/appstore.png" className={classes.appIcon} /></Link>
+                  <Link href={settings?.appstore_url}><img src="https://www.zoovi.in/kisanhaat/img/appstore.png" className={classes.appIcon} /></Link>
                 </Box>
                 <Box component="span" display="inline">
-                  <Link href="#"><img src="https://www.zoovi.in/kisanhaat/img/playmarket.png" className={classes.appIcon} /></Link>
+                  <Link href={settings?.playstore_url}><img src="https://www.zoovi.in/kisanhaat/img/playmarket.png" className={classes.appIcon} /></Link>
                 </Box>
               </Grid>
             </Grid>
