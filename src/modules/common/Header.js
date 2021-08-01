@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import clsx from 'clsx';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import {
   IconButton, Container, AppBar, Toolbar, Link, Button, Typography, Avatar,
@@ -9,17 +10,24 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import RoomIcon from '@material-ui/icons/Room';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import MailIcon from '@material-ui/icons/Mail';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import slugify from 'react-slugify';
 import { logout } from '../../redux/actions/auth';
 import Search from './Search';
+
+
+
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import Divider from '@material-ui/core/Divider';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+
 
 
 import Dialog from '@material-ui/core/Dialog';
@@ -49,7 +57,13 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
+  },
+  logoImg:{
+    height:38,
+    [theme.breakpoints.down('sm')]: {
+      transform :'scale(0.8)'
+    },
   },
   title: {
     display: 'none',
@@ -63,7 +77,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     marginLeft: theme.spacing(2),
     minWidth: 160,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft:0
+    },
   },
   search: {
     position: 'relative',
@@ -72,9 +89,8 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: fade(theme.palette.common.black, 0.10),
     },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
+    marginRight: '0!important',
+    marginLeft: '0!important',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(4),
     },
@@ -115,7 +131,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   Toobar: {
-    background: theme.palette.primary.main
+    background: theme.palette.primary.main,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
   menu: {
     margin: 0, padding: 0, marginLeft: theme.spacing(-2), flex: 1,
@@ -153,6 +172,31 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: 350,
     overflow: "auto"
   },
+  list: {
+    width: 250,
+  },
+  fullList: {
+    width: 'auto',
+  },
+  mobileSearch:{
+    display:'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
+  },
+  desktopSearch:{
+    width:'100%',
+    paddingRight:theme.spacing(4),
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  mobileMenu:{
+    display:'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    },
+  }
 }));
 
 export default function Header() {
@@ -167,6 +211,66 @@ export default function Header() {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const areas = useSelector(state => state.app.areas);
   const selected_area = useSelector(state => state.app.selected_area);
+
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const MenuName = [
+    {label:'Home', navigation: '/'},
+    {label:'Categories', navigation: '/category'},
+    {label:'Brands', navigation: '/brands'},
+    {label:'About Us', navigation: '/about-us'},
+    {label:'Terms & Conditions', navigation: '/terms-conditions'},
+    {label:'Contact Us', navigation: '/contact-us'},
+    {label:'Privacy Policy', navigation: '/privacy-policy'}
+  ]
+  const extraMenuName = [
+    {label:'Promos', navigation: '/'},
+    {label:'My Account', navigation: '/my-account'}
+  ]
+
+  const list = (anchor) => (
+    <div
+      className={clsx(classes.list, {
+        [classes.fullList]: anchor === 'top' || anchor === 'bottom',
+      })}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        {MenuName.map((text, index) => (
+          <ListItem button key={text.label}>
+            <ListItemText primary={text.label} />
+          </ListItem>
+        ))}
+      </List>
+      <Divider />
+      <List>
+        {extraMenuName.map((text, index) => (
+          <ListItem button key={text}>
+            <ListItemText primary={text.label} />
+          </ListItem>
+        ))}
+        <ListItem button key={0} onClick={() => dispatch(logout())}>
+          <ListItemText primary={"Logout"} />
+        </ListItem>
+      </List>
+    </div>
+  );
 
 
   const [open, setOpen] = React.useState(false);
@@ -250,6 +354,7 @@ export default function Header() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
+
       <MenuItem>
         <IconButton aria-label="show 8 new mails" color="inherit">
           <Badge badgeContent={8} color="primary">
@@ -258,14 +363,6 @@ export default function Header() {
         </IconButton>
         <p>Messages</p>
       </MenuItem>
-      {/* <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem> */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -282,6 +379,8 @@ export default function Header() {
 
   return (
     <>
+
+
 
       <Dialog onClose={handleClose} aria-labelledby="responsive-dialog-title"
         fullScreen={fullScreen} aria-labelledby="customized-dialog-title" open={open}>
@@ -315,15 +414,27 @@ export default function Header() {
         <AppBar position="static" color="default">
           <Container>
             <Toolbar disableGutters={true}>
-              {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton> */}
-              <Link href="/"><img src={settings?.app_logo} style={{ height: 38 }} /></Link>
+              <IconButton
+                edge="start"
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="open drawer"
+              >
+
+            <div className={classes.mobileMenu}>
+            {['left'].map((anchor) => (
+              <React.Fragment key={anchor}>
+                <MenuIcon  onClick={toggleDrawer(anchor, true)}/>
+                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                  {list(anchor)}
+                </Drawer>
+              </React.Fragment>
+            ))}
+            </div>
+
+            
+          </IconButton>
+              <Link href="/"><img src={settings?.app_logo} className={classes.logoImg} /></Link>
 
               <div className={classes.locationPicker} onClick={handleClickOpen}>
 
@@ -332,6 +443,7 @@ export default function Header() {
                 </Avatar>
                 <Typography noWrap="true"> <span style={{ marginLeft: 10, marginRight: 10, fontSize: 12 }}>{selected_area?.area || "Select"}</span></Typography> <ExpandMoreIcon />
               </div>
+              <div className={classes.desktopSearch}>
               <ClickAwayListener onClickAway={() => setSearchBarVisible(false)}>
                 <div className={classes.search}>
                   <div className={classes.searchIcon}>
@@ -354,6 +466,7 @@ export default function Header() {
                   </div> : null}
                 </div>
               </ClickAwayListener>
+              </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
 
@@ -376,18 +489,39 @@ export default function Header() {
                 </IconButton>
               </div>
               <div className={classes.sectionMobile}>
-                <IconButton
-                  aria-label="show more"
-                  aria-controls={mobileMenuId}
-                  aria-haspopup="true"
-                  onClick={handleMobileMenuOpen}
-                  color="inherit"
-                >
-                  <MoreIcon />
+                <IconButton aria-label="show 4 new mails" color="inherit" onClick={() => cart?.totalCount > 0 && history.push("/cart")}>
+                  <Badge badgeContent={cart?.totalCount} color="secondary">
+                    <ShoppingCartIcon />
+                  </Badge>
                 </IconButton>
+
               </div>
             </Toolbar>
           </Container>
+          <div className={classes.mobileSearch}>
+            <ClickAwayListener onClickAway={() => setSearchBarVisible(false)}>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ 'aria-label': 'search' }}
+                  onChange={e => setSearchText(e.target.value)}
+                  // onBlur={() => setSearchText("")}
+                  onFocus={() => setSearchBarVisible(true)}
+                />
+
+                {searchBarVisible ? <div className={classes.searchresult}>
+                  <Search text={searchText} setSearchBarVisible={setSearchBarVisible} />
+                </div> : null}
+              </div>
+            </ClickAwayListener>
+          </div>
           <Toolbar disableGutters={true} variant={"dense"}
             classes={{ root: classes.Toobar }}
           >
@@ -413,7 +547,6 @@ export default function Header() {
           </Toolbar >
         </AppBar>
 
-        {renderMobileMenu}
         {renderMenu}
       </div>
     </>

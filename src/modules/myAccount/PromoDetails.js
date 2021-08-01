@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './style.css';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Container, Breadcrumbs, Link, Typography, Paper, Grid, Divider, TextField } from '@material-ui/core';
@@ -53,6 +53,18 @@ export default function PromoDetailView() {
   const list = useSelector(state => state.cart.coupons);
 
   const [promo, setPromo] = useState(null);
+  
+  const [copySuccess, setCopySuccess] = useState('');
+  const textAreaRef = useRef(null);
+
+  function copyToClipboard(e) {
+    textAreaRef.current.select();
+    document.execCommand('copy');
+    // This is just personal preference.
+    // I prefer to not show the whole text area selected.
+    e.target.focus();
+    setCopySuccess('Copied!');
+  };
 
   useEffect(() => {
     if (!list) dispatch(fetchCoupons());
@@ -94,6 +106,18 @@ export default function PromoDetailView() {
                     <br />
 
         
+                    <div style={{opacity:'0', height:'0', position:'absolute'}}>
+                        {
+                        document.queryCommandSupported('copy') &&<></>
+                        }
+                        <form>
+                          <textarea
+                            ref={textAreaRef}
+                            value={promo?.coupon_code}
+                          />
+                        </form>
+                      </div>
+    
                     <Typography color="primary" variant="h5" gutterBottom>
                       <b id='clipboard'>{promo?.title}</b>
                     </Typography>
@@ -109,7 +133,10 @@ export default function PromoDetailView() {
                         <Typography variant="caption" color="textSecondary">Available until {promo?.end_date}</Typography>
                       </Grid>
                       <Grid>
-                        <Button variant="contained" color="primary" size="large">Copy</Button>
+                        <Button onClick={copyToClipboard} variant="contained" color="primary" size="large">Copy</Button>
+
+
+
                       </Grid>
                     </Grid>
                     <br />
