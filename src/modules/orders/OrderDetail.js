@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   tiles: {
     padding: '10px 20px'
   },
+  capital:{
+    textTransform:'capitalize'
+  }
 }))
 
 function ConfirmMessage({ title, message, handleYes, handleNo, open }) {
@@ -171,7 +174,7 @@ export default function OrderDetail() {
                     <b>Order Status</b>
                   </Typography>
                   <Box>
-                    <Typography variant='subtitle2' color="textSecondary">
+                    <Typography variant='subtitle2' color="textSecondary" className={classes.capital}>
                       {order?.order_status}
                     </Typography>
                   </Box>

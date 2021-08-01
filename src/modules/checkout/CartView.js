@@ -232,7 +232,7 @@ const CartItem = [
 ]
 
 function getSteps(cartLength) {
-  return [` Cart (${cartLength} items)`, 'Order Address', 'Delivery Time', 'Payment'];
+  return [` Cart (${cartLength} items)`, 'Order Address', 'Delivery Time', 'Payment Mode'];
 }
 
 
@@ -1080,7 +1080,7 @@ export default function CartView() {
 
                 <Divider />
                 <div style={{ padding: '10px 0px' }}>
-                  <Typography variant="subtitle2" color={"textSecondary"}>Your Total Savings on this order ₹{cart?.totalDiscount + cart?.couponDiscount}</Typography>
+                  <Typography variant="subtitle2" color={"textSecondary"}>Your total savings on this order ₹{cart?.totalDiscount + cart?.couponDiscount}</Typography>
                 </div>
                 <Divider />
 

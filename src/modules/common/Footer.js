@@ -86,8 +86,10 @@ export default function Footer() {
                 </Box>
               {isAuthenticated ?<>
                 <FooterLinks label="My account" link="/my-account" />
+                <FooterLinks label="My Address" link="/address" />
+                <FooterLinks label="My Orders" link="/orders" />
+                <FooterLinks label="My Enquiries" link="/enquiry" />
                 <FooterLinks label="Promos" link="/promo" />
-                <FooterLinks label="My address" link="#" />
               </>
                 :
                 <>

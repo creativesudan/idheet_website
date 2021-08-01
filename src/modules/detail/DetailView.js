@@ -311,7 +311,7 @@ export default function DetailView({ product }) {
             <Grid className={classes.reviews} container spacing={1} justify="space-between">
               <Grid item>
                 <Box><Typography variant='h6'><b>Delivery</b></Typography></Box>
-                <Box><Typography variant='subtitle1' color="textSecondary">Free</Typography></Box>
+                <Box><Typography variant='subtitle1' color="textSecondary">Check at cart for eligiblity</Typography></Box>
               </Grid>
               <Grid item>
                 <Button color="primary" variant="outlined" onClick={() => setEnquiry(true)}>Enquiry Now</Button>

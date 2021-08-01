@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 
 const useStyles = makeStyles((theme) => ({
-    badge: {padding:'5px 10px', borderRadius:4, fontSize:12, display:'inline-block'},
+    badge: {textTransform:'capitalize', padding:'5px 10px', borderRadius:4, fontSize:12, display:'inline-block'},
     color_1: {
         background: theme.palette.secondary.main,
         color:'#fff',

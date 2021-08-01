@@ -163,7 +163,7 @@ export const CompleteOrders = ({ orders }) => {
 export const OpenOrders = ({ orders }) => {
 
   const orderList = [
-    { orderid: '321DERS', delivery: 'Home', date: '06/04/2020', amount: '12.74', status: 'On Process', }
+    { orderid: '321DERS', delivery: 'Home', date: '06/04/2020', amount: '12.74', status: 'On Progress', }
   ]
   const classes = useStyles();
   return (
@@ -299,7 +299,7 @@ export default function OrderListing() {
                     aria-label="Vertical tabs example"
                     className={classes.tabs}
                   >
-                    <Tab icon={<Avatar className={classes.ordPnd}><AvTimerIcon /></Avatar>} label="On Process" {...a11yProps(1)} />
+                    <Tab icon={<Avatar className={classes.ordPnd}><AvTimerIcon /></Avatar>} label="On Progress" {...a11yProps(1)} />
                     <Tab icon={<Avatar className={classes.ordCmp}><CheckIcon /></Avatar>} label="Completed" {...a11yProps(0)} />
                     <Tab icon={<Avatar className={classes.ordCnc}><CloseIcon /></Avatar>} label="Cancelled" {...a11yProps(2)} />
                   </Tabs>
