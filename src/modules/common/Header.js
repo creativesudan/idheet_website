@@ -59,10 +59,10 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     // marginRight: theme.spacing(2),
   },
-  logoImg:{
-    height:38,
+  logoImg: {
+    height: 38,
     [theme.breakpoints.down('sm')]: {
-      transform :'scale(0.8)'
+      transform: 'scale(0.8)'
     },
   },
   title: {
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 160,
     cursor: 'pointer',
     [theme.breakpoints.down('sm')]: {
-      marginLeft:0
+      marginLeft: 0
     },
   },
   search: {
@@ -155,8 +155,8 @@ const useStyles = makeStyles((theme) => ({
     width: theme.spacing(4),
     height: theme.spacing(4),
     '& svg': {
-      width:'0.8em',
-      height:'0.8em',
+      width: '0.8em',
+      height: '0.8em',
     }
   },
   locationGroup: {
@@ -178,21 +178,21 @@ const useStyles = makeStyles((theme) => ({
   fullList: {
     width: 'auto',
   },
-  mobileSearch:{
-    display:'none',
+  mobileSearch: {
+    display: 'none',
     [theme.breakpoints.down('sm')]: {
       display: 'block',
     },
   },
-  desktopSearch:{
-    width:'100%',
-    paddingRight:theme.spacing(4),
+  desktopSearch: {
+    width: '100%',
+    paddingRight: theme.spacing(4),
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
   },
-  mobileMenu:{
-    display:'none',
+  mobileMenu: {
+    display: 'none',
     [theme.breakpoints.down('sm')]: {
       display: 'block',
     },
@@ -219,7 +219,7 @@ export default function Header() {
     right: false,
   });
 
-  
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -229,17 +229,17 @@ export default function Header() {
   };
 
   const MenuName = [
-    {label:'Home', navigation: '/'},
-    {label:'Categories', navigation: '/category'},
-    {label:'Brands', navigation: '/brands'},
-    {label:'About Us', navigation: '/about-us'},
-    {label:'Terms & Conditions', navigation: '/terms-conditions'},
-    {label:'Contact Us', navigation: '/contact-us'},
-    {label:'Privacy Policy', navigation: '/privacy-policy'}
+    { label: 'Home', navigation: '/' },
+    { label: 'Categories', navigation: '/category' },
+    { label: 'Brands', navigation: '/brands' },
+    { label: 'About Us', navigation: '/about-us' },
+    { label: 'Terms & Conditions', navigation: '/terms-conditions' },
+    { label: 'Contact Us', navigation: '/contact-us' },
+    { label: 'Privacy Policy', navigation: '/privacy-policy' }
   ]
   const extraMenuName = [
-    {label:'Promos', navigation: '/'},
-    {label:'My Account', navigation: '/my-account'}
+    { label: 'Promos', navigation: '/promo' },
+    { label: 'My Account', navigation: '/my-account' }
   ]
 
   const list = (anchor) => (
@@ -253,7 +253,7 @@ export default function Header() {
     >
       <List>
         {MenuName.map((text, index) => (
-          <ListItem button key={text.label}>
+          <ListItem button key={text.label} onClick={() => history.push(text.navigation)}>
             <ListItemText primary={text.label} />
           </ListItem>
         ))}
@@ -261,13 +261,18 @@ export default function Header() {
       <Divider />
       <List>
         {extraMenuName.map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text.label} onClick={() => history.push(text.navigation)}>
             <ListItemText primary={text.label} />
           </ListItem>
         ))}
-        <ListItem button key={0} onClick={() => dispatch(logout())}>
+        {isAuthenticated ? <ListItem button key={0} onClick={() => dispatch(logout())}>
           <ListItemText primary={"Logout"} />
         </ListItem>
+          :
+          <ListItem button key={1} onClick={() => history.push("/login")}>
+            <ListItemText primary={"Login"} />
+          </ListItem>
+        }
       </List>
     </div>
   );
@@ -306,6 +311,7 @@ export default function Header() {
   const [value, setValue] = React.useState(0);
   const [searchText, setSearchText] = React.useState("");
   const [searchBarVisible, setSearchBarVisible] = React.useState(false);
+  const [mobileSearchBarVisible, setMobileSearchBarVisible] = React.useState(false);
 
   useEffect(() => {
     if (selected_area && selected_area.area_id) setValue(selected_area?.area_id);
@@ -421,19 +427,19 @@ export default function Header() {
                 aria-label="open drawer"
               >
 
-            <div className={classes.mobileMenu}>
-            {['left'].map((anchor) => (
-              <React.Fragment key={anchor}>
-                <MenuIcon  onClick={toggleDrawer(anchor, true)}/>
-                <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-                  {list(anchor)}
-                </Drawer>
-              </React.Fragment>
-            ))}
-            </div>
+                <div className={classes.mobileMenu}>
+                  {['left'].map((anchor) => (
+                    <React.Fragment key={anchor}>
+                      <MenuIcon onClick={toggleDrawer(anchor, true)} />
+                      <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
+                        {list(anchor)}
+                      </Drawer>
+                    </React.Fragment>
+                  ))}
+                </div>
 
-            
-          </IconButton>
+
+              </IconButton>
               <Link href="/"><img src={settings?.app_logo} className={classes.logoImg} /></Link>
 
               <div className={classes.locationPicker} onClick={handleClickOpen}>
@@ -444,28 +450,28 @@ export default function Header() {
                 <Typography noWrap="true"> <span style={{ marginLeft: 10, marginRight: 10, fontSize: 12 }}>{selected_area?.area || "Select"}</span></Typography> <ExpandMoreIcon />
               </div>
               <div className={classes.desktopSearch}>
-              <ClickAwayListener onClickAway={() => setSearchBarVisible(false)}>
-                <div className={classes.search}>
-                  <div className={classes.searchIcon}>
-                    <SearchIcon />
-                  </div>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{ 'aria-label': 'search' }}
-                    onChange={e => setSearchText(e.target.value)}
-                    // onBlur={() => setSearchText("")}
-                    onFocus={() => setSearchBarVisible(true)}
-                  />
+                <ClickAwayListener onClickAway={() => setSearchBarVisible(false)}>
+                  <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                      <SearchIcon />
+                    </div>
+                    <InputBase
+                      placeholder="Search…"
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                      inputProps={{ 'aria-label': 'search' }}
+                      onChange={e => setSearchText(e.target.value)}
+                      // onBlur={() => setSearchText("")}
+                      onFocus={() => setSearchBarVisible(true)}
+                    />
 
-                  {searchBarVisible ? <div className={classes.searchresult}>
-                    <Search text={searchText} setSearchBarVisible={setSearchBarVisible} />
-                  </div> : null}
-                </div>
-              </ClickAwayListener>
+                    {searchBarVisible ? <div className={classes.searchresult}>
+                      <Search text={searchText} setSearchBarVisible={setSearchBarVisible} />
+                    </div> : null}
+                  </div>
+                </ClickAwayListener>
               </div>
               <div className={classes.grow} />
               <div className={classes.sectionDesktop}>
@@ -499,7 +505,7 @@ export default function Header() {
             </Toolbar>
           </Container>
           <div className={classes.mobileSearch}>
-            <ClickAwayListener onClickAway={() => setSearchBarVisible(false)}>
+            <ClickAwayListener onClickAway={() => setMobileSearchBarVisible(false)}>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon />
@@ -513,11 +519,11 @@ export default function Header() {
                   inputProps={{ 'aria-label': 'search' }}
                   onChange={e => setSearchText(e.target.value)}
                   // onBlur={() => setSearchText("")}
-                  onFocus={() => setSearchBarVisible(true)}
+                  onFocus={() => setMobileSearchBarVisible(true)}
                 />
 
-                {searchBarVisible ? <div className={classes.searchresult}>
-                  <Search text={searchText} setSearchBarVisible={setSearchBarVisible} />
+                {mobileSearchBarVisible ? <div className={classes.searchresult}>
+                  <Search text={searchText} setSearchBarVisible={setMobileSearchBarVisible} />
                 </div> : null}
               </div>
             </ClickAwayListener>
