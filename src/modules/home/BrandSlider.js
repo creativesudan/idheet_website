@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
     '& img': {
       height: 70,
       display: 'inline-block',
-      maxWidth:'100%',
-      objectFit:'cover',
-      objectPosition:'center'
+      maxWidth: '100%',
+      objectFit: 'cover',
+      objectPosition: 'center'
     }
   },
   paper: {
@@ -139,20 +139,20 @@ export default function CategorySlider() {
           onClick={() => history.push("/brands")}
         >See more</Button>}
       />
-      <Slider {...settings} style={{ margin: -8, }}>
+      {brands?.length > 0 && <Slider {...settings} style={{ margin: -8, }}>
         {brands?.map(item => (
           <div className={classes.categoryBox}>
             <div style={{ padding: 8 }}>
               <Link to={"/brands/" + item.brand_id}>
-              <Paper elevation={1} classes={{ root: classes.paper }}>
-                <img src={item.image} />
-                <Typography color="textPrimary" variant="caption" display="block" >{item.brand_name}</Typography>
-              </Paper>
+                <Paper elevation={1} classes={{ root: classes.paper }}>
+                  <img src={item.image} />
+                  <Typography color="textPrimary" variant="caption" display="block" >{item.brand_name}</Typography>
+                </Paper>
               </Link>
             </div>
           </div>
         ))}
-      </Slider>
+      </Slider>}
 
     </>
   );

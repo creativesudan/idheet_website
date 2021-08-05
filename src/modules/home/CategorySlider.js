@@ -135,7 +135,7 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
           onClick={() => history.push("/category")}
         >See more</Button>}
       />}
-      <Slider {...settings} style={{ margin: -8 }}>
+      {categories?.length > 0 && <Slider {...settings} style={{ margin: -8 }}>
         {categories?.map(item => (
           <div className={classes.categoryBox} >
             <div style={{ padding: 8 }}>
@@ -148,7 +148,7 @@ export default function CategorySlider({ title, categories, onClick, selectedId,
             </div>
           </div>
         ))}
-      </Slider>
+      </Slider>}
 
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography, Button, Grid, Box, Paper, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment } from '@material-ui/core';
 import { HeadingBar, QtyController, Rating } from '../component/index'
@@ -19,7 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
 import SearchIcon from '@material-ui/icons/Search';
-import { getCartItem } from '../../redux/lib/cart';
+import { getCartItem, getVariantCartItem } from '../../redux/lib/cart';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateItem } from '../../redux/actions/cart';
 import { useHistory } from 'react-router-dom';
@@ -98,7 +98,8 @@ export default function DetailView({ product }) {
   const cartLoading = useSelector(state => state.cart.cartLoading);
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
   const user = useSelector(state => state.auth.user);
-  const cartItem = getCartItem(cartItems, product);
+  const [cartItem, setCartItem] = useState(null);
+  // const cartItem = setCartItem(getVariantCartItem(cartItems, props.product, props.variant));
   const dispatch = useDispatch();
   const history = useHistory();
   var settings = {
@@ -111,7 +112,15 @@ export default function DetailView({ product }) {
     initialSlide: 0,
   };
 
+
+
   const [selectedVariant, setSelectedVariant] = React.useState(product.defaultVariant);
+
+  useEffect(() => {
+    // console.log(props.product, props.variant);
+    setCartItem(getVariantCartItem(cartItems, product, selectedVariant));
+
+  }, [cartItems, selectedVariant, product]);
 
 
   const handleVariant = (event, newVariant) => {

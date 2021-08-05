@@ -213,7 +213,7 @@ export default function HotProducts({ title, products }) {
       />
 
 
-      <Slider {...settings} style={{ margin: -8, }}>
+      {products?.length > 0 && <Slider {...settings} style={{ margin: -8, }}>
         {products && products.map(item => {
 
           return (
@@ -276,7 +276,7 @@ export default function HotProducts({ title, products }) {
             </div>
           )
         })}
-      </Slider>
+      </Slider>}
 
     </>
   );
